@@ -11,7 +11,7 @@ class devenv::xdebug
 		}
 		'Debian', 'Ubuntu':
 		{
-			$ini_file_path = '/etc/php5/conf.d/xdebug_config.ini'
+			$ini_file_path = '/etc/php/7.1/mods-available/xdebug.ini'
 			$package = 'php-xdebug'
 			$php = 'php-cli'
 			$zend_extension_module = 'xdebug.so'
