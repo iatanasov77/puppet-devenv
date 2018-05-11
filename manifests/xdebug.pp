@@ -32,16 +32,16 @@ class devenv::xdebug::params
 
 class devenv::xdebug (
 	$service              = "httpd",
-	$ini_file_path        = $xdebug::params::ini_file_path,
-	$default_enable       = $xdebug::params::default_enable,
-	$remote_enable        = $xdebug::params::remote_enable,
-	$remote_handler       = $xdebug::params::remote_handler,
-	$remote_host          = $xdebug::params::remote_host,
-	$remote_port          = $xdebug::params::remote_port,
-	$remote_autostart     = $xdebug::params::remote_autostart,
-	$remote_connect_back  = $xdebug::params::remote_connect_back,
-	$remote_log           = $xdebug::params::remote_log,
-	$idekey               = $xdebug::params::idekey,
+	$ini_file_path        = $devenv::xdebug::params::ini_file_path,
+	$default_enable       = $devenv::xdebug::params::default_enable,
+	$remote_enable        = $devenv::xdebug::params::remote_enable,
+	$remote_handler       = $devenv::xdebug::params::remote_handler,
+	$remote_host          = $devenv::xdebug::params::remote_host,
+	$remote_port          = $devenv::xdebug::params::remote_port,
+	$remote_autostart     = $devenv::xdebug::params::remote_autostart,
+	$remote_connect_back  = $devenv::xdebug::params::remote_connect_back,
+	$remote_log           = $devenv::xdebug::params::remote_log,
+	$idekey               = $devenv::xdebug::params::idekey,
 ) inherits devenv::xdebug::params 
 {
 	$zend_extension_module = $devenv::xdebug::params::zend_extension_module
