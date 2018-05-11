@@ -14,7 +14,7 @@ class devenv::xdebug::params
 		{
 			$ini_file_path = '/etc/php/7.1/mods-available/xdebug.ini'
 			$package = 'php-xdebug'
-			$php = 'php-cli'
+			$php = 'php7.1'
 			$zend_extension_module = 'xdebug.so'
 		}
 	}
