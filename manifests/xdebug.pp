@@ -44,18 +44,18 @@ class devenv::xdebug (
 	$idekey               = $xdebug::params::idekey,
 ) inherits devenv::xdebug::params 
 {
-	$zend_extension_module = $xdebug::params::zend_extension_module
+	$zend_extension_module = $devenv::xdebug::params::zend_extension_module
 
-	package { "$xdebug::params::package":
+	package { "$devenv::xdebug::params::package":
 		ensure	=> "installed",
-		require => Package[$xdebug::params::php],
+		require => Package[$devenv::xdebug::params::php],
 		notify	=> File[$ini_file_path],
 	}
 
 	file { "$ini_file_path" :
 		content => template('xdebug/ini_file.erb'),
 		ensure  => present,
-		require => Package[$xdebug::params::package],
+		require => Package[$devenv::xdebug::params::package],
 		notify  => Service[$service],
 	}
 }
