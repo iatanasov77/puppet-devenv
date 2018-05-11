@@ -53,7 +53,7 @@ class devenv::xdebug (
 	}
 
 	file { "$ini_file_path" :
-		content => template('xdebug/ini_file.erb'),
+		content => template('devenv/xdebug_ini.erb'),
 		ensure  => present,
 		require => Package[$devenv::xdebug::params::package],
 		notify  => Service[$service],
