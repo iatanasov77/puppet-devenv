@@ -28,9 +28,9 @@ class devenv::phpapc::params
 	}
 }
 
-class phpapc (
+class devenv::phpapc (
 	$config       	= $devenv::phpapc::params::config
-) inherits phpapc::params {
+) inherits devenv::phpapc::params {
 
 	
 	package { "$devenv::phpapc::params::package":
