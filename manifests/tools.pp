@@ -22,6 +22,7 @@ class devenv::tools
 		destination => '/usr/local/bin',
 		timeout     => 0,
 		verbose     => true,
-		mode		=> '0777'
+		mode        => '0777',
+		execuser    => 'vagrant'
 	}
 }
