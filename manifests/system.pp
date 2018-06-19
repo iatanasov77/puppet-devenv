@@ -1,5 +1,5 @@
 
-class devenv::ssh
+class devenv::system
 {
 	# In Puppetfile:
 	# mod 'ghoneycutt-ssh', '3.57.0' 
