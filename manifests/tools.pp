@@ -39,7 +39,8 @@ class devenv::tools
 	
 	# Install FtpDeploy script
 	wget::fetch { "Download ftp-deployment":
-		source      => 'https://github.com/iatanasov77/ftp-deployment/releases/download/v2.9/deployment.phar',
+		#source      => 'https://github.com/iatanasov77/ftp-deployment/releases/download/v2.9/deployment.phar',
+		source      => 'https://github.com/dg/ftp-deployment/releases/download/v3.0.1/deployment.phar',
 		destination => '/usr/local/bin/deploy',
 		timeout     => 0,
 		verbose     => true,
