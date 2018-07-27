@@ -19,8 +19,8 @@ class devenv::tools
 	
 	# Install BumpVersion script
 	wget::fetch { "Download IAtanasov's bumpversion.php":
-		source      => 'https://raw.github.com/iatanasov77/php-dev-tools/develop/bumpversion.php',
-		destination => '/usr/local/bin',
+		source      => 'https://github.com/iatanasov77/bumpversion/blob/v0.1.0/bumpversion.php',
+		destination => '/usr/local/bin/bumpversion',
 		timeout     => 0,
 		verbose     => true,
 		mode        => '0777',
@@ -29,8 +29,18 @@ class devenv::tools
 	
 	# Install MkPhar script
 	wget::fetch { "Download IAtanasov's mkphar.php":
-		source      => 'https://raw.github.com/iatanasov77/php-dev-tools/develop/mkphar.php',
-		destination => '/usr/local/bin',
+		source      => 'https://github.com/iatanasov77/mkphar/blob/v0.1.0/mkphar.php',
+		destination => '/usr/local/bin/mkphar',
+		timeout     => 0,
+		verbose     => true,
+		mode        => '0777',
+		execuser    => 'vagrant'
+	}
+	
+	# Install VankoSoft MkVhost script
+	wget::fetch { "Download VS's mkvhost":
+		source      => 'https://github.com/iatanasov77/mkvhost/releases/download/v0.1.0/mkvhost.phar',
+		destination => '/usr/local/bin/mkvhost',
 		timeout     => 0,
 		verbose     => true,
 		mode        => '0777',
@@ -41,7 +51,7 @@ class devenv::tools
 	wget::fetch { "Download ftp-deployment":
 		#source      => 'https://github.com/iatanasov77/ftp-deployment/releases/download/v2.9/deployment.phar',
 		source      => 'https://github.com/dg/ftp-deployment/releases/download/v3.0.1/deployment.phar',
-		destination => '/usr/local/bin/deploy',
+		destination => '/usr/local/bin/ftpdeploy',
 		timeout     => 0,
 		verbose     => true,
 		mode        => '0777',
