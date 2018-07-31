@@ -19,7 +19,7 @@ class devenv::tools
 	
 	# Install BumpVersion script
 	wget::fetch { "Download IAtanasov's bumpversion.php":
-		source      => 'https://github.com/iatanasov77/bumpversion/blob/v0.1.0/bumpversion.php',
+		source      => 'https://github.com/iatanasov77/bumpversion/raw/v0.1.0/bumpversion.php',
 		destination => '/usr/local/bin/bumpversion',
 		timeout     => 0,
 		verbose     => true,
@@ -29,7 +29,7 @@ class devenv::tools
 	
 	# Install MkPhar script
 	wget::fetch { "Download IAtanasov's mkphar.php":
-		source      => 'https://github.com/iatanasov77/mkphar/blob/v0.1.0/mkphar.php',
+		source      => 'https://github.com/iatanasov77/mkphar/raw/v0.1.0/mkphar.php',
 		destination => '/usr/local/bin/mkphar',
 		timeout     => 0,
 		verbose     => true,
