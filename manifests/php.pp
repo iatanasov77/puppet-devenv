@@ -2,11 +2,11 @@
 class devenv::php
 {
 	$packages = [
-		"php7.1", 
-		"php7.1-cli",
+		"php${phpVersion}", 
+		"php${phpVersion}-cli",
 		"composer",
 		"phpunit",
-		"libapache2-mod-php7.1",
+		"libapache2-mod-php${phpVersion}",
 		"libapache2-mod-php",
 	]
 	

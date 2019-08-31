@@ -15,7 +15,7 @@ class devenv::lamp
 	class { 'devenv::php': }
 	
 	class { 'apache::mod::php': 
-		php_version	=> '7.1',
+		php_version	=> $phpVersion,
 	}
 
 	# Install and setup MySql server

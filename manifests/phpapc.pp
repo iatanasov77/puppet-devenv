@@ -12,9 +12,9 @@ class devenv::phpapc::params
 		}
 		'Debian', 'Ubuntu':
 		{
-			$config_file	= '/etc/php/7.1/mods-available/apc.ini'
+			$config_file	= '/etc/php/7.2/mods-available/apc.ini'
 			$package 		= 'php-apcu'
-			$php 			= 'php7.1'
+			$php 			= 'php7.2'
 			$service		= apache2
 		}
 		default: {
