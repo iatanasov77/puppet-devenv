@@ -14,9 +14,11 @@ class devenv::lamp
 	class { 'apache::mod::vhost_alias': }
 	class { 'devenv::php': }
 	
+	/*
 	class { 'apache::mod::php': 
 		php_version	=> $phpVersion,
 	}
+	*/
 
 	# Install and setup MySql server
 	exec { 'mkdir -p /var/log/mariadb':

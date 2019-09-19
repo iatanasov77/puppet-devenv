@@ -1,11 +1,23 @@
 
 class devenv::tools
 {
+    case $operatingsystem 
+    {
+        'RedHat', 'CentOS', 'Fedora': 
+        {
+            $gitflow = 'gitflow'
+        }
+        'Debian', 'Ubuntu':
+        {
+            $gitflow = 'git-flow'
+        }
+    }
+    
 	# package install list
 	$packages = [
 		"mc", 
 		"git",
-		"git-flow",
+		"${gitflow}",
 		"curl",
 		"vim",
 		"htop",
