@@ -1,53 +1,21 @@
 class devenv::lamp
 {
-	# Install and setup an Apache server with mod_php
-	class { 'apache':
-		default_vhost 	=> false,
-		default_mods	=> false,
-		mpm_module 		=> 'prefork',
-	}
+	#include devenv::apache
 
-	# Apache modules
-	class { 'apache::mod::expires': }
-	class { 'apache::mod::headers': }
-	class { 'apache::mod::rewrite': }
-	class { 'apache::mod::vhost_alias': }
-	class { 'devenv::php': }
+	#include devenv::mysql
 	
-	/*
-	class { 'apache::mod::php': 
-		php_version	=> $phpVersion,
-	}
-	*/
-
-	# Install and setup MySql server
-	exec { 'mkdir -p /var/log/mariadb':
-		path     => '/usr/bin:/usr/sbin:/bin',
-		provider => shell
-	}
-	class { 'mysql::server':
-		create_root_user	=> true,
-		root_password		=> 'vagrant',
-	}
-	
-	mysql::db { 'devenv_task':
-		user		=> 'root',
-		password	=> 'vagrant',
-		host		=> "${mysqlhost}",
-		grant		=> ['ALL'],
-		sql			=> "${mysqldump}"
-	}
-      
-	# Install PhpMyAdmin
-	class { 'phpmyadmin': }
-	phpmyadmin::server{ 'default': }
+    class { 'devenv::php': }
+  
+	#class { 'phpmyadmin': }
+	#phpmyadmin::server{ 'default': }
 
 	# Setup default main virtual host
+	/*
 	apache::vhost { "${hostname}":
 		port    	=> '80',
 		docroot 	=> "${documentroot}", 
 		override	=> 'all',
-		php_values 		=> ['memory_limit 1024M'],
+		#php_values 		=> ['memory_limit 1024M'],
 		
 		directories => [
 			{
@@ -72,4 +40,5 @@ class devenv::lamp
 			}
 		],
 	}
+	*/
 }

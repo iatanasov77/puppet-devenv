@@ -14,32 +14,28 @@ class devenv::php
             'PHP/memory_limit'        => '-1',
             'Date/date.timezone'      => 'Europe/Sofia',
         },
-        
-    /*
         extensions => {
-            bcmath    => { },
-            imagick   => {
-                provider => pecl,
-            },
-            xmlrpc    => { },
-            memcached => {
-                provider        => 'pecl',
-                header_packages => [ 'libmemcached-devel', ],
-            },
-            apc       => {
-                provider => 'pecl',
-                settings => {
-                    'apc/stat'       => '1',
-                    'apc/stat_ctime' => '1',
-                },
-                sapi     => 'fpm',
-            },
-            'intl' => {
-                ini_prefix => '20-',
-            },
-        },
-    */
-    
+        	'pdo' => {
+	          ini_prefix => '20-',
+	          multifile_settings => true,
+	          settings => {
+	              'pdo'  => {},
+	              'pdo_sqlite' => {},
+	              'sqlite3' => {},
+	            },
+	        },
+	        'mysqlnd' => {
+	          ini_prefix => '30-',
+	          multifile_settings => true,
+	          settings => {
+	             'mysqlnd'  => {},
+	             'mysql' => {},
+	             'mysqli' => {},
+	             'pdo_mysql' => {},
+	             'sysvshm' => {},
+	          },
+	        },
+        }
     }
     
     /*
