@@ -13,9 +13,7 @@ class devenv::apache
 	class { 'apache::mod::rewrite': }
 	class { 'apache::mod::vhost_alias': }
 	
-	/*
 	class { 'apache::mod::php': 
 		php_version	=> $phpVersion,
 	}
-	*/
 }

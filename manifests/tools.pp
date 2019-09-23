@@ -22,6 +22,7 @@ class devenv::tools
 		"vim",
 		"htop",
 		"dos2unix",
+		"unzip",
 	]
 
 	# install packages

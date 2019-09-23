@@ -1,7 +1,6 @@
 class devenv::mysql
 {
 	# Install and setup MySql server
-	/*
 	exec { 'mkdir -p /var/log/mariadb':
 		path     => '/usr/bin:/usr/sbin:/bin',
 		provider => shell
@@ -11,6 +10,7 @@ class devenv::mysql
 		root_password		=> 'vagrant',
 	}
 	
+	/*
 	mysql::db { 'devenv_task':
 		user		=> 'root',
 		password	=> 'vagrant',

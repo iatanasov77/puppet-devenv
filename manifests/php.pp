@@ -15,46 +15,45 @@ class devenv::php
             'Date/date.timezone'      => 'Europe/Sofia',
         },
         extensions => {
+            'intl' => {
+                ini_prefix => '20-',
+            },
+            'gd' => {
+                ini_prefix => '20-',
+            },
+            'mbstring' => {
+                ini_prefix => '20-',
+            },
+            'xmlrpc' => {
+                ini_prefix => '20-',
+            },
         	'pdo' => {
-	          ini_prefix => '20-',
-	          multifile_settings => true,
-	          settings => {
-	              'pdo'  => {},
-	              'pdo_sqlite' => {},
-	              'sqlite3' => {},
+	           ini_prefix => '20-',
+	           multifile_settings => true,
+	           settings => {
+	               'pdo'  => {},
+	               'pdo_sqlite' => {},
+	               'sqlite3' => {},
 	            },
 	        },
-	        'mysqlnd' => {
-	          ini_prefix => '30-',
-	          multifile_settings => true,
-	          settings => {
-	             'mysqlnd'  => {},
-	             'mysql' => {},
-	             'mysqli' => {},
-	             'pdo_mysql' => {},
-	             'sysvshm' => {},
+	        'mysql' => {
+	           ini_prefix => '20-',
+	           multifile_settings => true,
+	           settings => {
+	               'mysqlnd'  => {},
+	               'mysql' => {},
+	               'mysqli' => {},
+	               'pdo_mysql' => {},
+	               'sysvshm' => {},
 	          },
-	        },
+	        }
+           
+	        /*
+	        curl    => { },
+	        imagick   => { provider => pecl },
+	        mcrypt    => { provider => pecl },
+	        json    => { provider => pecl },
+	        */
         }
     }
-    
-    /*
-    case $operatingsystem 
-    {
-        'RedHat', 'CentOS', 'Fedora': 
-        {
-            # remove old php packages
-            $removePackages = ["mod_php", "php-common"]
-            package { $removePackages:
-                ensure => purge,
-            }
-            
-            # install new packages
-            $installPackages = ["mod_php72u"]
-            package { $installPackages:
-                ensure => present,
-            }
-        }
-    }
-    */
 }

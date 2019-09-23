@@ -1,16 +1,21 @@
 class devenv::lamp
 {
-	#include devenv::apache
+	include devenv::apache
 
-	#include devenv::mysql
+	include devenv::mysql
 	
     class { 'devenv::php': }
-  
-	#class { 'phpmyadmin': }
-	#phpmyadmin::server{ 'default': }
+
+    class { '::composer':
+        command_name => 'composer',
+        target_dir   => '/usr/bin',
+        auto_update => true
+    }
+
+	class { 'phpmyadmin': }
+	phpmyadmin::server{ 'default': }
 
 	# Setup default main virtual host
-	/*
 	apache::vhost { "${hostname}":
 		port    	=> '80',
 		docroot 	=> "${documentroot}", 
@@ -19,13 +24,14 @@ class devenv::lamp
 		
 		directories => [
 			{
-				'path'		=> "${documentroot}",
-				'override'	=> 'All',
-				'Require'	=> 'all granted' ,
+				'path'		        => "${documentroot}",
+				'allow_override'    => ['All'],
+				'Require'           => 'all granted' ,
 			},
 			{
-				'path'		=> '/usr/share/phpmyadmin',
-				'Require'	=> 'all granted' ,
+				'path'              => "/usr/share/phpmyadmin",
+                'allow_override'    => ['All'],
+                'Require'           => 'all granted' ,
 			}
 		],
 		
@@ -40,5 +46,4 @@ class devenv::lamp
 			}
 		],
 	}
-	*/
 }
