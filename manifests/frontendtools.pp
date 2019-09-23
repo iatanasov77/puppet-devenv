@@ -1,7 +1,8 @@
 class devenv::frontendtools
 {
 	class { 'nodejs':
-		version 	=> 'lts',
+		version       => 'latest',
+		target_dir    => '/usr/bin',
 	}
 	
 	package { 'yarn':
