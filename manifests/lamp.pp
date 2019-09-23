@@ -13,7 +13,7 @@ class devenv::lamp
     }
 
 	class { 'phpmyadmin': }
-	phpmyadmin::server{ 'default': }
+	#phpmyadmin::server{ 'default': }
 
 	# Setup default main virtual host
 	apache::vhost { "${hostname}":
@@ -29,7 +29,7 @@ class devenv::lamp
 				'Require'           => 'all granted' ,
 			},
 			{
-				'path'              => "/usr/share/phpmyadmin",
+				'path'              => "/usr/share/phpMyAdmin",
                 'allow_override'    => ['All'],
                 'Require'           => 'all granted' ,
 			}
@@ -38,11 +38,11 @@ class devenv::lamp
 		aliases		=> [
 			{
 				alias => '/phpMyAdmin',
-				path  => '/usr/share/phpmyadmin'
+				path  => '/usr/share/phpMyAdmin'
 			}, 
 			{
 				alias => '/phpmyadmin',
-				path  => '/usr/share/phpmyadmin'
+				path  => '/usr/share/phpMyAdmin'
 			}
 		],
 	}
