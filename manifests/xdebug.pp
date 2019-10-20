@@ -12,9 +12,9 @@ class devenv::xdebug::params
 		}
 		'Debian', 'Ubuntu':
 		{
-			$ini_file_path = '/etc/php/7.2/mods-available/xdebug.ini'
+			$ini_file_path = "/etc/php/${phpVersion}/mods-available/xdebug.ini"
 			$package = 'php-xdebug'
-			$php = 'php7.2'
+			$php = "php${phpVersion}"
 			$zend_extension_module = 'xdebug.so'
 		}
 	}
@@ -24,8 +24,8 @@ class devenv::xdebug::params
 	$remote_handler      = 'dbgp'
 	$remote_host         = 'localhost'
 	$remote_port         = '9000'
-	$remote_autostart    = '1'
-	$remote_connect_back = '0'
+	$remote_autostart    = '0'
+	$remote_connect_back = '1'
 	$remote_log          = false
 	$idekey              = ''
 }
