@@ -6,14 +6,13 @@ class devenv::apache
 		default_mods	=> false,
 		mpm_module 		=> 'prefork',
 	}
-	
+    
 	# Apache modules
-	class { 'apache::mod::expires': }
-	class { 'apache::mod::headers': }
-	class { 'apache::mod::rewrite': }
-	class { 'apache::mod::vhost_alias': }
-	
-	class { 'apache::mod::php': 
-		php_version	=> $phpVersion,
-	}
+	each( $facts['apache_modules'] ) |$value| {
+        class { "apache::mod::$value": }
+    }
+    
+    class { 'apache::mod::php': 
+        php_version => $phpVersion,
+    }
 }
