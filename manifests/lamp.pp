@@ -2,7 +2,7 @@ class devenv::lamp
 {
 	include devenv::apache
 
-	include devenv::mysql
+	#include devenv::mysql
 	
     class { 'devenv::php': }
 
@@ -13,7 +13,6 @@ class devenv::lamp
     }
 
 	class { 'phpmyadmin': }
-	#phpmyadmin::server{ 'default': }
 
 	# Setup default main virtual host
 	apache::vhost { "${hostname}":
