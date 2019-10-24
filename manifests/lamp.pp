@@ -1,10 +1,9 @@
 class devenv::lamp
 {
 	include devenv::apache
-
-	#include devenv::mysql
-	
-    class { 'devenv::php': }
+	include devenv::mysql
+    include devenv::php
+    include devenv::phpextensions
 
     class { '::composer':
         command_name => 'composer',
