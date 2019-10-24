@@ -8,11 +8,15 @@ class devenv::apache
 	}
     
 	# Apache modules
-	each( $facts['apache_modules'] ) |$value| {
-        class { "apache::mod::$value": }
+	$apacheModules   = parseyaml( $facts['apache_modules'] )
+	$apacheModules.each |Integer $index, String $value| {
+        notice("${index} = ${value}")
+        notice( "APACHE MODULE: ${value}" )
+        class { "apache::mod::${value}": }
     }
     
-    class { 'apache::mod::php': 
-        php_version => $phpVersion,
+    class {'::apache::mod::php':
+        php_version  => '7.2',
+        path         => 'modules/libphp7.2.so',
     }
 }
