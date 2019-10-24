@@ -3,14 +3,19 @@ class devenv::php
 {
     # PHP Modules
     $modules = {}
-    each( $facts['php_modules'] ) |$value| {
-        $modules.merge!({
+    $phpModules   = parseyaml( $facts['php_modules'] )
+    $phpModules.each |Integer $index, String $value| {
+        $modules = merge( $modules, {
             "${value}"  => {
-                ini_prefix => '99-',
+                ini_prefix => "99-",
             }
         })
     }
 
+    class { '::php::globals':
+        php_version => '7.2',
+        #config_root => '/etc/php/7.0',
+    }->
     class { '::php':
         ensure       => latest,
         manage_repos => true,
