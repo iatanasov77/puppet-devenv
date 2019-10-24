@@ -5,9 +5,11 @@ class devenv::mysql
 		path     => '/usr/bin:/usr/sbin:/bin',
 		provider => shell
 	}
+	
 	class { 'mysql::server':
-		create_root_user	=> true,
-		root_password		=> 'vagrant',
+	   service_name        => 'mysqld',
+	   create_root_user    => true,
+	   root_password       => 'vagrant',
 	}
 	
 	/*
