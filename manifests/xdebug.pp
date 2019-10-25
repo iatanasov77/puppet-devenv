@@ -12,9 +12,9 @@ class devenv::xdebug::params
 		}
 		'Debian', 'Ubuntu':
 		{
-			$ini_file_path = "/etc/php/${phpVersion}/mods-available/xdebug.ini"
+			$ini_file_path = "/etc/php/${vsConfig['phpVersion']}/mods-available/xdebug.ini"
 			$package = 'php-xdebug'
-			$php = "php${phpVersion}"
+			$php = "php${vsConfig['phpVersion']}"
 			$zend_extension_module = 'xdebug.so'
 		}
 	}

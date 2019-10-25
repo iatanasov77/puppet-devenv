@@ -8,8 +8,7 @@ class devenv::apache
 	}
     
 	# Apache modules
-	$apacheModules   = parseyaml( $facts['apache_modules'] )
-	$apacheModules.each |Integer $index, String $value| {
+	$vsConfig['apacheModules'].each |Integer $index, String $value| {
         notice("${index} = ${value}")
         notice( "APACHE MODULE: ${value}" )
         class { "apache::mod::${value}": }

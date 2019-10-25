@@ -7,7 +7,7 @@ class devenv::mysql
 	}
 	
 	class { 'mysql::server':
-	   service_name        => 'mysqld',
+	   service_name        => $vsConfig['mysqlService'],
 	   create_root_user    => true,
 	   root_password       => 'vagrant',
 	}

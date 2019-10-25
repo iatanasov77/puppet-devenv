@@ -3,8 +3,7 @@ class devenv::php
 {
     # PHP Modules
     $modules = {}
-    $phpModules   = parseyaml( $facts['php_modules'] )
-    $phpModules.each |Integer $index, String $value| {
+    $vsConfig['phpModules'].each |Integer $index, String $value| {
         $modules = merge( $modules, {
             "${value}"  => {
                 ini_prefix => "99-",

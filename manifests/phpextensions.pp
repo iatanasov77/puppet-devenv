@@ -1,7 +1,7 @@
 
 class devenv::phpextensions
 {
-    if ( 'apc' in $facts['php_modules'] )
+    if ( 'apc' in $vsConfig['phpModules'] )
     {
         class { 'devenv::phpapc':
             config  => {
@@ -12,7 +12,7 @@ class devenv::phpextensions
         }
     }
 
-    if ( 'xdebug' in $facts['php_modules'] )
+    if ( 'xdebug' in $vsConfig['phpModules'] )
     {
         class { 'devenv::xdebug':
             default_enable       => '1',
@@ -25,20 +25,20 @@ class devenv::phpextensions
     }
     
     /*
-    if ( 'intl' in $facts['devenv_modules'] )
+    if ( 'intl' in $vsConfig['phpModules'] )
     {
-        package { "php${phpVersion}-intl":
+        package { "php${vsConfig['phpVersion']}-intl":
             ensure  => installed,
-            require => Package["php${phpVersion}"],
+            require => Package["php${vsConfig['phpVersion']}"],
             notify  => Service["${apachename}"],
         }
     }
     
-    if ( 'sqlite' in $facts['devenv_modules'] )
+    if ( 'sqlite' in $vsConfig['phpModules'] )
     {
-        package { "php${phpVersion}-sqlite3":
+        package { "php${vsConfig['phpVersion']}-sqlite3":
             ensure  => installed,
-            require => Package["php${phpVersion}"],
+            require => Package["php${vsConfig['phpVersion']}"],
             notify  => Service["${apachename}"],
         }
     }
