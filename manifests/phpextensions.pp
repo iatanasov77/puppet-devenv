@@ -20,7 +20,7 @@ class devenv::phpextensions
             remote_handler       => 'dbgp',
             remote_host          => 'localhost',
             remote_port          => '9000',
-            remote_autostart     => '1',
+            remote_autostart     => '0',
         }
     }
     
