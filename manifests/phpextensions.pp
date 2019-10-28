@@ -23,24 +23,4 @@ class devenv::phpextensions
             remote_autostart     => '0',
         }
     }
-    
-    /*
-    if ( 'intl' in $vsConfig['phpModules'] )
-    {
-        package { "php${vsConfig['phpVersion']}-intl":
-            ensure  => installed,
-            require => Package["php${vsConfig['phpVersion']}"],
-            notify  => Service["${apachename}"],
-        }
-    }
-    
-    if ( 'sqlite' in $vsConfig['phpModules'] )
-    {
-        package { "php${vsConfig['phpVersion']}-sqlite3":
-            ensure  => installed,
-            require => Package["php${vsConfig['phpVersion']}"],
-            notify  => Service["${apachename}"],
-        }
-    }
-    */
 }
