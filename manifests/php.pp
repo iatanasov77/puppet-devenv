@@ -4,10 +4,6 @@ class devenv::php
     # PHP Modules
     $modules = {}
     $vsConfig['phpModules'].each |Integer $index, String $value| {
-        if ( $value == 'apc' or $value == 'xdebug' ) {
-            next()
-        }
-        
         $modules = merge( $modules, {
             "${value}"  => {}
         })
