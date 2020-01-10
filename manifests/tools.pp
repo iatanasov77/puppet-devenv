@@ -8,14 +8,12 @@ class devenv::tools
         {
             'phpbrew': 
             {
-                validate_hash( $vsConfig )
-                if has_key( $vsConfig, 'phpbrewPhpVersion' ) {
-                    phpbrew::install { $vsConfig['phpbrewPhpVersion']: 
+                require phpbrew::pre_init
+                require phpbrew
+                
+                $vsConfig['phpbrewInstall'].each |Integer $index, String $value| {
+                	phpbrew::install { $value: 
                        
-                    }
-                } else {
-                    phpbrew::install { '7.4.1': 
-                        
                     }
                 }
             }
