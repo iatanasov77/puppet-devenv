@@ -6,9 +6,21 @@ class devenv::tools
      
         case $value
         {
+        	'git':
+        	{
+        		require git
+        		
+        		git::config { 'user.name':
+					value => $vsConfig['git']['userName'],
+					user    => 'vagrant',
+				}
+				git::config { 'user.email':
+					value => $vsConfig['git']['userEmail'],
+					user    => 'vagrant',
+				}
+        	}
             'phpbrew': 
             {
-                require phpbrew::pre_init
                 require phpbrew
                 
                 $vsConfig['phpbrewInstall'].each |Integer $index, String $value| {
