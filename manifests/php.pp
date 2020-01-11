@@ -13,10 +13,10 @@ class devenv::php
         })
     }
 
-    class { '::php::globals':
-        php_version => '7.2',
-        #config_root => '/etc/php/7.0',
-    }->
+#    class { '::php::globals':
+#        php_version => '7.2',
+#        #config_root => '/etc/php/7.0',
+#    }->
     class { '::php':
         ensure       => latest,
         manage_repos => true,
@@ -24,7 +24,7 @@ class devenv::php
         dev          => true,
         composer     => true,
         pear         => true,
-        phpunit      => false,
+        phpunit      => true,
         
         settings   => {
             'PHP/memory_limit'        => '-1',

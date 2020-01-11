@@ -1,32 +1,46 @@
-
 class devenv::tools
 {
-    case $operatingsystem 
-    {
-        'RedHat', 'CentOS', 'Fedora': 
+    #case $operatingsystem   'RedHat', 'CentOS', 'Fedora'
+    
+	$vsConfig['packages'].each |Integer $index, String $value| {
+     
+        case $value
         {
-            $gitflow = 'gitflow'
-        }
-        'Debian', 'Ubuntu':
-        {
-            $gitflow = 'git-flow'
+            'phpbrew': 
+            {
+                require phpbrew::pre_init
+                require phpbrew
+                
+                $vsConfig['phpbrewInstall'].each |Integer $index, String $value| {
+                	phpbrew::install { $value: 
+                       
+                    }
+                }
+            }
+            'gitflow':
+            {
+                case $operatingsystem 
+                {
+                    'Debian', 'Ubuntu':
+                    {
+                        package { 'git-flow':
+                            ensure => present,
+                        }
+                    }
+                    default:
+                    {
+                        package { $value:
+                            ensure => present,
+                        }
+                    }
+                }
+            }
+            default:
+            {
+                package { $value:
+                    ensure => present,
+                }
+            }
         }
     }
-    
-	# package install list
-	$packages = [
-		"mc", 
-		"git",
-		"${gitflow}",
-		"curl",
-		"vim",
-		"htop",
-		"dos2unix",
-		"unzip",
-	]
-
-	# install packages
-	package { $packages:
-		ensure => present,
-	}
 }
