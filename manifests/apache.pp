@@ -15,7 +15,7 @@ class devenv::apache
     }
     
     class {'::apache::mod::php':
-        php_version  => '7.2',
-        path         => 'modules/libphp7.2.so',
+        php_version  => "${vsConfig['phpVersion']}",
+        path         => "modules/libphp${vsConfig['phpVersion']}.so",
     }
 }

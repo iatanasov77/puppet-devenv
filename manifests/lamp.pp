@@ -13,35 +13,5 @@ class devenv::lamp
 
 	class { 'phpmyadmin': }
 
-	# Setup default main virtual host
-	apache::vhost { "${hostname}":
-		port    	=> '80',
-		docroot 	=> "${documentroot}", 
-		override	=> 'all',
-		#php_values 		=> ['memory_limit 1024M'],
-		
-		directories => [
-			{
-				'path'		        => "${documentroot}",
-				'allow_override'    => ['All'],
-				'Require'           => 'all granted' ,
-			},
-			{
-				'path'              => "/usr/share/phpMyAdmin",
-                'allow_override'    => ['All'],
-                'Require'           => 'all granted' ,
-			}
-		],
-		
-		aliases		=> [
-			{
-				alias => '/phpMyAdmin',
-				path  => '/usr/share/phpMyAdmin'
-			}, 
-			{
-				alias => '/phpmyadmin',
-				path  => '/usr/share/phpMyAdmin'
-			}
-		],
-	}
+	include devenv::vhosts
 }
