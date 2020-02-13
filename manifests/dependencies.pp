@@ -29,8 +29,8 @@ class devenv::dependencies
 	        	}
 	        	'command':
 	        	{
-	        		exec { 'remove older libzip':
-						command     => 'yum remove -y libzip'
+	        		exec { "${name}":
+						command     => "${config['command']}",
 					}
 	        	}
 	        	'packages':
