@@ -14,11 +14,16 @@ class devenv::php
     # PHP Modules
     $modules = {}
     $vsConfig['phpModules'].each |Integer $index, String $value| {
-        if ( $value == 'apc' or $value == 'xdebug' ) {
+    
+        notify { "INSTALLING PHP MUDULE: ${value}":
+    		withpath => false,
+		}
+		
+        if ( $value == 'apc' or $value == 'xdebug' or $value == 'mongodb' ) {
             next()
         }
         
-        $modules = merge( $modules, {
+    	$modules = merge( $modules, {
             "${value}"  => {}
         })
     }

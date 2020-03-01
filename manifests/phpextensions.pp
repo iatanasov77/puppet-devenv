@@ -23,4 +23,15 @@ class devenv::phpextensions
             remote_autostart     => '0',
         }
     }
+    
+    if ( 'mongodb' in $vsConfig['phpModules'] )
+    {
+        class { 'devenv::mongodb':
+            config  => {
+                #enable_opcode_cache => 1,
+                #shm_size            => '512M',
+                #stat                => 0
+            }
+        }
+    }
 }

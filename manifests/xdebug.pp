@@ -5,6 +5,7 @@ class devenv::xdebug::params
 	{
 		'RedHat', 'CentOS', 'Fedora': 
 		{
+			$original_ini_file_path	= '/etc/php.d/15-xdebug.ini'
 			$ini_file_path = '/etc/php.d/xdebug.ini'
 			$package = 'php-pecl-xdebug'
 			$php = 'php-cli'
@@ -12,6 +13,7 @@ class devenv::xdebug::params
 		}
 		'Debian', 'Ubuntu':
 		{
+			$original_ini_file_path	= '/etc/php.d/15-xdebug.ini'
 			$ini_file_path = "/etc/php/${vsConfig['phpVersion']}/mods-available/xdebug.ini"
 			$package = 'php-xdebug'
 			$php = "php${vsConfig['phpVersion']}"
@@ -50,8 +52,14 @@ class devenv::xdebug (
 		ensure	=> "installed",
 		require => Package[$devenv::xdebug::params::php],
 		notify	=> File[$ini_file_path],
+		configfiles => "replace"
 	}
 
+	file { "$original_ini_file_path" :
+		ensure  => absent,
+		require => Package[$devenv::xdebug::params::package],
+	} ->
+	
 	file { "$ini_file_path" :
 		content => template('devenv/xdebug_ini.erb'),
 		ensure  => present,
