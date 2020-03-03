@@ -49,4 +49,20 @@ class devenv::php
         },
         extensions => $modules
     }
+    
+    ########################################
+    # Php Build Tool PHING
+    ########################################
+    notify { "INSTALLING PHING ( PHP BUILD TOOL )":
+		withpath => false,
+	}
+    exec { "pearUpgrade":
+        command => "/usr/bin/pear upgrade-all",
+        require => Package["php-pear"]
+    }
+    exec { "phing":
+        command => "/usr/bin/pear channel-discover pear.phing.info; /usr/bin/pear install phing/phing; /usr/bin/pear install HTTP_Request2",
+        unless => "/usr/bin/pear info phing/phing",
+        require => Exec["pearUpgrade"]
+    }
 }
