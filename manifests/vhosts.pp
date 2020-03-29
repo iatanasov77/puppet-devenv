@@ -42,19 +42,41 @@ class devenv::vhosts
 
 	$vhosts	= parsejson( file( $vsConfig['vhostsJson'] ) )
 	$vhosts.each |String $host, Hash $config| {
-		apache::vhost { "${host}":
-			port    	=> '80',
-			docroot 	=> $config['documentRoot'], 
-			override	=> 'all',
-			
-			directories => [
-				{
-					'path'		        => $config['documentRoot'],
-					'allow_override'    => ['All'],
-					'Require'           => 'all granted',
-				}
-			]
-		}
+	
+        #$customFragment = 'ProxyPassMatch ^/(.*\.php)$ fcgi://127.0.0.1:9000/var/www/html/$1'
+	
+        if ( $config['fpmSocket'] ) {
+            
+            #$fpmSocket      = $config['fpmSocket']
+            $customFragment = "
+                <Proxy \"unix:${config['fpmSocket']}|fcgi://php-fpm\">
+                    ProxySet disablereuse=off
+                </Proxy>
+     
+                <FilesMatch \.php$>
+                    SetHandler proxy:fcgi://php-fpm
+                </FilesMatch>
+            "
+        } else {
+            $customFragment = ''
+        }
+        
+        apache::vhost { "${host}":
+        	port    	=> '80',
+        	docroot 	=> $config['documentRoot'], 
+        	override	=> 'all',
+        	
+        	directories => [
+                {
+                    'path'              => $config['documentRoot'],
+                    'allow_override'    => ['All'],
+                    'Require'           => 'all granted',
+                }
+            ],
+            
+        	custom_fragment    => $customFragment,
+        }
+        
 		
 		# Create cache dir
 		file { "/var/www/${host}":
