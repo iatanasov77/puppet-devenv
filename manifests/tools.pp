@@ -19,12 +19,15 @@ class devenv::tools
 					user    => 'vagrant',
 				}
         	}
-            'phpbrew': 
+            'phpbrew':
             {
-                require phpbrew
+                class { 'phpbrew':
+                   system_wide => $vsConfig['phpbrew']['system_wide'],
+                   additional_dependencies => $vsConfig['phpbrew']['additional_dependencies']
+                }
                 
-                $vsConfig['phpbrewInstall'].each |Integer $index, String $value| {
-                	phpbrew::install { $value: 
+                $vsConfig['phpbrew']['install'].each |Integer $index, String $value| {
+                    phpbrew::install { $value: 
                        
                     }
                 }
@@ -49,8 +52,10 @@ class devenv::tools
             }
             default:
             {
-                package { $value:
-                    ensure => present,
+                if ! defined(Package[$value]) {
+                    package { $value:
+                        ensure => present,
+                    }
                 }
             }
         }
