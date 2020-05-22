@@ -1,8 +1,6 @@
-class devenv::tools
+class devenv::packages
 {
-    #case $operatingsystem   'RedHat', 'CentOS', 'Fedora'
-    
-	$vsConfig['packages'].each |Integer $index, String $value| {
+    $vsConfig['packages'].each |Integer $index, String $value| {
      
         case $value
         {
@@ -19,19 +17,6 @@ class devenv::tools
 					user    => 'vagrant',
 				}
         	}
-            'phpbrew':
-            {
-                class { 'phpbrew':
-                   system_wide => $vsConfig['phpbrew']['system_wide'],
-                   additional_dependencies => $vsConfig['phpbrew']['additional_dependencies']
-                }
-                
-                $vsConfig['phpbrew']['install'].each |Integer $index, String $value| {
-                    phpbrew::install { $value: 
-                       
-                    }
-                }
-            }
             'gitflow':
             {
                 case $operatingsystem 
@@ -48,18 +33,6 @@ class devenv::tools
                             ensure => present,
                         }
                     }
-                }
-            }
-            'docker':
-            {
-                class { 'docker':
-                    ensure => present,
-                    version => 'latest',
-                }
-                
-                class {'docker::compose':
-                    ensure => present,
-                    #version => '1.9.0',
                 }
             }
             default:
