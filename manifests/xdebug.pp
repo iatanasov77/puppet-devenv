@@ -30,6 +30,18 @@ class devenv::xdebug::params
 	$remote_connect_back = '1'
 	$remote_log          = false
 	$idekey              = ''
+	
+	# Tracer default settings
+	$trace_format           = '1'
+    $trace_enable_trigger   = '1'
+    $trace_output_name      = 'trace.out'
+    $trace_output_dir       = '/home/nickname/Xdebug'
+    
+    # Profiler default settings
+    $profiler_enable        = '0'
+    $profiler_enable_trigger= '1'
+    $profiler_output_name   = 'cachegrind.out'
+    $profiler_output_dir    = '/home/nickname/Xdebug'
 }
 
 class devenv::xdebug (
@@ -44,6 +56,16 @@ class devenv::xdebug (
 	$remote_connect_back  = $devenv::xdebug::params::remote_connect_back,
 	$remote_log           = $devenv::xdebug::params::remote_log,
 	$idekey               = $devenv::xdebug::params::idekey,
+	
+    $trace_format           = $devenv::xdebug::params::trace_format,
+    $trace_enable_trigger   = $devenv::xdebug::params::trace_enable_trigger,
+    $trace_output_name      = $devenv::xdebug::params::trace_output_name,
+    $trace_output_dir       = $devenv::xdebug::params::trace_output_dir,
+    
+    $profiler_enable        = $devenv::xdebug::params::profiler_enable,
+    $profiler_enable_trigger= $devenv::xdebug::params::profiler_enable_trigger,
+    $profiler_output_name   = $devenv::xdebug::params::profiler_output_name,
+    $profiler_output_dir    = $devenv::xdebug::params::profiler_output_dir,
 ) inherits devenv::xdebug::params 
 {
 	$zend_extension_module = $devenv::xdebug::params::zend_extension_module

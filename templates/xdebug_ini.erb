@@ -14,3 +14,15 @@ xdebug.idekey = "<%= @idekey %>"
 <% if @remote_log != false %>
 xdebug.remote_log = "<%= @remote_log %>"
 <% end %>
+
+; - Tracer settings
+xdebug.trace_format = <%= @trace_format %>
+xdebug.trace_enable_trigger = <%= @trace_enable_trigger %>
+xdebug.trace_output_name = <%= @trace_output_name %>
+xdebug.trace_output_dir = <%= @trace_output_dir %>
+
+; - Profiler settings
+xdebug.profiler_enable = <%= @profiler_enable %>
+xdebug.profiler_enable_trigger = <%= @profiler_enable_trigger %>
+xdebug.profiler_output_name = <%= @profiler_output_name %>
+xdebug.profiler_output_dir = <%= @profiler_output_dir %>
