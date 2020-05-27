@@ -34,6 +34,23 @@ class devenv::phpextensions
             profiler_output_name   => "${vsConfig['xdebug']['profiler_output_name']}",
             profiler_output_dir    => "${vsConfig['xdebug']['profiler_output_dir']}",
         }
+        
+        file { $vsConfig['xdebug']['trace_output_dir']:
+		    ensure => 'directory',
+		    owner  => 'vagrant',
+		    group  => 'apache',
+		    mode   => '0770',
+		}
+		
+		if ( $vsConfig['xdebug']['trace_output_dir'] != $vsConfig['xdebug']['profiler_output_dir'] )
+    	{
+	        file { $vsConfig['xdebug']['profiler_output_dir']:
+			    ensure => 'directory',
+			    owner  => 'vagrant',
+			    group  => 'apache',
+			    mode   => '0770',
+			}
+		}
     }
     
     if ( 'mongodb' in $vsConfig['phpModules'] )
