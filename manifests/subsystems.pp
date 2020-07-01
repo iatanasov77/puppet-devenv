@@ -6,9 +6,21 @@ class devenv::subsystems
         {
             'phpbrew':
             {
+                file_line { "PHPBREW_ROOT_IS_REQUIRED":
+                    ensure  => present,
+                    line    => "PHPBREW_ROOT=/opt/phpbrew",
+                    path    => "/etc/environment",
+                }
+                
                 class { 'phpbrew':
                    system_wide => $vsConfig['phpbrew']['system_wide'],
                    additional_dependencies => $vsConfig['phpbrew']['additional_dependencies']
+                }
+                
+                exec { "Fetch Known Versions Json ...":
+                    command     => '/usr/bin/phpbrew known --more',
+                    environment => [ "PHPBREW_ROOT=/opt/phpbrew" ],
+                    require     => Class['phpbrew'],
                 }
                 
                 $vsConfig['phpbrew']['install'].each |Integer $index, String $value| {
