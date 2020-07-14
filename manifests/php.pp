@@ -56,15 +56,16 @@ class devenv::php
     # Php Build Tool PHING
     ########################################
     notify { "INSTALLING PHING ( PHP BUILD TOOL )":
-		withpath => false,
-	}
-    exec { "pearUpgrade":
-        command => "/usr/bin/pear upgrade-all",
-        require => Package["php-pear"]
+        withpath => false,
     }
-    exec { "phing":
-        command => "/usr/bin/pear channel-discover pear.phing.info; /usr/bin/pear install phing/phing; /usr/bin/pear install HTTP_Request2",
-        unless => "/usr/bin/pear info phing/phing",
-        require => Exec["pearUpgrade"]
+    wget::fetch { 'https://www.phing.info/get/phing-latest.phar':
+        destination => "/usr/share/php/",
+        timeout     => 0,
+        verbose     => true,
+    } ->
+    file { '/usr/local/bin/phing':
+        ensure  => link,
+        target  => '/usr/share/php/phing-latest.phar',
+        mode    => '0777',
     }
 }
