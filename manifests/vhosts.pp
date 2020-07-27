@@ -3,6 +3,12 @@ class devenv::vhosts
 	# Setup default main virtual host
 	apache::vhost { "${hostname}":
 		port    	=> '80',
+		
+		serveraliases => [
+            "www.${hostname}",
+        ],
+        serveradmin => "webmaster@${hostname}",
+            
 		docroot 	=> '/vagrant/public', 
 		override	=> 'all',
 		#php_values 		=> ['memory_limit 1024M'],
@@ -63,6 +69,12 @@ class devenv::vhosts
         
         apache::vhost { "${host}":
         	port    	=> '80',
+        	
+        	serveraliases => [
+                "www.${host}",
+            ],
+        	serveradmin => "webmaster@${host}",
+
         	docroot 	=> $config['documentRoot'], 
         	override	=> 'all',
         	
