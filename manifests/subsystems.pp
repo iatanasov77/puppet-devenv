@@ -4,6 +4,13 @@ class devenv::subsystems
      
         case $value
         {
+            'dotnet_core': {}
+            'mono': {}
+            'dotnet':
+            {
+                # Require Big Refactoring when to install DotnetCore and When Mono
+                include devenv::dotnet::all
+            }
             'phpbrew':
             {
                 file_line { "PHPBREW_ROOT_IS_REQUIRED":

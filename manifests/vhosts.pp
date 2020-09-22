@@ -49,11 +49,7 @@ class devenv::vhosts
 	$vhosts	= parsejson( file( $vsConfig['vhostsJson'] ) )
 	$vhosts.each |String $host, Hash $config| {
 	
-        #$customFragment = 'ProxyPassMatch ^/(.*\.php)$ fcgi://127.0.0.1:9000/var/www/html/$1'
-	
         if ( $config['fpmSocket'] ) {
-            
-            #$fpmSocket      = $config['fpmSocket']
             $customFragment = "
                 <Proxy \"unix:${config['fpmSocket']}|fcgi://php-fpm\">
                     ProxySet disablereuse=off
@@ -63,10 +59,25 @@ class devenv::vhosts
                     SetHandler proxy:fcgi://php-fpm
                 </FilesMatch>
             "
+        } elsif ( $config['dotnetCoreApp'] ) {
+            $customFragment = "
+                ProxyPreserveHost On
+                ProxyPass / ${config['reverseProxy']}
+                ProxyPassReverse / ${config['reverseProxy']}
+            "
+            if ( 'dotnet_core' in $vsConfig['subsystems'] ) {
+                exec { "${config['dotnetCoreApp']}":
+                    command     => "sudo dotnet run --urls \"http://*:${config['dotnetCoreAppHttpPort']};https://*:${config['dotnetCoreAppHttpsPort']}\" >/dev/null 2>&1 &",
+                    cwd         => "${config['dotnetCoreAppPath']}"
+                }
+            }
         } else {
             $customFragment = ''
         }
         
+        #########################################################################
+        # New versions of Apache not allow underscore(_) in host name by default
+        #########################################################################
         apache::vhost { "${host}":
         	port    	=> '80',
         	
