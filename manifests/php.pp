@@ -39,7 +39,7 @@ class devenv::php
         dev          => true,
         composer     => true,
         pear         => true,
-        phpunit      => true,
+        phpunit      => $vsConfig['phpunit'],
         
         #package_prefix => 'php72-php-',
         

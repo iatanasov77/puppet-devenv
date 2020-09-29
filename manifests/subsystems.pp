@@ -4,6 +4,8 @@ class devenv::subsystems
      
         case $value
         {
+            'angular-cli': {}
+            
             'dotnet_core': {}
             'mono': {}
             'dotnet':

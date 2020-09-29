@@ -9,7 +9,7 @@ class devenv::vhosts
         ],
         serveradmin => "webmaster@${hostname}",
             
-		docroot 	=> '/vagrant/public', 
+		docroot 	=> '/vagrant/gui_symfony/public', 
 		override	=> 'all',
 		#php_values 		=> ['memory_limit 1024M'],
 		
@@ -26,7 +26,7 @@ class devenv::vhosts
 		
 		directories => [
 			{
-				'path'		        => '/vagrant/public',
+				'path'		        => '/vagrant/gui_symfony/public',
 				'allow_override'    => ['All'],
 				'Require'           => 'all granted',
 			},

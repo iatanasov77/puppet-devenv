@@ -14,4 +14,12 @@ class devenv::frontendtools
         provider    => 'npm',
         require     => Class['nodejs']
     }
+    
+    if ( 'angular-cli' in $vsConfig['subsystems'] ) {
+        exec { 'Install Angular CLI':
+            command => '/usr/bin/yarn global add @angular/cli',
+            creates => '/usr/lib/node_modules/@angular/cli/bin/ng',
+            require => Package['yarn']
+        }
+    }
 }
