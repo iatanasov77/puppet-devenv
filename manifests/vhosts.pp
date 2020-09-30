@@ -12,6 +12,7 @@ class devenv::vhosts
 		docroot 	=> '/vagrant/gui_symfony/public', 
 		override	=> 'all',
 		#php_values 		=> ['memory_limit 1024M'],
+		log_level          => 'debug',
 		
 		aliases		=> [
 			{
@@ -75,6 +76,12 @@ class devenv::vhosts
             $customFragment = ''
         }
         
+        if $config['needRewriteRules'] == undef {
+            $needRewriteRules   = false
+        } else {
+            $needRewriteRules   = $config['needRewriteRules']
+        }
+        
         #########################################################################
         # New versions of Apache not allow underscore(_) in host name by default
         #########################################################################
@@ -91,13 +98,17 @@ class devenv::vhosts
         	
         	directories => [
                 {
-                    'path'              => $config['documentRoot'],
-                    'allow_override'    => ['All'],
-                    'Require'           => 'all granted',
+                    'Require'       => 'all granted',
+                    
+                    path            => $config['documentRoot'],
+                    allow_override  => ['All'],
+                    
+                    rewrites        => devenv::apache_rewrite_rules( Boolean( $needRewriteRules ) )
                 }
             ],
             
         	custom_fragment    => $customFragment,
+        	log_level          => 'debug',
         }
         
 		
