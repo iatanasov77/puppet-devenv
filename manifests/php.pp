@@ -48,6 +48,7 @@ class devenv::php
             'Date/date.timezone'      => 'Europe/Sofia',
             'PHP/post_max_size'       => '64M',
             'PHP/upload_max_filesize' => '64M',
+            'PHAR/phar.readonly'      => 'Off',
         },
         extensions => $modules
     }
