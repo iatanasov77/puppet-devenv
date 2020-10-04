@@ -1,6 +1,9 @@
-class devenv::packages
-{
-    $vsConfig['packages'].each |Integer $index, String $value| {
+class vs_devenv::packages (
+    Array $packages         = [],
+    String $gitUserName     = 'undefined_user_name',
+    String $gitUserEmail    = 'undefined@example.com',
+) {
+    $packages.each |String $value| {
      
         case $value
         {
@@ -9,11 +12,11 @@ class devenv::packages
         		require git
         		
         		git::config { 'user.name':
-					value => $vsConfig['git']['userName'],
+					value => $gitUserName,
 					user    => 'vagrant',
 				}
 				git::config { 'user.email':
-					value => $vsConfig['git']['userEmail'],
+					value => $gitUserEmail,
 					user    => 'vagrant',
 				}
         	}

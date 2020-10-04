@@ -1,6 +1,12 @@
-class devenv::subsystems
-{
-    $vsConfig['subsystems'].each |String $subsysKey, Hash $subsys| {
+class vs_devenv::subsystems (
+    Hash $subsystems    = {},
+    Hash $phpbrewConfig = {
+        'system_wide'               => true,
+        'additional_dependencies'   => [],
+        'install'                   => [],
+    },
+) {
+    $subsystems.each |String $subsysKey, Hash $subsys| {
      
         case $subsysKey
         {
@@ -25,8 +31,8 @@ class devenv::subsystems
                 }
                 
                 class { 'phpbrew':
-                   system_wide => $vsConfig['phpbrew']['system_wide'],
-                   additional_dependencies => $vsConfig['phpbrew']['additional_dependencies']
+                   system_wide => $phpbrewConfig['system_wide'],
+                   additional_dependencies => $phpbrewConfig['additional_dependencies']
                 }
                 
                 exec { "Fetch Known Versions Json ...":
@@ -35,7 +41,7 @@ class devenv::subsystems
                     require     => Class['phpbrew'],
                 }
                 
-                $vsConfig['phpbrew']['install'].each |Integer $index, String $value| {
+                $phpbrewConfig['install'].each |Integer $index, String $value| {
                     phpbrew::install { $value: 
                        
                     }

@@ -1,13 +1,19 @@
-class devenv::vhosts
-{
+class vs_devenv::vhosts (
+    String $defaultHost,
+    String $defaultDocumentRoot,
+    Hash $vhosts                    = {},
+    Boolean $dotnetCore             = false,
+) {
+    
 	# Setup default main virtual host
-	apache::vhost { "${hostname}":
+	#######################################
+	apache::vhost { "${defaultHost}":
 		port    	=> '80',
 		
 		serveraliases => [
-            "www.${hostname}",
+            "www.${defaultHost}",
         ],
-        serveradmin => "webmaster@${hostname}",
+        serveradmin => "webmaster@${defaultHost}",
             
 		docroot 	=> '/vagrant/gui_symfony/public', 
 		override	=> 'all',
@@ -27,7 +33,7 @@ class devenv::vhosts
 		
 		directories => [
 			{
-				'path'		        => '/vagrant/gui_symfony/public',
+				'path'		        => "${defaultDocumentRoot}",
 				'allow_override'    => ['All'],
 				'Require'           => 'all granted',
 			},
@@ -40,14 +46,13 @@ class devenv::vhosts
 	}
 	
 	# Create cache/log dir
-	file { "/var/www/${hostname}":
+	file { "/var/www/${defaultHost}":
 	    ensure => 'directory',
 	    owner  => 'apache',
 	    group  => 'root',
 	    mode   => '0777',
 	}
 
-	$vhosts	= parsejson( file( $vsConfig['vhostsJson'] ) )
 	$vhosts.each |String $host, Hash $config| {
 	
         if ( $config['fpmSocket'] ) {
@@ -66,7 +71,7 @@ class devenv::vhosts
                 ProxyPass / ${config['reverseProxy']}
                 ProxyPassReverse / ${config['reverseProxy']}
             "
-            if ( 'dotnet_core' in $vsConfig['subsystems'] ) {
+            if ( $dotnetCore ) {
                 exec { "${config['dotnetCoreApp']}":
                     command     => "sudo dotnet run --urls \"http://*:${config['dotnetCoreAppHttpPort']};https://*:${config['dotnetCoreAppHttpsPort']}\" >/dev/null 2>&1 &",
                     cwd         => "${config['dotnetCoreAppPath']}"

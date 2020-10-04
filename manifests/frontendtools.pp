@@ -1,5 +1,6 @@
-class devenv::frontendtools
-{
+class vs_devenv::frontendtools (
+    Boolean $angularCli,
+) {
     class { 'nodejs':
         version       => 'latest',
         target_dir    => '/usr/bin',
@@ -15,7 +16,7 @@ class devenv::frontendtools
         require     => Class['nodejs']
     }
     
-    if ( 'angular-cli' in $vsConfig['subsystems'] ) {
+    if ( $angularCli ) {
         exec { 'Install Angular CLI':
             command => '/usr/bin/yarn global add @angular/cli',
             creates => '/usr/lib/node_modules/@angular/cli/bin/ng',

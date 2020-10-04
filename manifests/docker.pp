@@ -1,5 +1,5 @@
 
-class devenv::docker
+class vs_devenv::docker
 {
 	
 }
