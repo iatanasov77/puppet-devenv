@@ -38,7 +38,7 @@ class vs_devenv (
         packages        => $packages,
         gitUserName     => $gitUserName,
         gitUserEmail    => $gitUserEmail,
-    )
+    }
 
     class { '::vs_lamp':
         phpVersion                  => $phpVersion,
