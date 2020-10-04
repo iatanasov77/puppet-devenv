@@ -1,18 +1,21 @@
 class devenv::subsystems
 {
-    $vsConfig['subsystems'].each |Integer $index, String $value| {
+    $vsConfig['subsystems'].each |String $subsysKey, Hash $subsys| {
      
-        case $value
+        case $subsysKey
         {
             'angular-cli': {}
             
-            'dotnet_core': {}
-            'mono': {}
             'dotnet':
             {
-                # Require Big Refactoring when to install DotnetCore and When Mono
-                include devenv::dotnet::all
+                class { '::vs_dotnet':
+                    sdkVersion  => $subsys['dotnet_core'],
+                    sdkUser     => $subsys['sdkUser'],
+                    sdks        => $subsys['sdks'],
+                    mono        => ( $subsys['mono'] == Undef ),
+                }
             }
+            
             'phpbrew':
             {
                 file_line { "PHPBREW_ROOT_IS_REQUIRED":

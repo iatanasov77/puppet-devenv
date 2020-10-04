@@ -1,5 +1,5 @@
 {
-  "name": "puppet-devenv",
+  "name": "vs-devenv",
   "version": "0.1.0",
   "author": "Ivan I. Atanasov",
   "summary": "Installs, configures, and manages the developement environements.",
@@ -29,14 +29,14 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "17.10"
+        "18.04"
       ]
     }
   ],
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 3.0.0 < 5.0.0"
+      "version_requirement": ">= 4.0.0 < 7.0.0"
     }
   ],
   "description": "Developement environement ( Lamp stack + other usefull tools )"

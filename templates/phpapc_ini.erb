@@ -1,9 +1,0 @@
-; This file managed by Puppet, changes are probably futile
-
-extension = apc.so
-
-apc.enabled = 1
-
-<% @config.sort_by{|k,v| k}.each do |k,v| %>
-  apc.<%= k %> = <%= v %>
-<% end %>
