@@ -62,20 +62,20 @@ class vs_devenv (
     class { '::vs_devenv::vhosts':
         defaultHost         => "${hostname}",
         defaultDocumentRoot => '/vagrant/gui_symfony/public',
-        vhosts              = {},
+        vhosts              => {},
         dotnetCore          => ( 'dotnet' in $subsystems )
-    )
+    }
     
     class { '::vs_devenv::subsystems':
         subsystems      => $subsystems,
         phpbrewConfig   => $phpbrewConfig,
-    )
+    }
     
     class { '::vs_devenv::vstools':
         vstools => $vstools,
-    )
+    }
 
     class { '::vs_devenv::frontendtools':
         angularCli => ( 'angular-cli' in $subsystems ),
-    )
+    }
 }
