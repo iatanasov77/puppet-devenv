@@ -63,7 +63,7 @@ class vs_devenv (
     class { '::vs_devenv::vhosts':
         defaultHost         => "${hostname}",
         defaultDocumentRoot => '/vagrant/gui_symfony/public',
-        vhosts              => {},
+        vhosts              => $vhosts,
         dotnetCore          => ( 'dotnet' in $subsystems )
     }
     
