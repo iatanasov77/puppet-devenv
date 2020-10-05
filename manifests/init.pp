@@ -32,6 +32,7 @@ class vs_devenv (
     String $xdebugProfilerOutputName    = 'cachegrind.out',
     String $xdebugProfilerOutputDir     = '/home/nickname/Xdebug',
     
+    Hash $frontendtools                 = {},
     Hash $vstools                       = {},
 ) {
     class { '::vs_devenv::packages':
@@ -76,6 +77,6 @@ class vs_devenv (
     }
 
     class { '::vs_devenv::frontendtools':
-        angularCli => ( 'angular-cli' in $subsystems ),
+        frontendtools   => $frontendtools,
     }
 }

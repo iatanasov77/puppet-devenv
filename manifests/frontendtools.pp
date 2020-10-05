@@ -1,5 +1,5 @@
 class vs_devenv::frontendtools (
-    Boolean $angularCli,
+    Hash $frontendtools = {},
 ) {
     class { 'nodejs':
         version       => 'latest',
@@ -11,16 +11,27 @@ class vs_devenv::frontendtools (
         require     => Class['nodejs']
     }
     
-    package { 'gulp':
-        provider    => 'npm',
-        require     => Class['nodejs']
-    }
-    
-    if ( $angularCli ) {
-        exec { 'Install Angular CLI':
-            command => '/usr/bin/yarn global add @angular/cli',
-            creates => '/usr/lib/node_modules/@angular/cli/bin/ng',
-            require => Package['yarn']
+    $frontendtools.each |String $key, Hash $data| {
+     
+        case $key
+        {
+            'gulp':
+            {
+                package { 'gulp':
+                    provider    => 'npm',
+                    require     => Class['nodejs']
+                }
+            }
+            
+            'angular-cli':
+            {
+                exec { 'Install Angular CLI':
+                    command => '/usr/bin/yarn global add @angular/cli',
+                    creates => '/usr/lib/node_modules/@angular/cli/bin/ng',
+                    require => Package['yarn']
+                }
+            }
         }
     }
+    
 }

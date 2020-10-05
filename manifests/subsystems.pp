@@ -10,8 +10,6 @@ class vs_devenv::subsystems (
      
         case $subsysKey
         {
-            'angular-cli': {}
-            
             'dotnet':
             {
                 class { '::vs_dotnet':
