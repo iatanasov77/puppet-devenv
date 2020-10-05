@@ -2,7 +2,7 @@
 #   Return rewrite rules used in apache virtual hosts.
 #
 #########################################################################
-function devenv::apache_rewrite_rules( Boolean $needRewriteRules ) {
+function vs_devenv::apache_rewrite_rules( Boolean $needRewriteRules ) {
 
     if ( $needRewriteRules ) {
         [

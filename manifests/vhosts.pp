@@ -108,7 +108,7 @@ class vs_devenv::vhosts (
                     path            => $config['documentRoot'],
                     allow_override  => ['All'],
                     
-                    rewrites        => devenv::apache_rewrite_rules( Boolean( $needRewriteRules ) )
+                    rewrites        => vs_devenv::apache_rewrite_rules( Boolean( $needRewriteRules ) )
                 }
             ],
             
