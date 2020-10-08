@@ -20,10 +20,10 @@ class vs_devenv::vhosts (
     $installedProjects.each |String $projectId, Hash $projectConfig| {
         $projectConfig['hosts'].each | Hash $host | {
             
-            if $host['needRewriteRules'] == Undef {
-                $needRewriteRules = False
-            } else {
+            if $host['needRewriteRules'] {
                 $needRewriteRules = Boolean( $host['needRewriteRules'] )
+            } else {
+                $needRewriteRules = False
             }
         
             case $host['hostType']
