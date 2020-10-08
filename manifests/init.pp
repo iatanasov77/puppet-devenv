@@ -1,7 +1,7 @@
 class vs_devenv (
     String $defaultHost,
     String $defaultDocumentRoot,
-    Hash $vhosts                        = {},
+    Hash $installedProjects             = {},
     
     Hash $subsystems                    = {},
     Hash $phpbrewConfig                 = {
@@ -63,7 +63,7 @@ class vs_devenv (
     class { '::vs_devenv::vhosts':
         defaultHost         => "${hostname}",
         defaultDocumentRoot => '/vagrant/gui_symfony/public',
-        vhosts              => $vhosts,
+        installedProjects   => $installedProjects,
         dotnetCore          => ( 'dotnet' in $subsystems )
     }
     
