@@ -19,6 +19,10 @@ class vs_devenv::vhosts (
 
     $installedProjects.each |String $projectId, Hash $projectConfig| {
         $projectConfig['hosts'].each | Hash $host | {
+            
+            if $host['needRewriteRules'] == Undef {
+                $host['needRewriteRules'] = False
+            }
         
             case $host['hostType']
             {
@@ -28,7 +32,7 @@ class vs_devenv::vhosts (
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
                         fpmSocket           => $host['fpmSocket'],
-                        needRewriteRules    => Boolean( $host['needRewriteRules'] ),
+                        needRewriteRules    => $host['needRewriteRules'],
                     }
                 }
                 'DotNet':
