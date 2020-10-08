@@ -23,7 +23,7 @@ class vs_devenv::vhosts (
             if $host['needRewriteRules'] {
                 $needRewriteRules = Boolean( $host['needRewriteRules'] )
             } else {
-                $needRewriteRules = False
+                $needRewriteRules = Boolean( "false" )
             }
         
             case $host['hostType']
