@@ -22,7 +22,7 @@ class vs_devenv::vhosts (
             
             if $host['needRewriteRules'] == Undef {
                 $needRewriteRules = False
-            } else
+            } else {
                 $needRewriteRules = Boolean( $host['needRewriteRules'] )
             }
         
