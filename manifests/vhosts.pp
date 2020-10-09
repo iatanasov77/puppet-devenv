@@ -6,8 +6,7 @@ class vs_devenv::vhosts (
     Boolean $dotnetCore             = false,
 ) {
 
-/*
-    class { '::vs_lamp::apache_vhost':
+    vs_lamp::apache_vhost{ "${defaultHost}":
         hostName        => $defaultHost,
         documentRoot    => $defaultDocumentRoot,
         aliases         => [ 
@@ -17,7 +16,6 @@ class vs_devenv::vhosts (
             }
         ],
     }
-*/
 
     $installedProjects.each |String $projectId, Hash $projectConfig| {
         $projectConfig['hosts'].each | Hash $host | {
@@ -32,7 +30,7 @@ class vs_devenv::vhosts (
             {
                 'Lamp':
                 {
-                    class { '::vs_lamp::apache_vhost':
+                    vs_lamp::apache_vhost{ "${host['hostName']}":
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
                         fpmSocket           => $host['fpmSocket'],
