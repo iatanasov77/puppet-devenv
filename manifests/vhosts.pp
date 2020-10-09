@@ -43,7 +43,6 @@ class vs_devenv::vhosts (
                         vs_dotnet::sdk_publish{ "Publish ${host['application']}":
                             application         => $host['application'],
                             projectName         => $projectId,
-                            application         => 
                             projectPath         => $host['dotnetCoreAppPath'],
                             reverseProxyPort    => $host['reverseProxyPort'],
                             sdkUser             => 'vagrant',
