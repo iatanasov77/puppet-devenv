@@ -39,13 +39,13 @@ class vs_devenv::vhosts (
                 }
                 'DotNet':
                 {
-                    class { '::vs_dotnet::sdk_publish':
+                    vs_dotnet::sdk_publish{ "${projectId}":
                         projectName         => $projectId,
                         projectPath         => $host['dotnetCoreAppPath'],
                         reverseProxyPort    => $host['reverseProxyPort'],
                         sdkUser             => 'vagrant',
                     }
-                    class { '::vs_dotnet::apache_vhost':
+                    vs_dotnet::apache_vhost{ "${host['hostName']}":
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
                         reverseProxyPort    => $host['reverseProxyPort'],
