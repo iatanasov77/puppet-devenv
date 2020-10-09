@@ -34,7 +34,18 @@ class vs_devenv (
     
     Hash $frontendtools                 = {},
     Hash $vstools                       = {},
+    
+    Boolean $forcePhp7Repo              = true,
+    Boolean $forceMySql57Repo           = true,
 ) {
+    if ( $forcePhp7Repo ) {
+        include vs_devenv::force::php7_repo
+    }
+    
+    if ( $forceMySql57Repo ) {
+        include vs_devenv::force::mysql57_repo
+    }
+    
     class { '::vs_devenv::packages':
         packages        => $packages,
         gitUserName     => $gitUserName,
