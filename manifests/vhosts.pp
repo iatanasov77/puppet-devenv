@@ -6,6 +6,7 @@ class vs_devenv::vhosts (
     Boolean $dotnetCore             = false,
 ) {
 
+/*
     class { '::vs_lamp::apache_vhost':
         hostName        => $defaultHost,
         documentRoot    => $defaultDocumentRoot,
@@ -16,6 +17,7 @@ class vs_devenv::vhosts (
             }
         ],
     }
+*/
 
     $installedProjects.each |String $projectId, Hash $projectConfig| {
         $projectConfig['hosts'].each | Hash $host | {
