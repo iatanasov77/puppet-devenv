@@ -40,8 +40,10 @@ class vs_devenv::vhosts (
                 'DotNet':
                 {
                     if ( $host['publish'] ) {
-                        vs_dotnet::sdk_publish{ "${projectId}":
+                        vs_dotnet::sdk_publish{ "Publish ${host['application']}":
+                            application         => $host['application'],
                             projectName         => $projectId,
+                            application         => 
                             projectPath         => $host['dotnetCoreAppPath'],
                             reverseProxyPort    => $host['reverseProxyPort'],
                             sdkUser             => 'vagrant',
