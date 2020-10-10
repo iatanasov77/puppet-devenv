@@ -6,17 +6,30 @@ class vs_devenv::vhosts (
     Boolean $dotnetCore             = false,
 ) {
 
+    ##################################################
+    # Create Vhost for GUI
+    ##################################################
     vs_lamp::apache_vhost{ "${defaultHost}":
         hostName        => $defaultHost,
         documentRoot    => $defaultDocumentRoot,
-        aliases         => [ 
+        aliases         => [
             {
                 alias => '/phpmyadmin',
                 path  => '/usr/share/phpMyAdmin'
             }
         ],
+        directories     => [
+            {
+                'path'              => '/usr/share/phpMyAdmin',
+                'allow_override'    => ['All'],
+                'Require'           => 'all granted',
+            }
+        ],
     }
-
+    
+    ##################################################
+    # Create Vhosts for all installed projects
+    ##################################################
     $installedProjects.each |String $projectId, Hash $projectConfig| {
         $projectConfig['hosts'].each | Hash $host | {
             

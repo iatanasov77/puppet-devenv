@@ -54,7 +54,6 @@ class vs_devenv::force::php7_repo
             descr      => "Remi PHP ${vsConfig['phpVersion']} RPM repository for Enterprise Linux 7",
             mirrorlist => "http://cdn.remirepo.net/enterprise/7/php${phpVersionShort}/mirror",
             *          => $yumrepo_defaults,
-        }
+        } 
     }
-    
 }

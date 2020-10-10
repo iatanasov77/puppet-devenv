@@ -18,7 +18,6 @@ class vs_devenv (
     Array $apacheModules                = [],
     String $phpVersion                  = '7.2',
     
-    String $mysqlService                = 'mysqld',
     String $mysqllRootPassword          = 'vagrant',
 
     Array $phpModules                   = [],
@@ -36,14 +35,21 @@ class vs_devenv (
     Hash $vstools                       = {},
     
     Boolean $forcePhp7Repo              = true,
-    Boolean $forceMySql57Repo           = true,
+    Boolean $forceMySqlComunityRepo     = true,
 ) {
     if ( $forcePhp7Repo ) {
         include vs_devenv::force::php7_repo
     }
     
-    if ( $forceMySql57Repo ) {
-        include vs_devenv::force::mysql57_repo
+    if ( $forceMySqlComunityRepo ) {
+        include vs_devenv::force::mysql_comunity_repo
+        
+        $mysqlPackageName       = 'mysql-community-server'
+        $mysqlService           = 'mysqld'
+        
+    } else {
+        $mysqlPackageName       = ''
+        $mysqlService           = ''
     }
     
     class { '::vs_devenv::packages':
@@ -56,19 +62,27 @@ class vs_devenv (
         phpVersion                  => $phpVersion,
         apacheModules               => $vsConfig['apacheModules'],
         
-        mysqlService                => $mysqlService,
         mysqllRootPassword          => $mysqllRootPassword,
+        mysqlPackageName            => $mysqlPackageName,
+        mysqlService                => $mysqlService,
 
         phpModules                  => $phpModules,
-        phpunit                     => $phpunit,
-        
         phpSettings                 => $phpSettings,
+        phpunit                     => $phpunit,
+        phpManageRepos              => !$forcePhp7Repo,
         
         xdebugTraceOutputName       => $xdebugTraceOutputName,
         xdebugTraceOutputDir        => $xdebugTraceOutputDir,
         xdebugProfilerEnable        => $xdebugProfilerEnable,
         xdebugProfilerOutputName    => $xdebugProfilerOutputName,
         xdebugProfilerOutputDir     => $xdebugProfilerOutputDir,
+    }
+    
+    if ( $forcePhp7Repo ) {
+        file { "/usr/lib64/httpd/modules/libphp${phpVersion}.so":
+            ensure  => link,
+            target  => '/usr/lib64/httpd/modules/libphp7.so',
+        }
     }
     
     class { '::vs_devenv::subsystems':
