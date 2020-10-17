@@ -58,14 +58,6 @@ class vs_devenv::subsystems (
                 }
 
             }
-            default:
-            {
-                if ! defined(Package[$value]) {
-                    package { $value:
-                        ensure => present,
-                    }
-                }
-            }
         }
     }
 }
