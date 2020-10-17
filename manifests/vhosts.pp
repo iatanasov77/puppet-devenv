@@ -52,21 +52,23 @@ class vs_devenv::vhosts (
                 }
                 'DotNet':
                 {
-                    if ( $host['publish'] ) {
-                        vs_dotnet::sdk_publish{ "Publish ${host['application']}":
-                            application         => $host['application'],
-                            projectName         => $projectId,
-                            projectPath         => $host['dotnetCoreAppPath'],
-                            reverseProxyPort    => $host['reverseProxyPort'],
-                            sdkUser             => 'vagrant',
-                        }
-                    }
-                    
-                    vs_dotnet::apache_vhost{ "${host['hostName']}":
-                        hostName            => $host['hostName'],
-                        documentRoot        => $host['documentRoot'],
-                        reverseProxyPort    => $host['reverseProxyPort'],
-                    }
+                	if ( $dotnetCore ) {
+	                    if ( $host['publish'] ) {
+	                        vs_dotnet::sdk_publish{ "Publish ${host['application']}":
+	                            application         => $host['application'],
+	                            projectName         => $projectId,
+	                            projectPath         => $host['dotnetCoreAppPath'],
+	                            reverseProxyPort    => $host['reverseProxyPort'],
+	                            sdkUser             => 'vagrant',
+	                        }
+	                    }
+	                    
+	                    vs_dotnet::apache_vhost{ "${host['hostName']}":
+	                        hostName            => $host['hostName'],
+	                        documentRoot        => $host['documentRoot'],
+	                        reverseProxyPort    => $host['reverseProxyPort'],
+	                    }
+	                }
                 }
             }
             
