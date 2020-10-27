@@ -41,13 +41,13 @@ class vs_devenv::vhosts (
                     source_url  => $instanceConfig['sourceUrl'],
                 }
     
-                vs_devenv::tomcat::instance(
+                vs_devenv::tomcat::instance { "${instanceId}":
                     name            => $instanceId,
                     catalinaHome    => "${instanceConfig['catalinaHome']}",
                     catalinaBase    => "${instanceConfig['catalinaBase']}",
                     serverPort      => $instanceConfig['serverPort'],
                     connectorPort   => $instanceConfig['connectorPort'],
-                )
+                }
             }
             
         }
