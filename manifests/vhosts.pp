@@ -74,8 +74,6 @@ class vs_devenv::vhosts (
                 
                 'JSP':
                 {
-                    vs_devenv::apache_vhost_jsp
-                    
                     vs_dotnet::apache_vhost{ "${host['hostName']}":
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
