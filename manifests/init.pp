@@ -102,6 +102,6 @@ class vs_devenv (
         defaultHost         => "${hostname}",
         defaultDocumentRoot => '/vagrant/gui_symfony/public',
         installedProjects   => $installedProjects,
-        dotnetCore          => has_key( $subsystems, 'dotnet' )		# ( 'dotnet' in $subsystems )
+        dotnetCore          => has_key( $subsystems, 'dotnet' )	and	$subsystems['dotnet']['enabled']
     }
 }
