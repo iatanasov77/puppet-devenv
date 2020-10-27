@@ -74,7 +74,7 @@ class vs_devenv::vhosts (
                 
                 'JSP':
                 {
-                    vs_dotnet::apache_vhost{ "${host['hostName']}":
+                    vs_lamp::apache_vhost{ "${host['hostName']}":
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
                         customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyPort'] ),
