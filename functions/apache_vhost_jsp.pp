@@ -1,8 +1,8 @@
-function vs_devenv::apache_vhost_jsp( $port )
+function vs_devenv::apache_vhost_jsp( $port = '8080', $protocol = 'ajp' )
 {
     "
     ProxyRequests off
-    ProxyPass / ajp://127.0.0.1:${port}/
-    ProxyPassReverse / ajp://127.0.0.1:${port}/
+    ProxyPass / ${protocol}://127.0.0.1:${port}/
+    ProxyPassReverse / ${protocol}://127.0.0.1:${port}/
     "
 }

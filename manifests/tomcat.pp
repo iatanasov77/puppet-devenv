@@ -1,4 +1,5 @@
 class vs_devenv::tomcat (
+    String $catalinaHome    = '/opt/tomcat',
     String $sourceUrl,
     String $jdkPackage,
 ) {
@@ -6,10 +7,10 @@ class vs_devenv::tomcat (
         package => $jdkPackage,
     } ->
     
-    tomcat::install { '/opt/tomcat':
+    tomcat::install { "${catalinaHome}":
         source_url => $sourceUrl,
     }
     tomcat::instance { 'default':
-        catalina_home => '/opt/tomcat',
+        catalina_home => "${catalinaHome}",
     }
 }

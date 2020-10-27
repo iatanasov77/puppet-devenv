@@ -31,6 +31,25 @@ class vs_devenv::vhosts (
     # Create Vhosts for all installed projects
     ##################################################
     $installedProjects.each |String $projectId, Hash $projectConfig| {
+        
+        # Install Tomcat Instances
+        if ( $projectConfig['type'] == 'Java' and $projectConfig['tomcatInstances'] ) {
+            $projectConfig['tomcatInstances'].each | String $instanceId, Hash $instanceConfig | {
+                tomcat::install { "${catalinaHome}":
+                    source_url => $sourceUrl,
+                }
+    
+                vs_devenv::tomcat::instance(
+                    name            => $instanceId,
+                    catalinaHome    => "${instanceConfig['catalinaHome']}",
+                    catalinaBase    => "${instanceConfig['catalinaBase']}",
+                    serverPort      => $instanceConfig['serverPort'],
+                    connectorPort   => $instanceConfig['connectorPort'],
+                )
+            }
+        }
+    
+        # Configure Apache Vhosts
         $projectConfig['hosts'].each | Hash $host | {
             
             if $host['needRewriteRules'] {
