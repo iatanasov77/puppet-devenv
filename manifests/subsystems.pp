@@ -10,13 +10,30 @@ class vs_devenv::subsystems (
      
         case $subsysKey
         {
+            'docker':
+            {
+                if ( $subsystems['docker']['enabled'] ) {
+                    class { 'docker':
+                        ensure => present,
+                        version => 'latest',
+                    }
+                    
+                    class {'docker::compose':
+                        ensure => present,
+                        #version => '1.9.0',
+                    }
+                }
+            }
+            
             'dotnet':
             {
-                class { '::vs_dotnet':
-                    sdkVersion  => $subsys['dotnet_core'],
-                    sdkUser     => $subsys['sdkUser'],
-                    sdks        => $subsys['sdks'],
-                    mono        => ( $subsys['mono'] == Undef ),
+                if ( $subsystems['dotnet']['enabled'] ) {
+                    class { '::vs_dotnet':
+                        sdkVersion  => $subsys['dotnet_core'],
+                        sdkUser     => $subsys['sdkUser'],
+                        sdks        => $subsys['sdks'],
+                        mono        => ( $subsys['mono'] == Undef ),
+                    }
                 }
             }
             
@@ -45,19 +62,7 @@ class vs_devenv::subsystems (
                     }
                 }
             }
-            'docker':
-            {
-                class { 'docker':
-                    ensure => present,
-                    version => 'latest',
-                }
-                
-                class {'docker::compose':
-                    ensure => present,
-                    #version => '1.9.0',
-                }
-
-            }
+            
         }
     }
 }
