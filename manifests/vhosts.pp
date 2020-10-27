@@ -35,8 +35,8 @@ class vs_devenv::vhosts (
         # Install Tomcat Instances
         if ( $projectConfig['type'] == 'Java' and $projectConfig['tomcatInstances'] ) {
             $projectConfig['tomcatInstances'].each | String $instanceId, Hash $instanceConfig | {
-                tomcat::install { "${catalinaHome}":
-                    source_url => $sourceUrl,
+                tomcat::install { "${instanceConfig['catalinaHome']}":
+                    source_url => ${instanceConfig['sourceUrl']},
                 }
     
                 vs_devenv::tomcat::instance(
