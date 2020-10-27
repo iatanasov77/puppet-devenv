@@ -1,5 +1,4 @@
 define vs_devenv::tomcat::instance (
-    String $name,
     String $catalinaHome,
     String $catalinaBase,
     Integer $serverPort     = 8005,

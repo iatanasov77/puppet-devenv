@@ -42,7 +42,6 @@ class vs_devenv::vhosts (
                 }
     
                 vs_devenv::tomcat::instance { "${instanceId}":
-                    name            => $instanceId,
                     catalinaHome    => "${instanceConfig['catalinaHome']}",
                     catalinaBase    => "${instanceConfig['catalinaBase']}",
                     serverPort      => $instanceConfig['serverPort'],
