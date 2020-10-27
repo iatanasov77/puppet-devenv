@@ -34,9 +34,11 @@ class vs_devenv::vhosts (
         
         # Install Tomcat Instances
         if ( $projectConfig['type'] == 'Java' and $projectConfig['tomcatInstances'] ) {
+        
             $projectConfig['tomcatInstances'].each | String $instanceId, Hash $instanceConfig | {
+                
                 tomcat::install { "${instanceConfig['catalinaHome']}":
-                    source_url => ${instanceConfig['sourceUrl']},
+                    source_url  => $instanceConfig['sourceUrl'],
                 }
     
                 vs_devenv::tomcat::instance(
@@ -47,6 +49,7 @@ class vs_devenv::vhosts (
                     connectorPort   => $instanceConfig['connectorPort'],
                 )
             }
+            
         }
     
         # Configure Apache Vhosts
