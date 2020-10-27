@@ -46,10 +46,11 @@ class vs_devenv::vhosts (
                     vs_lamp::apache_vhost{ "${host['hostName']}":
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
-                        fpmSocket           => $host['fpmSocket'],
+                        customFragment      => vs_lamp::apache_vhost_fpm_proxy( $host['fpmSocket'] ),
                         needRewriteRules    => $needRewriteRules,
                     }
                 }
+                
                 'DotNet':
                 {
                 	if ( $dotnetCore ) {
@@ -70,6 +71,19 @@ class vs_devenv::vhosts (
 	                    }
 	                }
                 }
+                
+                'JSP':
+                {
+                    vs_devenv::apache_vhost_jsp
+                    
+                    vs_dotnet::apache_vhost{ "${host['hostName']}":
+                        hostName            => $host['hostName'],
+                        documentRoot        => $host['documentRoot'],
+                        customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyPort'] ),
+                        needRewriteRules    => $needRewriteRules,
+                    }
+                }
+                
             }
             
         }

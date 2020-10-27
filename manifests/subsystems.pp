@@ -37,6 +37,16 @@ class vs_devenv::subsystems (
                 }
             }
             
+            'tomcat':
+            {
+                if ( $subsys['enabled'] ) {
+                    class { '::vs_devenv::tomcat':
+                        sourceUrl   => $subsys['sourceUrl'],
+                        jdkPackage  => $subsys['jdkPackage'],
+                    }
+                }
+            }
+            
             'phpbrew':
             {
                 file_line { "PHPBREW_ROOT_IS_REQUIRED":
