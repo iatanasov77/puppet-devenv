@@ -112,7 +112,7 @@ class vs_devenv::vhosts (
                         documentRoot        => $host['documentRoot'],
                         customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyProtocol'], $host['reverseProxyPort'] ),
                         needRewriteRules    => $needRewriteRules,
-                        notify              => Service['tomcat'],
+                        #notify              => Service['tomcat'],
                     }
                 }
                 
@@ -135,7 +135,7 @@ class vs_devenv::vhosts (
                         documentRoot        => $host['documentRoot'],
                         customFragment      => vs_devenv::apache_vhost_jsp_rewrite( $host['hostName'], $host['tomcatUrl'] ),
                         needRewriteRules    => $needRewriteRules,
-                        notify              => Service['tomcat'],
+                        #notify              => Service['tomcat'],
                     }
                 }
                 
