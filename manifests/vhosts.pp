@@ -93,12 +93,38 @@ class vs_devenv::vhosts (
 	                }
                 }
                 
-                'JSP':
+                'Jsp':
                 {
+                    if ( $host['publish'] ) {
+                        file { "${host['documentRoot']}":
+                            ensure  => link,
+                            target  => "${host['publishSrc']}",
+                            mode    => '0777',
+                        }
+                    }
+    
                     vs_lamp::apache_vhost{ "${host['hostName']}":
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
-                        customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyPort'] ),
+                        customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyProtocol'], $host['reverseProxyPort'] ),
+                        needRewriteRules    => $needRewriteRules,
+                    }
+                }
+                
+                'JspRewrite':
+                {
+                    if ( $host['publish'] ) {
+                        file { "${host['documentRoot']}":
+                            ensure  => link,
+                            target  => "${host['publishSrc']}",
+                            mode    => '0777',
+                        }
+                    }
+                    
+                    vs_lamp::apache_vhost{ "${host['hostName']}":
+                        hostName            => $host['hostName'],
+                        documentRoot        => $host['documentRoot'],
+                        customFragment      => vs_devenv::apache_vhost_jsp_rewrite( $host['hostName'], $host['tomcatUrl'] ),
                         needRewriteRules    => $needRewriteRules,
                     }
                 }

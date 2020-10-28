@@ -19,9 +19,10 @@ define vs_devenv::tomcat::instance (
         catalina_base         => "${catalinaBase}",
         port                  => "${connectorPort}",
         protocol              => 'HTTP/1.1',
-        additional_attributes => {
-            'redirectPort' => '8443'
-        },
+        
+        #additional_attributes => {
+        #    'redirectPort' => '8443'
+        #},
     }
     
 }
