@@ -14,6 +14,10 @@ class vs_devenv::tomcat (
         catalina_home => "${catalinaHome}",
     }
     
+    -> vs_devenv::tomcat::service { "tomcat":
+        catalinaHome    => "${catalinaHome}",
+    }
+    
     -> tomcat::config::server::tomcat_users {
         'default-role-manager-script':
             ensure        => present,

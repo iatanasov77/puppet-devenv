@@ -25,8 +25,8 @@ define vs_devenv::tomcat::instance (
         #},
     }
     
-    -> tomcat::service { "${name}":
-        catalina_base => "${catalinaHome}",
+    -> vs_devenv::tomcat::service { "${name}":
+        catalinaHome    => "${catalinaHome}",
     }
     
     -> tomcat::config::server::tomcat_users {
