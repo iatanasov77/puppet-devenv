@@ -9,13 +9,13 @@ define vs_devenv::tomcat::service (
         content => template( 'vs_devenv/tomcat.service.erb' ),
         mode    => '0755',
         require     => Class['vs_devenv::tomcat'],
-    } ->
-    
-    Exec { "Tomcat Service":
-        command => "/etc/init.d/${name} start",
     }
     
     /*
+    
+    -> Exec { "Tomcat Service":
+        command => "/etc/init.d/${name} start",
+    }
     
     File { "${name}.service":
         ensure  => file,
@@ -23,9 +23,9 @@ define vs_devenv::tomcat::service (
         content => template( 'vs_devenv/tomcat.service.erb' ),
         mode    => '0755',
         require     => Class['vs_devenv::tomcat'],
-    } ->
+    }
     
-    Service { "Start Service: ${name}":
+    -> Service { "Start Service: ${name}":
         name    => "${name}",
         ensure  => 'running',
     }
