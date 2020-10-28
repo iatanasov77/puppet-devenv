@@ -13,4 +13,23 @@ class vs_devenv::tomcat (
     tomcat::instance { 'default':
         catalina_home => "${catalinaHome}",
     }
+    
+    -> tomcat::service { 'default':
+        catalina_base => "${catalinaHome}",
+    }
+    
+    -> tomcat::config::server::tomcat_users {
+        'default-role-manager-script':
+            ensure        => present,
+            catalina_base => "${catalinaHome}",
+            element       => 'role',
+            element_name  => 'manager-script';
+        'default-user-admin':
+            ensure        => present,
+            catalina_base => "${catalinaHome}",
+            element       => 'user',
+            element_name  => 'admin',
+            password      => 'admin',
+            roles         => ['standard', 'manager-script'];
+    }
 }

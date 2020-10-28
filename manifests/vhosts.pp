@@ -100,6 +100,10 @@ class vs_devenv::vhosts (
                             ensure  => link,
                             target  => "${host['publishSrc']}",
                             mode    => '0777',
+                            require => [
+                                Class['vs_devenv::tomcat'],
+                                #File['/etc/ssh/sshd_config'],
+                            ],
                         }
                     }
     
@@ -108,6 +112,11 @@ class vs_devenv::vhosts (
                         documentRoot        => $host['documentRoot'],
                         customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyProtocol'], $host['reverseProxyPort'] ),
                         needRewriteRules    => $needRewriteRules,
+                    }
+                    
+                    service { "service-${host['hostName']}":
+                        name    => 'tomcat',
+                        ensure  => 'running',
                     }
                 }
                 
@@ -118,6 +127,10 @@ class vs_devenv::vhosts (
                             ensure  => link,
                             target  => "${host['publishSrc']}",
                             mode    => '0777',
+                            require => [
+                                Class['vs_devenv::tomcat'],
+                                #File['/etc/ssh/sshd_config'],
+                            ],
                         }
                     }
                     
@@ -126,6 +139,11 @@ class vs_devenv::vhosts (
                         documentRoot        => $host['documentRoot'],
                         customFragment      => vs_devenv::apache_vhost_jsp_rewrite( $host['hostName'], $host['tomcatUrl'] ),
                         needRewriteRules    => $needRewriteRules,
+                    }
+                    
+                    service { "service-${host['hostName']}":
+                        name    => 'tomcat',
+                        ensure  => 'running',
                     }
                 }
                 

@@ -9,7 +9,7 @@ function vs_devenv::apache_vhost_jsp_rewrite( $host = 'example.com', $tomcatUrl 
     ProxyPreserveHost on
     
     RewriteEngine     on
-    RewriteCond %{HTTP_HOST} ^${host}(:80)?$
-    RewriteRule /(.*) ${tomcatUrl}/$1 [P]
+    RewriteCond %{HTTP_HOST} ^${host}(:80)?\$
+    RewriteRule /(.*) ${tomcatUrl}/\$1 [P]
     "
 }

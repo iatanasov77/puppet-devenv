@@ -25,4 +25,22 @@ define vs_devenv::tomcat::instance (
         #},
     }
     
+    -> tomcat::service { "${name}":
+        catalina_base => "${catalinaHome}",
+    }
+    
+    -> tomcat::config::server::tomcat_users {
+        'instance-role-manager-script':
+            ensure        => present,
+            catalina_base => "${catalinaHome}",
+            element       => 'role',
+            element_name  => 'manager-script';
+        'instance-user-admin':
+            ensure        => present,
+            catalina_base => "${catalinaHome}",
+            element       => 'user',
+            element_name  => 'admin',
+            password      => 'admin',
+            roles         => ['standard', 'manager-script'];
+    }
 }
