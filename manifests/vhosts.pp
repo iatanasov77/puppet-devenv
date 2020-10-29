@@ -112,7 +112,11 @@ class vs_devenv::vhosts (
                         documentRoot        => $host['documentRoot'],
                         customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyProtocol'], $host['reverseProxyPort'] ),
                         needRewriteRules    => $needRewriteRules,
-                        #notify              => Service['tomcat'],
+                    }
+                    
+                    -> Exec { "Restart Tomcat for host: ${host['hostName']}":
+                        command => "service ${host['tomcatService']} restart",
+                        require => Service["${host['tomcatService']}"],
                     }
                 }
                 
@@ -135,7 +139,11 @@ class vs_devenv::vhosts (
                         documentRoot        => $host['documentRoot'],
                         customFragment      => vs_devenv::apache_vhost_jsp_rewrite( $host['hostName'], $host['tomcatUrl'] ),
                         needRewriteRules    => $needRewriteRules,
-                        #notify              => Service['tomcat'],
+                    }
+                    
+                    -> Exec { "Restart Tomcat for host: ${host['hostName']}":
+                        command => "service ${host['tomcatService']} restart",
+                        require => Service["${host['tomcatService']}"],
                     }
                 }
                 

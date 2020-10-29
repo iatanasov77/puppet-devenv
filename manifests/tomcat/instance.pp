@@ -1,8 +1,8 @@
 define vs_devenv::tomcat::instance (
     String $catalinaHome,
     String $catalinaBase,
-    Integer $serverPort     = 8005,
-    Integer $connectorPort  = 8080,
+    Integer $serverPort,
+    Integer $connectorPort,
 ) {
 
     tomcat::instance { "${name}":
@@ -30,6 +30,21 @@ define vs_devenv::tomcat::instance (
     }
     
     -> tomcat::config::server::tomcat_users {
+        'instance-role-admin-gui':
+            ensure        => present,
+            catalina_base => "${catalinaHome}",
+            element       => 'role',
+            element_name  => 'admin-gui';
+        'instance-role-admin-script':
+            ensure        => present,
+            catalina_base => "${catalinaHome}",
+            element       => 'role',
+            element_name  => 'admin-script';
+        'instance-role-manager-gui':
+            ensure        => present,
+            catalina_base => "${catalinaHome}",
+            element       => 'role',
+            element_name  => 'manager-gui';
         'instance-role-manager-script':
             ensure        => present,
             catalina_base => "${catalinaHome}",
@@ -41,6 +56,6 @@ define vs_devenv::tomcat::instance (
             element       => 'user',
             element_name  => 'admin',
             password      => 'admin',
-            roles         => ['standard', 'manager-script'];
+            roles         => ['standard', 'admin-script', 'admin-gui', 'manager-script', 'manager-gui'];
     }
 }
