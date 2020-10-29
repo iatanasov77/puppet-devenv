@@ -4,11 +4,6 @@ class vs_devenv (
     Hash $installedProjects             = {},
     
     Hash $subsystems                    = {},
-    Hash $phpbrewConfig                 = {
-        'system_wide'               => true,
-        'additional_dependencies'   => [],
-        'install'                   => [],
-    },
     
     Array $packages                     = [],
     String $gitUserName                 = 'undefined_user_name',
@@ -87,7 +82,6 @@ class vs_devenv (
     
     class { '::vs_devenv::subsystems':
         subsystems      => $subsystems,
-        phpbrewConfig   => $phpbrewConfig,
     }
     
     class { '::vs_devenv::vstools':

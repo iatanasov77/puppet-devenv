@@ -1,10 +1,5 @@
 class vs_devenv::subsystems (
     Hash $subsystems    = {},
-    Hash $phpbrewConfig = {
-        'system_wide'               => true,
-        'additional_dependencies'   => [],
-        'install'                   => [],
-    },
 ) {
     $subsystems.each |String $subsysKey, Hash $subsys| {
      
@@ -49,26 +44,9 @@ class vs_devenv::subsystems (
             
             'phpbrew':
             {
-                file_line { "PHPBREW_ROOT_IS_REQUIRED":
-                    ensure  => present,
-                    line    => "PHPBREW_ROOT=/opt/phpbrew",
-                    path    => "/etc/environment",
-                }
-                
-                class { 'phpbrew':
-                   system_wide => $phpbrewConfig['system_wide'],
-                   additional_dependencies => $phpbrewConfig['additional_dependencies']
-                }
-                
-                exec { "Fetch Known Versions Json ...":
-                    command     => '/usr/bin/phpbrew known --more',
-                    environment => [ "PHPBREW_ROOT=/opt/phpbrew" ],
-                    require     => Class['phpbrew'],
-                }
-                
-                $phpbrewConfig['install'].each |Integer $index, String $value| {
-                    phpbrew::install { $value: 
-                       
+                if ( $subsys['enabled'] ) {
+                    class { '::vs_devenv::phpbrew':
+                        config   => $subsys,
                     }
                 }
             }
