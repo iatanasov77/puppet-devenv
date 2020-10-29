@@ -24,7 +24,11 @@ define vs_devenv::tomcat::instance (
         #    'redirectPort' => '8443'
         #},
     }
-
+    
+    -> vs_devenv::tomcat::service { "${name}":
+        catalinaHome    => "${catalinaHome}",
+    }
+    
     -> tomcat::config::server::tomcat_users {
         'instance-role-manager-script':
             ensure        => present,

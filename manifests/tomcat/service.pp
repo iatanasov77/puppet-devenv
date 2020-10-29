@@ -8,7 +8,7 @@ define vs_devenv::tomcat::service (
         path    => "/etc/init.d/${name}",
         content => template( 'vs_devenv/tomcat.service.erb' ),
         mode    => '0755',
-        require     => Class['vs_devenv::tomcat'],
+        #require     => Class['vs_devenv::tomcat'],
     }
     
     /*
