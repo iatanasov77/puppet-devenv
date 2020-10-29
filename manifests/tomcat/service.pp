@@ -1,6 +1,6 @@
 define vs_devenv::tomcat::service (
     String $catalinaHome,
-    String $tomcatUser      = 'root'
+    String $tomcatUser      = 'tomcat'
 ) {
 
     File { "${name}.sh":
@@ -8,7 +8,6 @@ define vs_devenv::tomcat::service (
         path    => "/etc/init.d/${name}",
         content => template( 'vs_devenv/tomcat.service.erb' ),
         mode    => '0755',
-        #require     => Class['vs_devenv::tomcat'],
     }
     
     /*
@@ -22,7 +21,6 @@ define vs_devenv::tomcat::service (
         path    => "/etc/systemd/system/${name}.service",
         content => template( 'vs_devenv/tomcat.service.erb' ),
         mode    => '0755',
-        require     => Class['vs_devenv::tomcat'],
     }
     
     -> Service { "Start Service: ${name}":
