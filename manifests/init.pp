@@ -29,6 +29,8 @@ class vs_devenv (
     
     Boolean $forcePhp7Repo              = true,
     Boolean $forceMySqlComunityRepo     = true,
+    
+    Hash $ansibleConfig                 = {},
 ) {
 	include vs_devenv::dependencies
 	
@@ -86,5 +88,11 @@ class vs_devenv (
         defaultDocumentRoot => '/vagrant/gui_symfony/public',
         installedProjects   => $installedProjects,
         dotnetCore          => has_key( $subsystems, 'dotnet' )	and	$subsystems['dotnet']['enabled']
+    }
+    
+    class { '::vs_devenv::ansible':
+        pathRoles   => $ansibleConfig['pathRoles'],
+        logPath     => $ansibleConfig['logPath'],
+        galaxyRoles => $ansibleConfig['galaxyRoles'],
     }
 }
