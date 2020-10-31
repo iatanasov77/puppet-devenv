@@ -22,6 +22,7 @@ class vs_devenv (
     Hash $phpSettings                   = {},
     
     Hash $phpMyAdmin					= {},
+    Hash $databases						= {},
     
     Hash $frontendtools                 = {},
     Hash $vstools                       = {},
@@ -58,6 +59,7 @@ class vs_devenv (
         phpManageRepos              => !$forcePhp7Repo,
         
         phpMyAdmin					=> $phpMyAdmin,
+        databases					=> $databases,
     }
     
     if ( $forcePhp7Repo ) {
