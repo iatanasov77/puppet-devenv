@@ -30,11 +30,28 @@ class vs_devenv::packages (
                             ensure => present,
                         }
                     }
+                    'CentOS':
+                    {
+                    	if $::operatingsystemmajrelease == '8' {
+							wget::fetch { "Download GitFlow Installer":
+								source      => "https://raw.github.com/nvie/gitflow/develop/contrib/gitflow-installer.sh",
+								destination => '/tmp/gitflow-installer.sh',
+								verbose     => true,
+								mode        => '0755',
+								cache_dir   => '/var/cache/wget',
+							} ->
+							Exec { "Install GitFlow":
+								command	=> '/tmp/gitflow-installer.sh',
+							}
+                    	} else {
+                    		package { $value:
+	                            ensure => present,
+	                        }
+                    	}
+                    }
                     default:
                     {
-                        package { $value:
-                            ensure => present,
-                        }
+                        fail( 'Unsupported Operating System' )
                     }
                 }
             }
@@ -43,16 +60,13 @@ class vs_devenv::packages (
                 ##############################
                 # Download and Install GitFtp
                 ##############################
-                exec { 'download git-ftp':
-                    command => '/usr/bin/wget -P /tmp https://raw.githubusercontent.com/git-ftp/git-ftp/master/git-ftp',
-                    creates => '/tmp/git-ftp',
-                }
-                
-                file { '/bin/git-ftp':
-                    source  => '/tmp/git-ftp',
-                    mode    => 'a+x',
-                    require => Exec['download git-ftp'],
-                }
+                wget::fetch { "Download git-ftp":
+					source      => "https://raw.githubusercontent.com/git-ftp/git-ftp/master/git-ftp",
+					destination => '/tmp/git-ftp',
+					verbose     => true,
+					mode        => 'a+x',
+					cache_dir   => '/var/cache/wget',
+				}
             }
             default:
             {

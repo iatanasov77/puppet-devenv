@@ -46,7 +46,8 @@ class vs_devenv::subsystems (
             {
                 if ( $subsys['enabled'] ) {
                     class { '::vs_devenv::phpbrew':
-                        config   => $subsys,
+                        config	=> $subsys,
+                        require	=> Class['vs_lamp::php'],
                     }
                 }
             }

@@ -2,7 +2,7 @@ class vs_devenv::frontendtools (
     Hash $frontendtools = {},
 ) {
     class { 'nodejs':
-        version       => 'latest',
+        version       => "${frontendtools['nodejs']}",
         target_dir    => '/usr/bin',
     }
     
@@ -11,7 +11,7 @@ class vs_devenv::frontendtools (
         require     => Class['nodejs']
     }
     
-    $frontendtools.each |String $key, Hash $data| {
+    $frontendtools['tools'].each |String $key, Hash $data| {
      
         case $key
         {

@@ -43,10 +43,22 @@ class vs_devenv::phpbrew (
        additional_dependencies	=> $deps
     }
     
+    if $::operatingsystem == 'centos' and $::operatingsystemmajrelease == '8' and ! defined(Package['php-json'])  {
+    	if ! defined(Package['php-json']) {
+	    	Package { 'php-json':
+			    ensure    => installed,
+			}
+		}
+		
+		$fechVersionsRequire	= [Class['phpbrew'], Package['php-json']]
+    } else {
+    	$fechVersionsRequire	= [Class['phpbrew']]
+    }
+    
     exec { "Fetch Known Versions Json ...":
         command     => '/usr/bin/phpbrew known --more',
         environment => [ "PHPBREW_ROOT=/opt/phpbrew" ],
-        require     => Class['phpbrew'],
+        require     => $fechVersionsRequire,
     }
     
     $config['install'].each |Integer $index, String $value| {

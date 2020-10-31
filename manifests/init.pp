@@ -14,17 +14,14 @@ class vs_devenv (
     String $phpVersion                  = '7.2',
     
     String $mysqllRootPassword          = 'vagrant',
-
-    Array $phpModules                   = [],
+	$mysqlPackageName					= false,
+	
+    Hash $phpModules                    = {},
     Boolean $phpunit                    = false,
     
     Hash $phpSettings                   = {},
     
-    String $xdebugTraceOutputName       = 'trace.out',
-    String $xdebugTraceOutputDir        = '/home/nickname/Xdebug',
-    String $xdebugProfilerEnable        = '0',
-    String $xdebugProfilerOutputName    = 'cachegrind.out',
-    String $xdebugProfilerOutputDir     = '/home/nickname/Xdebug',
+    Hash $phpMyAdmin					= {},
     
     Hash $frontendtools                 = {},
     Hash $vstools                       = {},
@@ -32,19 +29,14 @@ class vs_devenv (
     Boolean $forcePhp7Repo              = true,
     Boolean $forceMySqlComunityRepo     = true,
 ) {
+	include vs_devenv::dependencies
+	
     if ( $forcePhp7Repo ) {
         include vs_devenv::force::php7_repo
     }
     
     if ( $forceMySqlComunityRepo ) {
         include vs_devenv::force::mysql_comunity_repo
-        
-        $mysqlPackageName       = 'mysql-community-server'
-        $mysqlService           = 'mysqld'
-        
-    } else {
-        $mysqlPackageName       = ''
-        $mysqlService           = ''
     }
     
     class { '::vs_devenv::packages':
@@ -59,18 +51,13 @@ class vs_devenv (
         
         mysqllRootPassword          => $mysqllRootPassword,
         mysqlPackageName            => $mysqlPackageName,
-        mysqlService                => $mysqlService,
 
         phpModules                  => $phpModules,
         phpSettings                 => $phpSettings,
         phpunit                     => $phpunit,
         phpManageRepos              => !$forcePhp7Repo,
         
-        xdebugTraceOutputName       => $xdebugTraceOutputName,
-        xdebugTraceOutputDir        => $xdebugTraceOutputDir,
-        xdebugProfilerEnable        => $xdebugProfilerEnable,
-        xdebugProfilerOutputName    => $xdebugProfilerOutputName,
-        xdebugProfilerOutputDir     => $xdebugProfilerOutputDir,
+        phpMyAdmin					=> $phpMyAdmin,
     }
     
     if ( $forcePhp7Repo ) {
