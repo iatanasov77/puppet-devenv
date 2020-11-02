@@ -14,7 +14,7 @@ class vs_devenv (
     String $phpVersion                  = '7.2',
     
     String $mysqllRootPassword          = 'vagrant',
-	$mysqlPackageName					= false,
+	$mySqlProvider						= false,
 	
     Hash $phpModules                    = {},
     Boolean $phpunit                    = false,
@@ -28,17 +28,18 @@ class vs_devenv (
     Hash $vstools                       = {},
     
     Boolean $forcePhp7Repo              = true,
-    Boolean $forceMySqlComunityRepo     = true,
     
     Hash $ansibleConfig                 = {},
 ) {
 	include vs_devenv::dependencies
 	
     if ( $forcePhp7Repo ) {
-        include vs_devenv::force::php7_repo
+        class { 'vs_devenv::force::php7_repo':
+        	phpVersion	=> $phpVersion
+        }
     }
     
-    if ( $forceMySqlComunityRepo ) {
+    if ( $::operatingsystem == 'centos' and $::operatingsystemmajrelease == '7' and $mySqlProvider == 'mysql' ) {
         include vs_devenv::force::mysql_comunity_repo
     }
     
@@ -50,10 +51,10 @@ class vs_devenv (
 
     class { '::vs_lamp':
         phpVersion                  => $phpVersion,
-        apacheModules               => $vsConfig['apacheModules'],
+        apacheModules               => $apacheModules,
         
         mysqllRootPassword          => $mysqllRootPassword,
-        mysqlPackageName            => $mysqlPackageName,
+        mySqlProvider				=> $mySqlProvider,
 
         phpModules                  => $phpModules,
         phpSettings                 => $phpSettings,

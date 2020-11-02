@@ -1,8 +1,9 @@
 # Made For CentOs7 only
 ###############################
-class vs_devenv::force::php7_repo
-{
-	$phpVersionShort    = regsubst( sprintf( "%.1f", $vsConfig['phpVersion'] ), '[.]', '', 'G' )
+class vs_devenv::force::php7_repo (
+	$phpVersion
+) {
+	$phpVersionShort    = regsubst( sprintf( "%.1f", $phpVersion ), '[.]', '', 'G' )
 	$repo               = sprintf( 'remi-php%s', "${phpVersionShort}" )
 	        
     case $::operatingsystem {
@@ -50,7 +51,7 @@ class vs_devenv::force::php7_repo
 	        $yumrepo_defaults = {
 	            'ensure'   => 'present',
 	            'enabled'  => true,
-	            'gpgcheck' => true,
+	            'gpgcheck' => false,
 	            'priority' => 50,
 	            'require'  => $requiredPackages,
 	        }
@@ -61,7 +62,7 @@ class vs_devenv::force::php7_repo
 	        }
 
 	        yumrepo { $repo:
-	            descr      => "Remi PHP ${vsConfig['phpVersion']} RPM repository for Enterprise Linux",
+	            descr      => "Remi PHP ${phpVersion} RPM repository for Enterprise Linux",
 	            mirrorlist => $repoMirrors,
 	            *          => $yumrepo_defaults,
 	        }
