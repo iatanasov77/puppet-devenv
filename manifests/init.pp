@@ -90,10 +90,12 @@ class vs_devenv (
         installedProjects   => $installedProjects,
         dotnetCore          => has_key( $subsystems, 'dotnet' )	and	$subsystems['dotnet']['enabled']
     }
-    
-    class { '::vs_devenv::ansible':
-        pathRoles   => $ansibleConfig['pathRoles'],
-        logPath     => $ansibleConfig['logPath'],
-        galaxyRoles => $ansibleConfig['galaxyRoles'],
-    }
+
+	if ( $ansibleConfig['enabled'] ) {    
+	    class { '::vs_devenv::ansible':
+	        pathRoles   => $ansibleConfig['pathRoles'],
+	        logPath     => $ansibleConfig['logPath'],
+	        galaxyRoles => $ansibleConfig['galaxyRoles'],
+	    }
+	}
 }
