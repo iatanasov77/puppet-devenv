@@ -4,6 +4,7 @@ class vs_devenv::vhosts (
     Hash $installedProjects         = {},
     Hash $vhosts                    = {},
     Boolean $dotnetCore             = false,
+    Boolean $sslModule				= false,
 ) {
 
     ##################################################
@@ -64,11 +65,21 @@ class vs_devenv::vhosts (
             {
                 'Lamp':
                 {
+                	$fpmProxy			= vs_lamp::apache_vhost_fpm_proxy( $host['fpmSocket'] )
+                	$hostCustomFragment	= $host['customFragment']
+                	if ( $fpmProxy or $hostCustomFragment ) {
+                		$customFragment	= "
+                			${fpmProxy}
+                			${hostCustomFragment}
+                		"
+                	}
+                	
                     vs_lamp::apache_vhost{ "${host['hostName']}":
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
-                        customFragment      => vs_lamp::apache_vhost_fpm_proxy( $host['fpmSocket'] ),
+                        customFragment      => $customFragment,
                         needRewriteRules    => $needRewriteRules,
+                        ssl					=> ( $host['withSsl'] and $sslModule ),
                     }
                 }
                 

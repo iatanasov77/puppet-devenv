@@ -88,7 +88,8 @@ class vs_devenv (
         defaultHost         => "${hostname}",
         defaultDocumentRoot => '/vagrant/gui_symfony/public',
         installedProjects   => $installedProjects,
-        dotnetCore          => has_key( $subsystems, 'dotnet' )	and	$subsystems['dotnet']['enabled']
+        dotnetCore          => ( has_key( $subsystems, 'dotnet' ) and $subsystems['dotnet']['enabled'] ),
+        sslModule			=> ( 'ssl' in $apacheModules ),
     }
 
 	if ( $ansibleConfig['enabled'] ) {    
