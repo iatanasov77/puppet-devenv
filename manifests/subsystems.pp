@@ -67,6 +67,17 @@ class vs_devenv::subsystems (
                 }
             }
             
+            'drush':
+            {
+            	if ( $subsys['enabled'] ) {
+            		$drushVersions	= $subsys['versions'].map |$v| { String( $v ) }
+                    class { '::vs_devenv::drush':
+                        versions   		=> $drushVersions,
+                        defaultVersion	=> String( $subsys['defaultVersion'] ),
+                    }
+                }
+            }
+            
         }
     }
 }
