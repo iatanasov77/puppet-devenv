@@ -32,24 +32,33 @@ class vs_devenv::vhosts (
     # Create Vhosts for all installed projects
     ##################################################
     $installedProjects.each |String $projectId, Hash $projectConfig| {
-        
-        # Install Tomcat Instances
-        if ( $projectConfig['type'] == 'Java' and $projectConfig['tomcatInstances'] ) {
-        
-            $projectConfig['tomcatInstances'].each | String $instanceId, Hash $instanceConfig | {
-                
-                tomcat::install { "${instanceConfig['catalinaHome']}":
-                    source_url  => $instanceConfig['sourceUrl'],
-                }
     
-                vs_devenv::tomcat::instance { "${instanceId}":
-                    catalinaHome    => "${instanceConfig['catalinaHome']}",
-                    catalinaBase    => "${instanceConfig['catalinaBase']}",
-                    serverPort      => $instanceConfig['serverPort'],
-                    connectorPort   => $instanceConfig['connectorPort'],
-                }
-            }
-            
+    	# Project Dependencies
+        case $projectConfig['type']
+        {
+        	'Java': {
+        		if $projectConfig['tomcatInstances'] {
+        			# Install Tomcat Instances
+        			$projectConfig['tomcatInstances'].each | String $instanceId, Hash $instanceConfig | {
+		                tomcat::install { "${instanceConfig['catalinaHome']}":
+		                    source_url  => $instanceConfig['sourceUrl'],
+		                }
+		    
+		                vs_devenv::tomcat::instance { "${instanceId}":
+		                    catalinaHome    => "${instanceConfig['catalinaHome']}",
+		                    catalinaBase    => "${instanceConfig['catalinaBase']}",
+		                    serverPort      => $instanceConfig['serverPort'],
+		                    connectorPort   => $instanceConfig['connectorPort'],
+		                }
+		            }
+        		}
+        	}
+        	
+        	'Django': {
+        		if ! defined( Class["vs_django"] ) {
+        			include vs_django
+        		}
+        	}
         }
     
         # Configure Apache Vhosts
@@ -158,6 +167,23 @@ class vs_devenv::vhosts (
                     }
                 }
                 
+                'Django':
+                {
+                	class { 'vs_django::virtualenv':
+				        hostName    => $host['hostName'],
+				        require		=> Class["vs_django"],
+				    }
+                	$venvPath	= "/var/www/${host['hostName']}/venv"
+                	
+                	vs_django::apache_vhost (
+					    hostName            => $host['hostName'],
+                        documentRoot        => $host['documentRoot'],
+					    configWsgiDaemon	=> vs_django::apache_vhost_wsgi_daemon( $venvPath, $projectConfig['projectPath'] ),
+					    configWsgi			=> vs_django::apache_vhost_wsgi( $host['hostName'], $host['documentRoot'] ),
+					    withSsl				=> ( $host['withSsl'] and $sslModule ),
+					) 
+                
+                }
             }
             
         }
