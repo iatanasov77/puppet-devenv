@@ -22,7 +22,8 @@ class vs_devenv::subsystems (
         	}
             'docker':
             {
-                if ( $subsystems['docker']['enabled'] ) {
+                if ( $subsys['enabled'] ) {
+                	# vs_devenv::subsystems::docker
                     class { 'docker':
                         ensure => present,
                         version => 'latest',
@@ -37,7 +38,7 @@ class vs_devenv::subsystems (
             
             'dotnet':
             {
-                if ( $subsystems['dotnet']['enabled'] ) {
+                if ( $subsys['enabled'] ) {
                     class { '::vs_dotnet':
                         sdkVersion  => $subsys['dotnet_core'],
                         sdkUser     => $subsys['sdkUser'],
@@ -57,27 +58,30 @@ class vs_devenv::subsystems (
                 }
             }
             
-            'phpbrew':
-            {
-                if ( $subsys['enabled'] ) {
-                    class { '::vs_devenv::phpbrew':
-                        config	=> $subsys,
-                        require	=> Class['vs_lamp::php'],
-                    }
-                }
-            }
-            
             'drush':
             {
             	if ( $subsys['enabled'] ) {
             		$drushVersions	= $subsys['versions'].map |$v| { String( $v ) }
-                    class { '::vs_devenv::drush':
+                    class { '::vs_devenv::subsystems::drush':
                         versions   		=> $drushVersions,
                         defaultVersion	=> String( $subsys['defaultVersion'] ),
                     }
                 }
             }
             
+            default:
+            {
+                if ( $subsys['enabled'] ) {
+                    class { "::vs_devenv::subsystems::${$subsysKey}":
+                    	config	=> $subsys,
+                        require	=> [
+                        	Class['vs_lamp::php'], 
+                        	Class['vs_lamp::apache']
+                        ],
+                    }
+                }
+      
+            }
         }
     }
 }

@@ -3,8 +3,10 @@ class vs_devenv::vhosts (
     String $defaultDocumentRoot,
     Hash $installedProjects         = {},
     Hash $vhosts                    = {},
-    Boolean $dotnetCore             = false,
     Boolean $sslModule				= false,
+    Boolean $dotnetCore             = false,
+    Boolean $python             	= false,
+    Boolean $ruby             		= false,
 ) {
 
     ##################################################
@@ -169,20 +171,42 @@ class vs_devenv::vhosts (
                 
                 'Django':
                 {
-                	class { 'vs_django::virtualenv':
-				        hostName    => $host['hostName'],
-				        require		=> Class["vs_django"],
-				    }
-                	$venvPath	= "/var/www/${host['hostName']}/venv"
-                	
-                	vs_django::apache_vhost (
-					    hostName            => $host['hostName'],
-                        documentRoot        => $host['documentRoot'],
-					    configWsgiDaemon	=> vs_django::apache_vhost_wsgi_daemon( $venvPath, $projectConfig['projectPath'] ),
-					    configWsgi			=> vs_django::apache_vhost_wsgi( $host['hostName'], $host['documentRoot'] ),
-					    withSsl				=> ( $host['withSsl'] and $sslModule ),
-					) 
+                	if $python {
+	                	$venvPath	= "/var/www/${host['hostName']}/venv"
+	                	class { 'vs_django::virtualenv':
+					        hostName    => $host['hostName'],
+					        require		=> Class["vs_django"],
+					    } ->
+	                	vs_django::apache_vhost{ "${host['hostName']}":
+						    hostName            => $host['hostName'],
+	                        documentRoot        => $host['documentRoot'],
+						    projectPath			=> $projectConfig['projectPath'],
+							venvPath			=> $venvPath,
+						    withSsl				=> ( $host['withSsl'] and $sslModule ),
+						}
+					} else {
+						notify { "PYTHON IS NOT ENABLED !!!":
+					        withpath => false,
+					    }
+					}
+                }
                 
+                # https://www.pair.com/support/kb/what-is-mod_passenger/
+                'Ruby':
+                {
+                	if $ruby {
+	                	vs_lamp::apache_vhost{ "${host['hostName']}":
+	                        hostName            => $host['hostName'],
+	                        documentRoot        => $host['documentRoot'],
+	                        customFragment      => 'RailsEnv development',
+	                        needRewriteRules    => Boolean( "false" ),
+	                        ssl					=> ( $host['withSsl'] and $sslModule ),
+	                    }
+	                } else {
+	                	notify { "RUBY IS NOT ENABLED !!!":
+					        withpath => false,
+					    }
+	                }
                 }
             }
             

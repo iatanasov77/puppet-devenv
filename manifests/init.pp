@@ -31,7 +31,15 @@ class vs_devenv (
     
     Hash $ansibleConfig                 = {},
 ) {
-	include vs_devenv::dependencies
+	# Maika mu deeba :)
+	stage { 'install-dependencies': before => Stage['rvm-install'] }
+	class {
+      'vs_devenv::yumrepos': stage => 'install-dependencies';
+      'vs_devenv::dependencies': stage => 'install-dependencies';
+    }
+    
+    stage { 'after-main': }
+	Stage['main'] -> Stage['after-main']
 	
     if ( $forcePhp7Repo ) {
         class { 'vs_devenv::force::php7_repo':
@@ -47,8 +55,8 @@ class vs_devenv (
         packages        => $packages,
         gitUserName     => $gitUserName,
         gitUserEmail    => $gitUserEmail,
-    }
-
+    } ->
+	
     class { '::vs_lamp':
         phpVersion                  => $phpVersion,
         apacheModules               => $apacheModules,
@@ -63,17 +71,13 @@ class vs_devenv (
         
         phpMyAdmin					=> $phpMyAdmin,
         databases					=> $databases,
-    }
+    } 
     
     if ( $forcePhp7Repo ) {
         file { "/usr/lib64/httpd/modules/libphp${phpVersion}.so":
             ensure  => link,
             target  => '/usr/lib64/httpd/modules/libphp7.so',
         }
-    }
-    
-    class { '::vs_devenv::subsystems':
-        subsystems      => $subsystems,
     }
     
     class { '::vs_devenv::vstools':
@@ -83,13 +87,18 @@ class vs_devenv (
     class { '::vs_devenv::frontendtools':
         frontendtools   => $frontendtools,
     }
-    
+
+	class { '::vs_devenv::subsystems':
+        subsystems      => $subsystems,
+    } ->
     class { '::vs_devenv::vhosts':
         defaultHost         => "${hostname}",
         defaultDocumentRoot => '/vagrant/gui_symfony/public',
         installedProjects   => $installedProjects,
         dotnetCore          => ( has_key( $subsystems, 'dotnet' ) and $subsystems['dotnet']['enabled'] ),
         sslModule			=> ( 'ssl' in $apacheModules ),
+        python				=> ( 'wsgi' in $apacheModules ) and $subsystems['django']['enabled'] ),
+        ruby				=> ( 'passenger' in $apacheModules ) and $subsystems['rubyonrails']['enabled'] ),
     }
 
 	if ( $ansibleConfig['enabled'] ) {    

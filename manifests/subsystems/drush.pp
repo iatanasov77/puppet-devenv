@@ -1,6 +1,6 @@
 # Drush is a command line shell and Unix scripting interface for Drupal. 
 ###########################################################################
-class vs_devenv::drush (
+class vs_devenv::subsystems::drush (
      Array[String] $versions	= ['10',],
   	 String $defaultVersion		= '10',
 ) {

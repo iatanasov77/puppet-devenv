@@ -1,4 +1,4 @@
-class vs_devenv::phpbrew (
+class vs_devenv::subsystems::phpbrew (
     Hash $config    = {},
 ) {
 	if ( 
