@@ -97,8 +97,8 @@ class vs_devenv (
         installedProjects   => $installedProjects,
         dotnetCore          => ( has_key( $subsystems, 'dotnet' ) and $subsystems['dotnet']['enabled'] ),
         sslModule			=> ( 'ssl' in $apacheModules ),
-        python				=> ( 'wsgi' in $apacheModules ) and $subsystems['django']['enabled'] ),
-        ruby				=> ( 'passenger' in $apacheModules ) and $subsystems['rubyonrails']['enabled'] ),
+        python				=> ( ( 'wsgi' in $apacheModules ) and $subsystems['django']['enabled'] ),
+        ruby				=> ( ( 'passenger' in $apacheModules ) and $subsystems['rubyonrails']['enabled'] ),
     }
 
 	if ( $ansibleConfig['enabled'] ) {    
