@@ -25,6 +25,10 @@ class vs_devenv::subsystems::phing (
 	        timeout     => 0,
 	        verbose     => true,
 	    } ->
+	    file { '/usr/share/php/phing-latest.phar':
+	        ensure  => file,
+	        mode    => '0777',
+	    } ->
 	    file { '/usr/local/bin/phing':
 	        ensure  => link,
 	        target  => '/usr/share/php/phing-latest.phar',
