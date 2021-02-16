@@ -108,4 +108,6 @@ class vs_devenv (
 	        galaxyRoles => $ansibleConfig['galaxyRoles'],
 	    }
 	}
+	
+	include vs_devenv::sendmail
 }
