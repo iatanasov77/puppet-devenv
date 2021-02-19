@@ -1,4 +1,4 @@
-class vs_devenv::subsystems::django (
+class vs_devenv::subsystems::python (
 	Hash $config    = {},
 ) {
 	class { '::vs_django':
@@ -8,7 +8,8 @@ class vs_devenv::subsystems::django (
     }
     
     $config['virtual_environments'].each |String $key, Hash $options| {
-    	vs_django::virtualenv{ "${key']}":
+    	vs_django::virtualenv{ "${key}":
+    		venv			=> $key,
         	pythonVersion	=> $options['pythonVersion'],
 	        packages        => $options['packages'],
 	    }

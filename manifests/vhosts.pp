@@ -5,6 +5,7 @@ class vs_devenv::vhosts (
     Hash $vhosts                    = {},
     Boolean $sslModule				= false,
     Boolean $dotnetCore             = false,
+    Boolean $tomcat             	= false,
     Boolean $python             	= false,
     Boolean $ruby             		= false,
 ) {
@@ -144,29 +145,31 @@ class vs_devenv::vhosts (
                 
                 'JspRewrite':
                 {
-                    if ( $host['publish'] ) {
-                        file { "${host['documentRoot']}":
-                            ensure  => link,
-                            target  => "${host['publishSrc']}",
-                            mode    => '0777',
-                            require => [
-                                Class['vs_devenv::tomcat'],
-                                #File['/etc/ssh/sshd_config'],
-                            ],
-                        }
-                    }
-                    
-                    vs_lamp::apache_vhost{ "${host['hostName']}":
-                        hostName            => $host['hostName'],
-                        documentRoot        => $host['documentRoot'],
-                        customFragment      => vs_devenv::apache_vhost_jsp_rewrite( $host['hostName'], $host['tomcatUrl'] ),
-                        needRewriteRules    => $needRewriteRules,
-                    }
-                    
-                    -> Exec { "Restart Tomcat for host: ${host['hostName']}":
-                        command => "service ${host['tomcatService']} restart",
-                        require => Service["${host['tomcatService']}"],
-                    }
+                	if ( $tomcat ) {
+	                    if ( $host['publish'] ) {
+	                        file { "${host['documentRoot']}":
+	                            ensure  => link,
+	                            target  => "${host['publishSrc']}",
+	                            mode    => '0777',
+	                            require => [
+	                                Class['vs_devenv::tomcat'],
+	                                #File['/etc/ssh/sshd_config'],
+	                            ],
+	                        }
+	                    }
+	                    
+	                    vs_lamp::apache_vhost{ "${host['hostName']}":
+	                        hostName            => $host['hostName'],
+	                        documentRoot        => $host['documentRoot'],
+	                        customFragment      => vs_devenv::apache_vhost_jsp_rewrite( $host['hostName'], $host['tomcatUrl'] ),
+	                        needRewriteRules    => $needRewriteRules,
+	                    }
+	                    
+	                    -> Exec { "Restart Tomcat for host: ${host['hostName']}":
+	                        command => "service ${host['tomcatService']} restart",
+	                        require => Service["${host['tomcatService']}"],
+	                    }
+	                }
                 }
                 
                 'Django':

@@ -32,7 +32,12 @@ class vs_devenv (
     Hash $ansibleConfig                 = {},
 ) {
 	# Maika mu deeba :)
-	stage { 'install-dependencies': before => Stage['rvm-install'] }
+	if ( $subsystems['rubyonrails']['enabled'] ) {
+		stage { 'install-dependencies': before => Stage['rvm-install'] }
+	} else {
+		stage { 'install-dependencies': }
+	}
+	
 	class {
       'vs_devenv::yumrepos': stage => 'install-dependencies';
       'vs_devenv::dependencies': stage => 'install-dependencies';
@@ -95,9 +100,10 @@ class vs_devenv (
         defaultHost         => "${hostname}",
         defaultDocumentRoot => '/vagrant/gui_symfony/public',
         installedProjects   => $installedProjects,
-        dotnetCore          => ( has_key( $subsystems, 'dotnet' ) and $subsystems['dotnet']['enabled'] ),
         sslModule			=> ( 'ssl' in $apacheModules ),
-        python				=> ( ( 'wsgi' in $apacheModules ) and $subsystems['django']['enabled'] ),
+        dotnetCore          => ( has_key( $subsystems, 'dotnet' ) and $subsystems['dotnet']['enabled'] ),
+        tomcat				=> ( $subsystems['tomcat']['enabled'] ),
+        python				=> ( ( 'wsgi' in $apacheModules ) and $subsystems['python']['enabled'] ),
         ruby				=> ( ( 'passenger' in $apacheModules ) and $subsystems['rubyonrails']['enabled'] ),
     }
 
