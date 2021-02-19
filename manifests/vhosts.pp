@@ -172,17 +172,12 @@ class vs_devenv::vhosts (
                 'Django':
                 {
                 	if $python {
-	                	$venvPath	= "/var/www/${host['hostName']}/venv"
-	                	class { 'vs_django::virtualenv':
-					        hostName    => $host['hostName'],
-					        require		=> Class["vs_django"],
-					    } ->
 	                	vs_django::apache_vhost{ "${host['hostName']}":
 						    hostName            => $host['hostName'],
 	                        documentRoot        => $host['documentRoot'],
-						    projectPath			=> $projectConfig['projectPath'],
-							venvPath			=> $venvPath,
 						    withSsl				=> ( $host['withSsl'] and $sslModule ),
+						    projectPath			=> $projectConfig['projectPath'],
+						    venvPath			=> $projectConfig['venvPath'],
 						}
 					} else {
 						notify { "PYTHON IS NOT ENABLED !!!":
