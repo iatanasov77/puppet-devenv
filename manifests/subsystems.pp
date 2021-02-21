@@ -36,28 +36,6 @@ class vs_devenv::subsystems (
                 }
             }
             
-            'dotnet':
-            {
-                if ( $subsys['enabled'] ) {
-                    class { '::vs_dotnet':
-                        sdkVersion  => $subsys['dotnet_core'],
-                        sdkUser     => $subsys['sdkUser'],
-                        sdks        => $subsys['sdks'],
-                        mono        => ( $subsys['mono'] == Undef ),
-                    }
-                }
-            }
-            
-            'tomcat':
-            {
-                if ( $subsys['enabled'] ) {
-                    class { '::vs_devenv::tomcat':
-                        sourceUrl   => $subsys['sourceUrl'],
-                        jdkPackage  => $subsys['jdkPackage'],
-                    }
-                }
-            }
-            
             'drush':
             {
             	if ( $subsys['enabled'] ) {

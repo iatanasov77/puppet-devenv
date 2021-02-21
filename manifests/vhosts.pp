@@ -40,7 +40,7 @@ class vs_devenv::vhosts (
         case $projectConfig['type']
         {
         	'Java': {
-        		if $projectConfig['tomcatInstances'] {
+        		if $tomcat and $projectConfig['tomcatInstances'] {
         			# Install Tomcat Instances
         			$projectConfig['tomcatInstances'].each | String $instanceId, Hash $instanceConfig | {
 		                tomcat::install { "${instanceConfig['catalinaHome']}":
@@ -54,12 +54,6 @@ class vs_devenv::vhosts (
 		                    connectorPort   => $instanceConfig['connectorPort'],
 		                }
 		            }
-        		}
-        	}
-        	
-        	'Django': {
-        		if ! defined( Class["vs_django"] ) {
-        			include vs_django
         		}
         	}
         }
@@ -118,29 +112,27 @@ class vs_devenv::vhosts (
                 
                 'Jsp':
                 {
-                    if ( $host['publish'] ) {
-                        file { "${host['documentRoot']}":
-                            ensure  => link,
-                            target  => "${host['publishSrc']}",
-                            mode    => '0777',
-                            require => [
-                                Class['vs_devenv::tomcat'],
-                                #File['/etc/ssh/sshd_config'],
-                            ],
-                        }
-                    }
-    
-                    vs_lamp::apache_vhost{ "${host['hostName']}":
-                        hostName            => $host['hostName'],
-                        documentRoot        => $host['documentRoot'],
-                        customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyProtocol'], $host['reverseProxyPort'] ),
-                        needRewriteRules    => $needRewriteRules,
-                    }
-                    
-                    -> Exec { "Restart Tomcat for host: ${host['hostName']}":
-                        command => "service ${host['tomcatService']} restart",
-                        require => Service["${host['tomcatService']}"],
-                    }
+                	if ( $tomcat ) {
+	                    if ( $host['publish'] ) {
+	                        file { "${host['documentRoot']}":
+	                            ensure  => link,
+	                            target  => "${host['publishSrc']}",
+	                            mode    => '0777',
+	                        }
+	                    }
+	    
+	                    vs_lamp::apache_vhost{ "${host['hostName']}":
+	                        hostName            => $host['hostName'],
+	                        documentRoot        => $host['documentRoot'],
+	                        customFragment      => vs_devenv::apache_vhost_jsp( $host['reverseProxyProtocol'], $host['reverseProxyPort'] ),
+	                        needRewriteRules    => $needRewriteRules,
+	                    }
+	                    
+	                    -> Exec { "Restart Tomcat for host: ${host['hostName']}":
+	                        command => "service ${host['tomcatService']} restart",
+	                        require => Service["${host['tomcatService']}"],
+	                    }
+	                }
                 }
                 
                 'JspRewrite':
@@ -151,10 +143,7 @@ class vs_devenv::vhosts (
 	                            ensure  => link,
 	                            target  => "${host['publishSrc']}",
 	                            mode    => '0777',
-	                            require => [
-	                                Class['vs_devenv::tomcat'],
-	                                #File['/etc/ssh/sshd_config'],
-	                            ],
+	                            require => Class["vs_devenv::tomcat::default"],
 	                        }
 	                    }
 	                    
