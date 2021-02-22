@@ -1,7 +1,7 @@
 class vs_devenv::subsystems (
     Hash $subsystems    = {},
 ) {
-    $subsystems.each |String $subsysKey, Hash $subsys| {
+	$subsystems.each |String $subsysKey, Hash $subsys| {
      
         case $subsysKey
         {
@@ -43,6 +43,17 @@ class vs_devenv::subsystems (
                     class { '::vs_devenv::subsystems::drush':
                         versions   		=> $drushVersions,
                         defaultVersion	=> String( $subsys['defaultVersion'] ),
+                    }
+                }
+            }
+            
+            'ruby':
+            {
+            	if ( $subsys['enabled'] ) {
+            		stage { 'rvm-install': before => Stage['main'] }
+                    class { '::vs_devenv::subsystems::ruby':
+                    	config	=> $subsys,
+                        stage	=> 'rvm-install',
                     }
                 }
             }

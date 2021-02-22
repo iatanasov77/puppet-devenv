@@ -181,11 +181,19 @@ class vs_devenv::vhosts (
                 # https://www.pair.com/support/kb/what-is-mod_passenger/
                 'Ruby':
                 {
-                	if $ruby {
+                	#$rubyVersion		= "/opt/rvm/wrappers/ruby-${host['rubyVersion']}/ruby"
+                	$rubyVersion		= "/usr/local/rvm/wrappers/ruby-${host['rubyVersion']}/ruby"
+                	
+                	$rubyVersionExists	= find_file( $rubyVersion )
+                	#fail( "RUBY ENABLED: \'$ruby\',  RUBY VERSION EXISTS: \'$rubyVersionExists\'" )
+                	if ( $ruby ) { # and $rubyVersionExists
 	                	vs_lamp::apache_vhost{ "${host['hostName']}":
 	                        hostName            => $host['hostName'],
 	                        documentRoot        => $host['documentRoot'],
-	                        customFragment      => 'RailsEnv development',
+	                        customFragment      => "
+	                        						RailsEnv development
+	                        						PassengerRuby ${rubyVersion}
+	                        						",
 	                        needRewriteRules    => Boolean( "false" ),
 	                        ssl					=> ( $host['withSsl'] and $sslModule ),
 	                    }

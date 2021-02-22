@@ -32,7 +32,7 @@ class vs_devenv (
     Hash $ansibleConfig                 = {},
 ) {
 	# Maika mu deeba :)
-	if ( $subsystems['rubyonrails']['enabled'] ) {
+	if ( $subsystems['ruby']['enabled'] ) {
 		stage { 'install-dependencies': before => Stage['rvm-install'] }
 	} else {
 		stage { 'install-dependencies': }
@@ -104,7 +104,7 @@ class vs_devenv (
         dotnetCore          => ( has_key( $subsystems, 'dotnet' ) and $subsystems['dotnet']['enabled'] ),
         tomcat				=> ( $subsystems['tomcat']['enabled'] ),
         python				=> ( ( 'wsgi' in $apacheModules ) and $subsystems['python']['enabled'] ),
-        ruby				=> ( ( 'passenger' in $apacheModules ) and $subsystems['rubyonrails']['enabled'] ),
+        ruby				=> ( ( 'passenger' in $apacheModules ) and $subsystems['ruby']['enabled'] ),
     }
 
 	if ( $ansibleConfig['enabled'] ) {    
