@@ -1,6 +1,6 @@
 class vs_devenv (
     String $defaultHost,
-    String $defaultDocumentRoot,
+    String $defaultDocumentRoot			= '/vagrant/gui_symfony/public',
     Hash $installedProjects             = {},
     
     Hash $subsystems                    = {},
@@ -97,8 +97,8 @@ class vs_devenv (
         subsystems      => $subsystems,
     } ->
     class { '::vs_devenv::vhosts':
-        defaultHost         => "${hostname}",
-        defaultDocumentRoot => '/vagrant/gui_symfony/public',
+        defaultHost         => "${defaultHost}",
+        defaultDocumentRoot => "${defaultDocumentRoot}",
         installedProjects   => $installedProjects,
         sslModule			=> ( 'ssl' in $apacheModules ),
         dotnetCore          => ( has_key( $subsystems, 'dotnet' ) and $subsystems['dotnet']['enabled'] ),
