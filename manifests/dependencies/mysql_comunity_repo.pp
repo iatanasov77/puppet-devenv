@@ -1,6 +1,6 @@
 # Made For CentOs7 only
 ###############################
-class vs_devenv::force::mysql_comunity_repo
+class vs_devenv::dependencies::mysql_comunity_repo
 {
 	case $::operatingsystem {
     	centos: {

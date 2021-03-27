@@ -35,26 +35,21 @@ class vs_devenv (
 	if ( $subsystems['ruby']['enabled'] ) {
 		stage { 'install-dependencies': before => Stage['rvm-install'] }
 	} else {
-		stage { 'install-dependencies': }
+		stage { 'install-dependencies': before => Stage['main'] }
 	}
 	
-	class {
-      'vs_devenv::yumrepos': stage => 'install-dependencies';
-      'vs_devenv::dependencies': stage => 'install-dependencies';
+	class { '::vs_devenv::dependencies::repos':
+        forcePhp7Repo   => $forcePhp7Repo,
+        phpVersion      => $phpVersion,
+        mySqlProvider   => $mySqlProvider,
+        stage           => 'install-dependencies',
+    } ->
+	class { 'vs_devenv::dependencies::packages':
+        stage   => 'install-dependencies',
     }
     
     stage { 'after-main': }
 	Stage['main'] -> Stage['after-main']
-	
-    if ( $forcePhp7Repo ) {
-        class { 'vs_devenv::force::php7_repo':
-        	phpVersion	=> $phpVersion
-        }
-    }
-    
-    if ( $::operatingsystem == 'centos' and $::operatingsystemmajrelease == '7' and $mySqlProvider == 'mysql' ) {
-        include vs_devenv::force::mysql_comunity_repo
-    }
     
     class { '::vs_devenv::packages':
         packages        => $packages,
