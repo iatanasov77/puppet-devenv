@@ -5,21 +5,6 @@ class vs_devenv::subsystems (
      
         case $subsysKey
         {
-        	'vault':
-        	{
-        		class { 'hashicorp::vault': 
-        			version	=> $subsys['version']
-        		}
-        		/*
-        		archive { '/tmp/Vault.zip':
-					ensure        	=> present,
-					source        	=> "$subsys['sourceUrl']",
-					extract       	=> true,
-					extract_path  	=> '/usr/local/bin',
-					cleanup       	=> true,
-				}
-				*/
-        	}
             'docker':
             {
                 if ( $subsys['enabled'] ) {
