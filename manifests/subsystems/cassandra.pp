@@ -39,9 +39,12 @@ class vs_devenv::subsystems::cassandra (
 	# Create database structure and add demo data
 	###############################################
 	if $config['database'] {
+		wait_for { 'a_minute_before_cassandra_server_is_ready':
+			seconds => 60,
+		}
 		Exec { "cqlsh -f ${config['database']}":
 			command	=> "cqlsh -f ${config['database']}",
-			require => Package["${cassandraPackage}"],
+			require => Class['vs_devenv::subsystems::cassandra::server'],
 		}
 	}
 }
