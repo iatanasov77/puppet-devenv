@@ -3,9 +3,11 @@ class vs_devenv::tomcat::default (
 	String $catalinaHome,
 	String $jdkPackage,
 ) {
-    class { 'java' :
-        package => $jdkPackage,
-    } ->
+	if ! defined(Class['java']) {
+	    class { 'java' :
+	        package => $jdkPackage,
+	    }
+	}
     
     tomcat::install { "${catalinaHome}":
         source_url => $sourceUrl,

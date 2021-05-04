@@ -1,0 +1,47 @@
+class vs_devenv::subsystems::cassandra (
+	Hash $config    = {},
+) {
+	case $::operatingsystem {
+    	centos: {
+			if $::operatingsystemmajrelease == '7' {
+				$cassandraPackage	= 'dsc21'
+			} elsif $::operatingsystemmajrelease == '8' {
+				$cassandraPackage	= 'dsc30'
+			} else {
+		    	fail( "CentOS support only tested on major version 7 or 8, you are running version '${::operatingsystemmajrelease}'" )
+		    }
+		}
+	}
+   
+	###########################################
+	# Install DataStax Cassandra Dependencies
+	###########################################
+	class { 'vs_devenv::subsystems::cassandra::dependencies':
+		
+	} ->
+	
+	###########################################
+	# Install and start DataStax Cassandra
+	###########################################
+	class { 'vs_devenv::subsystems::cassandra::server':
+		cassandraPackage	=> $cassandraPackage,
+	} ->
+	
+	########################################
+	# Install PHP driver for Cassandra
+	########################################
+	class { 'vs_devenv::subsystems::cassandra::phpDriver':
+		version			=> $config['phpDriverVersion'],
+		installDriver	=> $config['phpDriverInstall'],
+	}
+	
+	###############################################
+	# Create database structure and add demo data
+	###############################################
+	if $config['database'] {
+		Exec { "cqlsh -f ${config['database']}":
+			command	=> "cqlsh -f ${config['database']}",
+			require => Package["${cassandraPackage}"],
+		}
+	}
+}
