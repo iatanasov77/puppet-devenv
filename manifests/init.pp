@@ -111,4 +111,12 @@ class vs_devenv (
 	}
 	
 	include vs_devenv::sendmail
+	
+	file { "${defaultDocumentRoot}/../var":
+		ensure  => directory,
+	} ->
+	file { "${defaultDocumentRoot}/../var/subsystems.json":
+		ensure  => file,
+		content => to_json_pretty( $subsystems ),
+	}
 }
