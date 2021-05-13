@@ -19,8 +19,9 @@ class vs_devenv::subsystems::cassandra (
 	# Install PHP driver for Cassandra
 	########################################
 	class { 'vs_devenv::subsystems::cassandra::phpDriver':
-		version			=> $config['phpDriverVersion'],
-		installDriver	=> $config['phpDriverInstall'],
+		version					=> $config['phpDriverVersion'],
+		installDriver			=> $config['phpDriverInstall'],
+		installDriverFromGitHub	=> $config['phpDriverInstallFromGitHub'],
 	}
 	
 	###############################################

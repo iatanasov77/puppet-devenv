@@ -1,6 +1,7 @@
 class vs_devenv::subsystems::cassandra::phpDriver (
 	String $version,
-	Boolean $installDriver	= true,
+	Boolean $installDriver				= true,
+	Boolean $installDriverFromGitHub	= false,
 ) {
 	case $::operatingsystem {
     	centos: {
@@ -50,20 +51,39 @@ class vs_devenv::subsystems::cassandra::phpDriver (
 	            source   	=> $cassaDriverDevelSource,
 	        }
 	        
+	        #################################################################
+	        # DataStax Php Driver from Pecl require php version max 7.0.x
+	        # From GitHub this driver support all php 7 versions
+	        #################################################################
 	        if $installDriver {
-	        	Exec { 'Update Pear Channel':
-		        	command	=> 'pear channel-update pecl.php.net',
-		        } ->
-		        Package { 'cassandra':
-		        	provider	=> 'pecl',
-		        	require     => [Class['php::pear'], Class['php::dev'], Package['cassandra-cpp-driver-devel']],
-				} ->
-				File { '/etc/php.d/cassandra.ini':
+	        	if $installDriverFromGitHub {
+	        		archive { '/tmp/datastaxphpdriver.zip':
+						ensure        	=> present,
+						source        	=> "https://github.com/datastax/php-driver/archive/refs/heads/master.zip",
+						extract       	=> true,
+						extract_path  	=> '/tmp',
+						cleanup       	=> true,
+					} ->
+					Exec { 'Build and Instal Cassandra PHP Driver':
+		        		command	=> 'pear install /tmp/php-driver-master/ext/package.xml',
+		        		require     => [Class['php::pear'], Class['php::dev'], Package['cassandra-cpp-driver-devel']],
+			        }
+	        	} else {
+	        		Exec { 'Update Pear Channel':
+		        		command	=> 'pear channel-update pecl.php.net',
+			        } ->
+			        Package { 'cassandra':
+			        	provider	=> 'pecl',
+			        	require     => [Class['php::pear'], Class['php::dev'], Package['cassandra-cpp-driver-devel']],
+					}
+	        	}
+	        	
+	        	File { '/etc/php.d/cassandra.ini':
 			        ensure  => file,
 			        path    => '/etc/php.d/cassandra.ini',
 			        content => template( 'vs_devenv/cassandra.ini.erb' ),
 			        mode    => '0755',
-			        require	=> Class['vs_lamp'],
+			        require	=> [Class['vs_lamp']],
 			        notify  => Service['httpd'],
 			    }
 	        }
