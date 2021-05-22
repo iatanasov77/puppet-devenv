@@ -119,4 +119,24 @@ class vs_devenv (
 		ensure  => file,
 		content => to_json_pretty( $subsystems ),
 	}
+	
+	# Set Bash Aliases
+	###########################
+	class { '::bashrc':
+		aliases    => [
+			"composer='XDEBUG_MODE=off \composer'"
+		],
+		users      => [
+			{
+				'username'			=> 'root',
+				'homedirectory'		=> '/root',
+				'managelocalbashrc'	=> true,
+			},
+			{
+				'username'			=> 'vagrant',
+				'homedirectory'		=> '/home/vagrant',
+				'managelocalbashrc'	=> true,
+			}
+		]
+	}
 }
