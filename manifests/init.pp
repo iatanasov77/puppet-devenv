@@ -1,4 +1,6 @@
 class vs_devenv (
+	Hash $dependencies					= {},
+	
     String $defaultHost,
     String $defaultDocumentRoot			= '/vagrant/gui_symfony/public',
     Hash $installedProjects             = {},
@@ -39,6 +41,7 @@ class vs_devenv (
 	}
 	
 	class { '::vs_devenv::dependencies::repos':
+		dependencies	=> $dependencies,
         forcePhp7Repo   => $forcePhp7Repo,
         phpVersion      => $phpVersion,
         mySqlProvider   => $mySqlProvider,

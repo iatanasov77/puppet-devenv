@@ -1,4 +1,5 @@
 class vs_devenv::dependencies::repos (
+	Hash $dependencies	   = {},
 	$repos                 = {},
 	Boolean $forcePhp7Repo = true,
 	String $phpVersion     = '7.2',
@@ -19,6 +20,7 @@ class vs_devenv::dependencies::repos (
             }
             
             class { 'vs_devenv::dependencies::remi':
+            	remiReleaseRpm	=> "${dependencies['remiReleaseRpm']}",
                 yumrepoDefaults => $yumrepoDefaults,
             }
             
