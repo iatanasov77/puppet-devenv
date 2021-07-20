@@ -1,4 +1,6 @@
-class vs_devenv::subsystems::symfony {
+class vs_devenv::subsystems::symfony (
+	Hash $config    = {},
+) {
     Exec { 'Install Symfony CLI':
       command	=> 'curl -sSL https://get.symfony.com/cli/installer | bash'
     } ->
