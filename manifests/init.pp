@@ -10,7 +10,7 @@ class vs_devenv (
     Array $packages                     = [],
     String $gitUserName                 = 'undefined_user_name',
     String $gitUserEmail                = 'undefined@example.com',
-
+	String $gitCredentials				= '',
 
     Array $apacheModules                = [],
     String $phpVersion                  = '7.2',
@@ -58,6 +58,7 @@ class vs_devenv (
         packages        => $packages,
         gitUserName     => $gitUserName,
         gitUserEmail    => $gitUserEmail,
+        gitCredentials	=> $gitCredentials,
     } ->
 	
     class { '::vs_lamp':
