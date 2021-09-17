@@ -40,6 +40,10 @@ class vs_devenv::packages (
 				}
 				
 				# Setup Git Credentials
+				exec { 'Setup Git Credentials':
+					command	=> 'git config --global credential.helper store',
+					user	=> 'vagrant',
+				} ->
 				file { '/home/vagrant/.git-credentials':
 			    	content => "${gitCredentials}",
 			    	owner	=> 'vagrant',
