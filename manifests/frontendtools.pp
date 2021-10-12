@@ -1,10 +1,26 @@
 class vs_devenv::frontendtools (
     Hash $frontendtools = {},
 ) {
-    class { 'nodejs':
-        version       => "${frontendtools['nodejs']}",
-        target_dir    => '/usr/bin',
-    }
+
+	if defined( $frontendtools['nvm'] ) {
+		# Multiple NodeJs Versions
+	    class { 'nvm':
+			user => 'vagrant',
+		} ->
+		
+		$frontendtools['nvm'].each |Integer $index, String $nodeVersion| {
+			nvm::node::install { "${nodeVersion}":
+			    user    => 'vagrant',
+			    set_default => ($index == 0),
+			} ->
+		}
+	} else {
+		# Only one NodeJs Version
+	    class { 'nodejs':
+	        version       => "${frontendtools['nodejs']}",
+	        target_dir    => '/usr/bin',
+	    }
+	}
     
     $frontendtools['tools'].each |String $key, Hash $data| {
      
