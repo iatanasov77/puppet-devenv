@@ -21,6 +21,9 @@ class vs_devenv::packages (
 					user    => 'vagrant',
 				}
 				
+				# Installs and configures git-subtree for git 1.7 and up.
+				include git::subtree
+				
 				# Download Git Prompt
 				wget::fetch { "Download GitPrompt Script":
 					source      => "https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh",
