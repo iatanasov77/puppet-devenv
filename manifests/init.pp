@@ -40,6 +40,9 @@ class vs_devenv (
 		stage { 'install-dependencies': before => Stage['main'] }
 	}
 	
+	stage { 'after-main': }
+    Stage['main'] -> Stage['after-main']
+    
 	class { '::vs_devenv::dependencies::repos':
 		dependencies	=> $dependencies,
         forcePhp7Repo   => $forcePhp7Repo,
@@ -48,17 +51,18 @@ class vs_devenv (
         stage           => 'install-dependencies',
     } ->
 	class { 'vs_devenv::dependencies::packages':
-        stage   => 'install-dependencies',
+        stage           => 'install-dependencies',
+        gitUserName     => $gitUserName,
+        gitUserEmail    => $gitUserEmail,
     }
     
-    stage { 'after-main': }
-	Stage['main'] -> Stage['after-main']
+    class { 'vs_devenv::dependencies::git_setup':
+        stage           => 'after-main',
+        gitCredentials  => $gitCredentials,
+    }
     
     class { '::vs_devenv::packages':
         packages        => $packages,
-        gitUserName     => $gitUserName,
-        gitUserEmail    => $gitUserEmail,
-        gitCredentials	=> $gitCredentials,
     } ->
 	
     class { '::vs_lamp':
@@ -128,7 +132,7 @@ class vs_devenv (
 	###########################
 	class { '::bashrc':
 		aliases    => [
-			"composer='XDEBUG_MODE=off \composer'"
+			"composer='XDEBUG_MODE=off \\composer'"
 		],
 		users      => [
 			{
