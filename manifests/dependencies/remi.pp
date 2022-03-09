@@ -9,13 +9,8 @@ class vs_devenv::dependencies::remi (
 		    	$requiredPackages	= [ Package['epel-release'], Package['yum-plugin-priorities'] ]
 		    } elsif $::operatingsystemmajrelease == '8' {
 		    	$remiSafeMirrors	= 'http://cdn.remirepo.net/enterprise/8/safe/x86_64/mirror'
-		    	$requiredPackages	= [ Package['centos-linux-release'], Package['epel-release'] ]
 		    	
-		    	Package { 'centos-linux-release':
-                    ensure   => 'present',
-                    provider => 'yum',
-                    require  => Package['epel-release'],
-                }
+		    	$requiredPackages    = [ Package['epel-release'] ]
 		    }
             
 		    if ! defined( Package['remi-release'] ) {

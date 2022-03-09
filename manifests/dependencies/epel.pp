@@ -4,16 +4,30 @@ class vs_devenv::dependencies::epel (
 	case $::operatingsystem {
     	centos: {
 			if ! defined( Package['epel-release'] ) {
-		        Exec { 'Import RPM GPG KEYS':
-		            command => 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*',
-		        } ->
-		        Package { 'epel-release':
-		            ensure   => 'present',
-		            provider => 'yum',
-		        } ->
-		        yumrepo { 'epel-testing':
-                    descr       => "Enable Epel-Testing Repo",
-                    *           => $yumrepoDefaults,
+			    if $::operatingsystemmajrelease == '8' {
+			        Exec { 'Import RPM GPG KEYS':
+                        command => 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*',
+                    } ->
+                    Package { 'epel-release':
+                        ensure   => 'present',
+                        provider => 'dnf',
+                    } ->
+                    yumrepo { 'epel-testing':
+                        descr       => "Enable Epel-Testing Repo",
+                        *           => $yumrepoDefaults,
+                    }
+			    } else {
+    		        Exec { 'Import RPM GPG KEYS':
+    		            command => 'rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY*',
+    		        } ->
+    		        Package { 'epel-release':
+    		            ensure   => 'present',
+    		            provider => 'yum',
+    		        } ->
+    		        yumrepo { 'epel-testing':
+                        descr       => "Enable Epel-Testing Repo",
+                        *           => $yumrepoDefaults,
+                    }
                 }
 		    }
 		}

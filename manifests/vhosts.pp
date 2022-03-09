@@ -73,6 +73,8 @@ class vs_devenv::vhosts (
                 {
                 	$fpmProxy			= vs_lamp::apache_vhost_fpm_proxy( $host['fpmSocket'] )
                 	$hostCustomFragment	= $host['customFragment']
+                	$aliases            = $host['aliases']
+                	$directories        = $host['directories']
                 	if ( $fpmProxy or $hostCustomFragment ) {
                 		$customFragment	= "
                 			${fpmProxy}
@@ -86,6 +88,8 @@ class vs_devenv::vhosts (
                         customFragment      => $customFragment,
                         needRewriteRules    => $needRewriteRules,
                         ssl					=> ( $host['withSsl'] and $sslModule ),
+                        aliases             => $aliases,
+                        directories         => $directories,
                     }
                 }
                 
