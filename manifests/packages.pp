@@ -18,6 +18,7 @@ class vs_devenv::packages (
                     'CentOS':
                     {
                     	if $::operatingsystemmajrelease == '8' {
+                    	   /* USING ORIGINAL REPO
 							wget::fetch { "Download GitFlow Installer":
 								source      => "https://raw.github.com/nvie/gitflow/develop/contrib/gitflow-installer.sh",
 								destination => '/tmp/gitflow-installer.sh',
@@ -28,6 +29,19 @@ class vs_devenv::packages (
 							Exec { "Install GitFlow":
 								command	=> '/tmp/gitflow-installer.sh',
 							}
+						  */
+						
+						  /* MY FORKED REPO */
+                            wget::fetch { "Download GitFlow Installer":
+                                source      => "https://raw.github.com/iatanasov77/gitflow/use_fixed_gitmodules/contrib/gitflow-installer.sh",
+                                destination => '/tmp/gitflow-installer.sh',
+                                verbose     => true,
+                                mode        => '0755',
+                                cache_dir   => '/var/cache/wget',
+                            } ->
+                            Exec { "Install GitFlow":
+                                command => '/tmp/gitflow-installer.sh',
+                            }
                     	} else {
                     		package { $value:
 	                            ensure => present,

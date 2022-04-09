@@ -18,5 +18,11 @@ class vs_devenv::dependencies::packages (
                 ensure => present,
             }
         }
+        
+        if ! defined(Package['tar']) {
+            Package { 'tar':
+                ensure => present,
+            }
+        }
     }
 }

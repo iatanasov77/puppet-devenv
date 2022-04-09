@@ -24,6 +24,7 @@ class vs_devenv::frontendtools (
     class { 'nodejs':
         version       => "${frontendtools['nodejs']}",
         target_dir    => '/usr/bin',
+        build_deps    => false,
     }
     
     $frontendtools['tools'].each |String $key, Hash $data| {

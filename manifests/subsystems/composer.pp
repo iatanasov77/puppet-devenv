@@ -4,6 +4,7 @@ class vs_devenv::subsystems::composer (
 	class { '::composer':
 		command_name	=> "${config['command']}",
 		version			=> "${config['version']}",
+		build_deps      => false,
 	}
 	
 	/*
