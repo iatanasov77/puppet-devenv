@@ -2,8 +2,9 @@ class vs_devenv::subsystems::docker (
 	Hash $config    = {},
 ) {
 	class { 'docker':
-        ensure => present,
-        version => 'latest',
+        ensure          => 'present',
+        version         => 'latest',
+        docker_users    => $config['docker_users'],
     }
     
     class {'docker::compose':
