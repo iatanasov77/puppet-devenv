@@ -5,22 +5,6 @@ class vs_devenv::subsystems (
      
         case $subsysKey
         {
-            'docker':
-            {
-                if ( $subsys['enabled'] ) {
-                	# vs_devenv::subsystems::docker
-                    class { 'docker':
-                        ensure => present,
-                        version => 'latest',
-                    }
-                    
-                    class {'docker::compose':
-                        ensure => present,
-                        #version => '1.9.0',
-                    }
-                }
-            }
-            
             'drush':
             {
             	if ( $subsys['enabled'] ) {
