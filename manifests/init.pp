@@ -43,27 +43,39 @@ class vs_devenv (
 	stage { 'after-main': }
     Stage['main'] -> Stage['after-main']
     
-	class { '::vs_devenv::dependencies::repos':
+	class { '::vs_core::dependencies::repos':
 		dependencies	=> $dependencies,
         forcePhp7Repo   => $forcePhp7Repo,
         phpVersion      => $phpVersion,
         mySqlProvider   => $mySqlProvider,
         stage           => 'install-dependencies',
     } ->
-	class { 'vs_devenv::dependencies::packages':
+	class { 'vs_core::dependencies::packages':
         stage           => 'install-dependencies',
         gitUserName     => $gitUserName,
         gitUserEmail    => $gitUserEmail,
     }
     
-    class { 'vs_devenv::dependencies::git_setup':
+    class { 'vs_core::dependencies::git_setup':
         stage           => 'after-main',
         gitCredentials  => $gitCredentials,
     }
     
-    class { '::vs_devenv::packages':
+    class { '::vs_core::packages':
         packages        => $packages,
-    } ->
+        gitUserName     => $gitUserName,
+        gitUserEmail    => $gitUserEmail,
+    }
+    
+    class { '::vs_core::vstools':
+        vstools => $vstools,
+    }
+
+    class { '::vs_core::frontendtools':
+        frontendtools   => $frontendtools,
+    }
+	
+	include vs_core::sendmail
 	
     class { '::vs_lamp':
         phpVersion                  => $phpVersion,
@@ -80,21 +92,6 @@ class vs_devenv (
         phpMyAdmin					=> $phpMyAdmin,
         databases					=> $databases,
     } 
-    
-    if ( $forcePhp7Repo ) {
-        file { "/usr/lib64/httpd/modules/libphp${phpVersion}.so":
-            ensure  => link,
-            target  => '/usr/lib64/httpd/modules/libphp7.so',
-        }
-    }
-    
-    class { '::vs_devenv::vstools':
-        vstools => $vstools,
-    }
-
-    class { '::vs_devenv::frontendtools':
-        frontendtools   => $frontendtools,
-    }
 
 	class { '::vs_devenv::subsystems':
         subsystems      => $subsystems,
@@ -117,8 +114,6 @@ class vs_devenv (
 	        galaxyRoles => $ansibleConfig['galaxyRoles'],
 	    }
 	}
-	
-	include vs_devenv::sendmail
 	
 	file { "${defaultDocumentRoot}/../var":
 		ensure  => directory,
