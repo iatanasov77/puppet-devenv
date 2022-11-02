@@ -3,6 +3,9 @@ class vs_devenv (
 	
     String $defaultHost,
     String $defaultDocumentRoot			= '/vagrant/gui_symfony/public',
+    String $guiUrl                      = '',
+    String $guiRoot                     = '',
+    
     Hash $installedProjects             = {},
     
     Hash $subsystems                    = {},
@@ -115,6 +118,10 @@ class vs_devenv (
 	    }
 	}
 	
+	class { '::vs_devenv::install_gui':
+        guiUrl  => "${guiUrl}",
+        guiRoot => "${guiRoot}",
+	} ->
 	file { "${defaultDocumentRoot}/../var":
 		ensure  => directory,
 	} ->
