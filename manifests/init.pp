@@ -61,6 +61,8 @@ class vs_devenv (
     
     class { 'vs_core::dependencies::git_setup':
         stage           => 'after-main',
+        gitUserName     => $gitUserName,
+        gitUserEmail    => $gitUserEmail,
         gitCredentials  => $gitCredentials,
     }
     
