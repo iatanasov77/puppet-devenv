@@ -6,7 +6,7 @@ class vs_devenv::subsystems::symfony (
       environment	=> [ "HOME=/root" ],
     } ->
     Exec { 'Move Symfony CLI globally':
-      command	=> 'mv /root/.symfony/bin/symfony /usr/local/bin/symfony'
+      command	=> 'mv /root/.symfony5/bin/symfony /usr/local/bin/symfony'
     } ->
     file { "/usr/local/bin/symfony":
         ensure => present,

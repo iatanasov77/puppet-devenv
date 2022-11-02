@@ -3,6 +3,14 @@
 class vs_devenv::subsystems::mailcatcher (
     Hash $config    = {},
 ) {
+    $rubyDefaultVersion  = '2.7.1'
+    
+    if ! defined(Class['vs_devenv::subsystems::ruby::rvm']) {
+        class { 'vs_devenv::subsystems::ruby::rvm':
+            rubyDefaultVersion => "${rubyDefaultVersion}",
+        }
+    }
+    
     if ! defined(Package['sqlite-devel']) {
         package { 'sqlite-devel':
             ensure => present,
@@ -10,7 +18,8 @@ class vs_devenv::subsystems::mailcatcher (
     }
     if ! defined(Package['ruby-devel']) {
         package { 'ruby-devel':
-            ensure => present,
+            ensure  => present,
+            require => Class['vs_devenv::subsystems::ruby::rvm'],
         }
     }
 
@@ -20,9 +29,14 @@ class vs_devenv::subsystems::mailcatcher (
         require   => Package['ruby-devel'],
     }
     
+    /*
+     * CANNOT START MAILCATCHER SERVICE NOW.
+     * START IT AFTER YOU LOGIN IN THE MACHINE
+     *
     exec { "Run MailCatcher Service ...":
-        command     => "mailcatcher --ip ${config['ip']}",
+        command     => "/usr/local/rvm/rubies/ruby-${rubyDefaultVersion}/bin/mailcatcher --ip ${config['ip']}",
         user        => 'vagrant',
         require     => Package['mailcatcher'],
     }
+    */
 }
