@@ -14,7 +14,7 @@ class vs_devenv::subsystems::cassandra::phpDriver (
 				$supportedVersions		= ['2.11.0', '2.12.0', '2.13.0', '2.14.0', '2.14.1', '2.15.0', '2.15.1', '2.15.2', '2.15.3', '2.16.0']
 				$cassaDriverSource		= "http://downloads.datastax.com/cpp-driver/centos/7/cassandra/v${version}/cassandra-cpp-driver-${version}-1.el7.x86_64.rpm"
 				$cassaDriverDevelSource	= "http://downloads.datastax.com/cpp-driver/centos/7/cassandra/v${version}/cassandra-cpp-driver-devel-${version}-1.el7.x86_64.rpm"
-			} elsif $::operatingsystemmajrelease == '8' {
+			} elsif Integer( $::operatingsystemmajrelease ) >= 8 {
 				$dependencies			= {
 					'libuv'			=> 'https://downloads.datastax.com/cpp-driver/centos/8/dependencies/libuv/v1.35.0/libuv-1.35.0-1.el8.x86_64.rpm',
 					'libuv-devel'	=> 'https://downloads.datastax.com/cpp-driver/centos/8/dependencies/libuv/v1.35.0/libuv-devel-1.35.0-1.el8.x86_64.rpm'

@@ -5,6 +5,7 @@ class vs_devenv (
     String $defaultDocumentRoot			= '/vagrant/gui_symfony/public',
     String $guiUrl                      = '',
     String $guiRoot                     = '',
+    Hash $guiDatabase                   = {},
     
     Hash $installedProjects             = {},
     
@@ -121,8 +122,10 @@ class vs_devenv (
 	}
 	
 	class { '::vs_devenv::install_gui':
-        guiUrl  => "${guiUrl}",
-        guiRoot => "${guiRoot}",
+        guiUrl      => "${guiUrl}",
+        guiRoot     => "${guiRoot}",
+        database    => $guiDatabase,
+        require     => Class['vs_lamp::mysql'],
 	} ->
 	file { "${defaultDocumentRoot}/../var":
 		ensure  => directory,
