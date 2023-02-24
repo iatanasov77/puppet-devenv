@@ -1,3 +1,6 @@
+############################################################
+# RVM Not Work on CentOs 9 BUT It Have Ruby Installed
+############################################################
 class vs_devenv::subsystems::ruby::rvm (
     String $rubyDefaultVersion  = '2.7.1',
 ) {
@@ -13,7 +16,9 @@ class vs_devenv::subsystems::ruby::rvm (
     } ->
     class { '::rvm':
         #version        => '1.29.12',
-        gnupg_key_id    => false,
+        signing_keys    => [],
+        include_gnupg   => false,
+        manage_wget     => false,
         system_users    => ['vagrant'],
     } ->
     rvm_system_ruby {

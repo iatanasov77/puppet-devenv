@@ -3,23 +3,30 @@
 class vs_devenv::subsystems::mailcatcher (
     Hash $config    = {},
 ) {
-    $rubyDefaultVersion  = '2.7.1'
+    $rubyDefaultVersion  = $config['rubyDefaultVersion']
     
-    if ! defined(Class['vs_devenv::subsystems::ruby::rvm']) {
+    if Boolean( $config['useRvm'] ) and ( ! defined( Class['vs_devenv::subsystems::ruby::rvm'] ) ) {
         class { 'vs_devenv::subsystems::ruby::rvm':
             rubyDefaultVersion => "${rubyDefaultVersion}",
+        }
+        
+        if ! defined(Package['ruby-devel']) {
+            package { 'ruby-devel':
+                ensure  => present,
+                require => Class['vs_devenv::subsystems::ruby::rvm'],
+            }
+        }
+    } else {
+        if ! defined(Package['ruby-devel']) {
+            package { 'ruby-devel':
+                ensure  => present,
+            }
         }
     }
     
     if ! defined(Package['sqlite-devel']) {
         package { 'sqlite-devel':
             ensure => present,
-        }
-    }
-    if ! defined(Package['ruby-devel']) {
-        package { 'ruby-devel':
-            ensure  => present,
-            require => Class['vs_devenv::subsystems::ruby::rvm'],
         }
     }
 

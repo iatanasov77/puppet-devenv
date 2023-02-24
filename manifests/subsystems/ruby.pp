@@ -3,7 +3,7 @@ class vs_devenv::subsystems::ruby (
 ) {
     if ! defined(Class['vs_devenv::subsystems::ruby::rvm']) {
     	class { 'vs_devenv::subsystems::ruby::rvm':
-            #rubyDefaultVersion => '2.6',
+            rubyDefaultVersion => "${config['rubyDefaultVersion']}",
         }
     }
     
