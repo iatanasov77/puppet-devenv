@@ -111,6 +111,7 @@ class vs_devenv (
         tomcat				=> ( $subsystems['tomcat']['enabled'] ),
         python				=> ( ( 'wsgi' in $apacheModules ) and $subsystems['python']['enabled'] ),
         ruby				=> ( ( 'passenger' in $apacheModules ) and $subsystems['ruby']['enabled'] ),
+        require     		=> Class['vs_lamp::install_mod_php'],
     }
 
 	if ( $ansibleConfig['enabled'] ) {    
