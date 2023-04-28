@@ -107,7 +107,7 @@ class vs_devenv (
         defaultDocumentRoot => "${defaultDocumentRoot}",
         installedProjects   => $installedProjects,
         sslModule			=> ( 'ssl' in $apacheModules ),
-        dotnetCore          => ( has_key( $subsystems, 'dotnet' ) and $subsystems['dotnet']['enabled'] ),
+        dotnetCore          => ( ( 'dotnet' in $subsystems ) and $subsystems['dotnet']['enabled'] ),
         tomcat				=> ( $subsystems['tomcat']['enabled'] ),
         python				=> ( ( 'wsgi' in $apacheModules ) and $subsystems['python']['enabled'] ),
         ruby				=> ( ( 'passenger' in $apacheModules ) and $subsystems['ruby']['enabled'] ),
@@ -137,22 +137,25 @@ class vs_devenv (
 	}
 	
 	# Set Bash Aliases
-	###########################
-	class { '::bashrc':
-		aliases    => [
-			"composer='XDEBUG_MODE=off \\composer'"
-		],
-		users      => [
-			{
-				'username'			=> 'root',
-				'homedirectory'		=> '/root',
-				'managelocalbashrc'	=> true,
-			},
-			{
-				'username'			=> 'vagrant',
-				'homedirectory'		=> '/home/vagrant',
-				'managelocalbashrc'	=> true,
-			}
-		]
-	}
+	# 'bashrc' module is too OLD
+	#################################
+	if false {
+    	class { '::bashrc':
+    		aliases    => [
+    			"composer='XDEBUG_MODE=off \\composer'"
+    		],
+    		users      => [
+    			{
+    				'username'			=> 'root',
+    				'homedirectory'		=> '/root',
+    				'managelocalbashrc'	=> true,
+    			},
+    			{
+    				'username'			=> 'vagrant',
+    				'homedirectory'		=> '/home/vagrant',
+    				'managelocalbashrc'	=> true,
+    			}
+    		]
+    	}
+    }
 }
