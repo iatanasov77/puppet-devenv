@@ -138,6 +138,10 @@ class vs_devenv (
 		content => to_json_pretty( $subsystems ),
 	}
 	
+	class { '::vs_devenv::final_settings':
+	
+	}
+    
 	# Set Bash Aliases
 	# 'bashrc' module is too OLD
 	#################################
