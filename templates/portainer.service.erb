@@ -1,0 +1,21 @@
+[Unit]
+Description=Portainer CE
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+StartLimitInterval=20
+StartLimitBurst=5
+TimeoutStartSec=0
+RestartSec=5
+SyslogIdentifier=portainer
+
+ExecStartPre=/bin/bash -c "/usr/bin/docker container inspect portainer 2> /dev/null || /usr/bin/docker run -d --name portainer --privileged  -p 9443:9443 -p 8000:8000 -v <%= @data_path %>:/data -v /var/run/docker.sock:/var/run/docker.sock -v <%= @portainerPasswordFile%>:<%= @portainerPasswordFile%> portainer/portainer-ce:latest --admin-password-file '<%= @portainerPasswordFile%>'"
+#ExecStartPre=/bin/bash -c "/usr/bin/docker container inspect portainer 2> /dev/null || /usr/bin/docker run -d --name portainer --privileged  -p 9443:9443 -p 8000:8000 -v <%= @data_path %>:/data -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer-ce:latest"
+
+ExecStart=/usr/bin/docker start -a portainer
+ExecStop=/usr/bin/docker stop -t 10 portainer
+
+[Install]
+WantedBy=multi-user.target
