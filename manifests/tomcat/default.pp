@@ -1,9 +1,9 @@
 class vs_devenv::tomcat::default (
 	String $sourceUrl,
 	String $catalinaHome,
-	String $jdkPackage,
+	Optional[String] $jdkPackage,
 ) {
-	if ! defined(Class['java']) {
+	if ! defined(Class['java']) and ! empty($jdkPackage) {
 	    class { 'java' :
 	        package => $jdkPackage,
 	    }

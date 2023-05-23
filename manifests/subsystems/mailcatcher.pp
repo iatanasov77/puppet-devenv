@@ -31,7 +31,7 @@ class vs_devenv::subsystems::mailcatcher (
     }
 
     package { 'mailcatcher':
-        provider  => 'gem',
+        provider  => gem,
         ensure    => installed,
         require   => Package['ruby-devel'],
     }

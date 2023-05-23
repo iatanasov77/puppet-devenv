@@ -12,7 +12,6 @@ class vs_devenv::install_gui (
             command     => "${guiRoot}/install.sh",
             cwd         => $guiRoot,
             user        => 'vagrant',
-            environment => [ "PHPBREW_ROOT=/opt/phpbrew" ],
             environment => [ "COMPOSER_HOME=/home/vagrant" ],
         } ->
         mysql::db { $database['name']:

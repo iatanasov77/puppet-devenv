@@ -3,9 +3,9 @@ define vs_devenv::tomcat::service (
     String $tomcatUser      = 'root'
 ) {
     
-    $scriptName = $name
+    $scriptName = "${name}.sh"
 
-    File { "${scriptName}.sh":
+    File { "${scriptName}":
         ensure  => file,
         path    => "/etc/init.d/${scriptName}",
         content => template( 'vs_devenv/tomcat.initd.erb' ),

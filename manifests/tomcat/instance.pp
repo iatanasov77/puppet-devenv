@@ -30,27 +30,27 @@ define vs_devenv::tomcat::instance (
     }
     
     -> tomcat::config::server::tomcat_users {
-        'instance-role-admin-gui':
+        "instance-role-admin-gui-${title}":
             ensure        => present,
             catalina_base => "${catalinaHome}",
             element       => 'role',
             element_name  => 'admin-gui';
-        'instance-role-admin-script':
+        "instance-role-admin-script-${title}":
             ensure        => present,
             catalina_base => "${catalinaHome}",
             element       => 'role',
             element_name  => 'admin-script';
-        'instance-role-manager-gui':
+        "instance-role-manager-gui-${title}":
             ensure        => present,
             catalina_base => "${catalinaHome}",
             element       => 'role',
             element_name  => 'manager-gui';
-        'instance-role-manager-script':
+        "instance-role-manager-script-${title}":
             ensure        => present,
             catalina_base => "${catalinaHome}",
             element       => 'role',
             element_name  => 'manager-script';
-        'instance-user-admin':
+        "instance-user-admin-${title}":
             ensure        => present,
             catalina_base => "${catalinaHome}",
             element       => 'user',
