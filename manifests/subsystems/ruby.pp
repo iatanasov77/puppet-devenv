@@ -11,7 +11,7 @@ class vs_devenv::subsystems::ruby (
     	rvm_system_ruby {
 			"ruby-${venvConfig['rubyVersion']}":
 			    ensure      => 'present',
-			    default_use => $venvConfig['defaultUse'];
+			    default_use => false;
 		}
 		
 		$venvConfig['packages'].each |String $package| {

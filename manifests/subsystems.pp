@@ -27,6 +27,24 @@ class vs_devenv::subsystems (
                 }
             }
             
+            'mailcatcher':
+            {
+                if ( $subsys['enabled'] ) {
+                    
+                    if ( 'ruby' in $subsystems and $subsystems['ruby']['enabled'] ) {
+                        $mailcatcherRequires    = []
+                    } else {
+                        class { 'vs_core::packages::ruby':}
+                        $mailcatcherRequires    = [Class['vs_core::packages::ruby']]
+                    }
+                    
+                    class { "::vs_devenv::subsystems::mailcatcher":
+                        config  => $subsys,
+                        require => $mailcatcherRequires,
+                    }
+                }
+            }
+            
             default:
             {
                 if ( $subsys['enabled'] ) {
