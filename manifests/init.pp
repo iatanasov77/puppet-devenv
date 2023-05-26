@@ -48,6 +48,8 @@ class vs_devenv (
 	stage { 'after-main': }
     Stage['main'] -> Stage['after-main']
     
+    class { 'vs_core::scripts': stage => 'install-dependencies' }
+    
 	class { '::vs_core::dependencies::repos':
 		dependencies	=> $dependencies,
         forcePhp7Repo   => $forcePhp7Repo,
@@ -136,10 +138,6 @@ class vs_devenv (
 	file { "${defaultDocumentRoot}/../var/subsystems.json":
 		ensure  => file,
 		content => to_json_pretty( $subsystems ),
-	}
-	
-	class { '::vs_devenv::final_settings':
-	
 	}
     
 	# Set Bash Aliases
