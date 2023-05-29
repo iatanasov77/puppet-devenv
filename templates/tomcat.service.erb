@@ -1,9 +1,0 @@
-[Unit]
-Description=Tomcat Service
-
-[Service]
-Type=forking
-ExecStart=/etc/init.d/<%= @scriptName %>
-
-[Install]
-WantedBy=multi-user.target

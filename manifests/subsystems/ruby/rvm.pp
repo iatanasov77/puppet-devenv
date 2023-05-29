@@ -29,11 +29,11 @@ class vs_devenv::subsystems::ruby::rvm (
     File { '/usr/bin/ruby':
         ensure  => 'link',
         force   => true,
-        target  => '/usr/local/rvm/rubies/ruby-2.7.1/bin/ruby',
+        target  => "/usr/local/rvm/rubies/ruby-${rubyDefaultVersion}/bin/ruby",
     } ->
     File { '/usr/bin/gem':
         ensure  => 'link',
         force   => true,
-        target  => '/usr/local/rvm/rubies/ruby-2.7.1/bin/gem',
+        target  => "/usr/local/rvm/rubies/ruby-${rubyDefaultVersion}/bin/gem",
     }
 }
