@@ -135,7 +135,7 @@ class vs_devenv (
 	file { "${defaultDocumentRoot}/../var":
 		ensure  => directory,
 	} ->
-	file { "${defaultDocumentRoot}/../var/subsystems.json":
+	file { "${defaultDocumentRoot}/../var/subsystems-${defaultHost}.json":
 		ensure  => file,
 		content => to_json_pretty( $subsystems ),
 	}
