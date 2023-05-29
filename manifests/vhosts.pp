@@ -36,28 +36,6 @@ class vs_devenv::vhosts (
     ##################################################
     $installedProjects.each |String $projectId, Hash $projectConfig| {
     
-    	# Project Dependencies
-        case $projectConfig['type']
-        {
-        	'Java': {
-        		if $tomcat and $projectConfig['tomcatInstances'] {
-        			# Install Tomcat Instances
-        			$projectConfig['tomcatInstances'].each | String $instanceId, Hash $instanceConfig | {
-		                tomcat::install { "${instanceConfig['catalinaHome']}":
-		                    source_url  => $instanceConfig['sourceUrl'],
-		                }
-		    
-		                vs_devenv::tomcat::instance { "${instanceId}":
-		                    catalinaHome    => "${instanceConfig['catalinaHome']}",
-		                    catalinaBase    => "${instanceConfig['catalinaBase']}",
-		                    serverPort      => $instanceConfig['serverPort'],
-		                    connectorPort   => $instanceConfig['connectorPort'],
-		                }
-		            }
-        		}
-        	}
-        }
-    
         # Configure Apache Vhosts
         $projectConfig['hosts'].each | Hash $host | {
             
