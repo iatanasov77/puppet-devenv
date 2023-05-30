@@ -48,7 +48,10 @@ class vs_devenv (
 	stage { 'after-main': }
     Stage['main'] -> Stage['after-main']
     
-    class { 'vs_core::scripts': stage => 'install-dependencies' }
+    class { 'vs_core::scripts':
+        # This Make dependency cycle
+        #stage => 'install-dependencies'
+    }
     
 	class { '::vs_core::dependencies::repos':
 		dependencies	=> $dependencies,
