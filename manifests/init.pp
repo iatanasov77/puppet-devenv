@@ -106,6 +106,10 @@ class vs_devenv (
         databases					=> $databases,
     } 
 
+    class { '::vs_devenv::php_documentor':
+    
+    }
+
 	class { '::vs_devenv::subsystems':
         subsystems      => $subsystems,
     } ->
