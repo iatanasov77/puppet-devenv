@@ -25,6 +25,7 @@ class vs_devenv (
 	$mySqlProvider						= false,
 	
     Hash $phpModules                    = {},
+    Hash $removePhpIniFiles             = {},
     Boolean $phpunit                    = false,
     
     Hash $phpSettings                   = {},
@@ -105,7 +106,12 @@ class vs_devenv (
         
         phpMyAdmin					=> $phpMyAdmin,
         databases					=> $databases,
-    } 
+    }
+    
+    class { 'vs_lamp::fix_php_modules':
+        stage               => 'after-main',
+        removeIniFiles      => $removePhpIniFiles,
+    }
 
     class { '::vs_devenv::php_documentor':
     
