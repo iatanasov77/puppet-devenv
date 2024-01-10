@@ -39,8 +39,9 @@ class vs_devenv::subsystems::phpbrew (
     }
     
     class { 'phpbrew':
-       system_wide 				=> $config['system_wide'],
-       additional_dependencies	=> $deps
+        version                 => $config['version'],
+        system_wide 				=> $config['system_wide'],
+        additional_dependencies	=> $deps
     }
     
     if $::operatingsystem == 'centos' and Integer( $::operatingsystemmajrelease ) >= 8 and ! defined(Package['php-json'])  {

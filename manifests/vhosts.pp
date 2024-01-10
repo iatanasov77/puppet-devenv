@@ -1,4 +1,5 @@
 class vs_devenv::vhosts (
+    String $hostIp                  = '0.0.0.0',
     String $defaultHost,
     String $defaultDocumentRoot,
     Hash $installedProjects         = {},
@@ -38,6 +39,11 @@ class vs_devenv::vhosts (
     
         # Configure Apache Vhosts
         $projectConfig['hosts'].each | Hash $host | {
+            
+            vs_devenv::system_host{ "${host['hostName']}":
+                hostIp      => $hostIp,
+                hostName    => $host['hostName'],
+            }
             
             if $host['needRewriteRules'] {
                 $needRewriteRules = Boolean( $host['needRewriteRules'] )

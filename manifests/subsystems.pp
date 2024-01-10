@@ -34,7 +34,9 @@ class vs_devenv::subsystems (
                     if ( 'ruby' in $subsystems and $subsystems['ruby']['enabled'] ) {
                         $mailcatcherRequires    = []
                     } else {
-                        class { 'vs_core::packages::ruby':}
+                        class { 'vs_core::packages::ruby':
+                            rubyVersion => $subsys['rubyDefaultVersion']
+                        }
                         $mailcatcherRequires    = [Class['vs_core::packages::ruby']]
                     }
                     

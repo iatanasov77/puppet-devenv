@@ -1,5 +1,6 @@
 class vs_devenv (
 	Hash $dependencies					= {},
+    String $hostIp                      = '0.0.0.0',
 	
     String $defaultHost,
     String $defaultDocumentRoot			= '/vagrant/gui_symfony/public',
@@ -114,6 +115,7 @@ class vs_devenv (
         subsystems      => $subsystems,
     } ->
     class { '::vs_devenv::vhosts':
+        hostIp              => "${hostIp}",
         defaultHost         => "${defaultHost}",
         defaultDocumentRoot => "${defaultDocumentRoot}",
         installedProjects   => $installedProjects,
