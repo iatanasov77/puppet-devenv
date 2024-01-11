@@ -39,6 +39,8 @@ class vs_devenv (
     Boolean $forcePhp7Repo              = true,
     
     Hash $ansibleConfig                 = {},
+    
+    Hash $finalFixes                    = {},
 ) {
 	# Maika mu deeba :)
 	if ( $subsystems['ruby']['enabled'] ) {
@@ -133,7 +135,7 @@ class vs_devenv (
         require     		=> Class['vs_lamp::install_mod_php'],
     }
 
-	if ( $ansibleConfig['enabled'] ) {    
+	if ( $ansibleConfig['enabled'] ) {
 	    class { '::vs_devenv::ansible':
 	        pathRoles   => $ansibleConfig['pathRoles'],
 	        logPath     => $ansibleConfig['logPath'],
@@ -154,6 +156,14 @@ class vs_devenv (
 		ensure  => file,
 		content => to_json_pretty( $subsystems ),
 	}
+    
+    if ( $finalFixes['enabled'] ) { 
+        class { '::vs_devenv::final_fixes':
+            stage       => 'after-main',
+            subsystems  => $subsystems,
+            finalFixes  => $finalFixes,
+        }
+    }
     
 	# Set Bash Aliases
 	# 'bashrc' module is too OLD
