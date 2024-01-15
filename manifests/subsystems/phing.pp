@@ -4,6 +4,32 @@
 class vs_devenv::subsystems::phing (
 	Hash $config    = {},
 ) {
+    /*
+     * Phing Official Site: https://www.phing.info
+     */
+    case $config['version']
+    {
+        '3.0.0-rc6':
+        {
+            $sourceUrl  = "https://github.com/phingofficial/phing/releases/download/${config['version']}/phing-3.0.0-RC6.phar"
+        }
+        default:
+        {
+            $sourceUrl  = "https://github.com/phingofficial/phing/releases/download/${config['version']}/phing-${config['version']}.phar"
+        }
+    }
+    
+    wget::fetch { "Install Phing Build Tool":
+        source      => "${sourceUrl}",
+        destination => '/usr/local/bin/phing',
+        verbose     => true,
+        mode        => '0777',
+        cache_dir   => '/var/cache/wget',
+    }
+        
+        
+    /* OLD WAY 
+    
     notify { "INSTALLING PHING ( PHP BUILD TOOL )":
         withpath => false,
     }
@@ -21,4 +47,6 @@ class vs_devenv::subsystems::phing (
         target  => '/usr/share/php/phing-latest.phar',
         mode    => '0777',
     }
+    
+    */
 }
