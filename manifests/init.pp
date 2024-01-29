@@ -34,6 +34,7 @@ class vs_devenv (
     Hash $databases						= {},
     
     Hash $frontendtools                 = {},
+    Hash $npmCredentials,
     Hash $vstools                       = {},
     
     Boolean $forcePhp7Repo              = true,
@@ -89,6 +90,10 @@ class vs_devenv (
 
     class { '::vs_core::frontendtools':
         frontendtools   => $frontendtools,
+    }
+    
+    class { '::vs_devenv::npm_login':
+        npmCredentials  => $npmCredentials,
     }
 	
 	include vs_core::sendmail
