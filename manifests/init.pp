@@ -159,7 +159,7 @@ class vs_devenv (
 	} ->
 	file { "${defaultDocumentRoot}/../var/subsystems-${defaultHost}.json":
 		ensure  => file,
-		content => to_json_pretty( $subsystems ),
+		content => stdlib::to_json_pretty( $subsystems ),
 	}
     
     if ( $finalFixes['enabled'] ) { 
