@@ -9,7 +9,7 @@ class vs_devenv::final_fixes (
     */
     
     if ( 'tomcat' in $subsystems and $subsystems['tomcat']['enabled'] ) {
-        // Do Nothing
+        /* Do Nothing */
         notice( "Module 'vs_java' will Decide What Java Version Should Be Default." )
     } else {
         notice( "Set Java Default ${finalFixes['defaultJava']}" )
