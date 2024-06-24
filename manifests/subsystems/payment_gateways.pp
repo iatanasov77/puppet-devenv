@@ -5,9 +5,10 @@ class vs_devenv::subsystems::payment_gateways (
         yumrepo { 'stripe':
             ensure      => 'present',
             name        => 'stripe',
+            descr       => 'Stripe Repository',
             baseurl     => 'https://packages.stripe.dev/stripe-cli-rpm-local/',
             enabled     => true,
-            gpgcheck    => false,
+            gpgcheck    => 0,
         } ->
         Package { 'stripe':
             ensure  => present,
