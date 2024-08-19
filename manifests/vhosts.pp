@@ -51,6 +51,10 @@ class vs_devenv::vhosts (
                 $needRewriteRules = Boolean( "false" )
             }
         
+            if ( mercureProxy in $host and $host['mercureProxy'] ) {
+                $mercureProxy   = vs_devenv::apache_vhost_reverse_proxy( '3000' )
+            }
+            
             case $host['hostType']
             {
                 'Lamp':
@@ -59,10 +63,11 @@ class vs_devenv::vhosts (
                 	$hostCustomFragment	= $host['customFragment']
                 	$aliases            = $host['aliases']
                 	$directories        = $host['directories']
-                	if ( $fpmProxy or $hostCustomFragment ) {
+                	if ( $fpmProxy or $hostCustomFragment or $mercureProxy ) {
                 		$customFragment	= "
                 			${fpmProxy}
                 			${hostCustomFragment}
+                			${mercureProxy}
                 		"
                 	}
                 	
