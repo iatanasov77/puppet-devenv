@@ -9,15 +9,19 @@ class vs_devenv::subsystems::websocket_server (
     user { 'wsworker':
         ensure  => present,
         shell   => '/sbin/nologin',
-    } ->
-    File { '/etc/systemd/system/websocket.service':
-        ensure  => file,
-        path    => '/etc/systemd/system/websocket.service',
-        content => template( 'vs_devenv/websocket.service.erb' ),
-        mode    => '0644',
-    } ->
-    Service { 'websocket':
-        ensure  => 'running',
-        enable  => true,
+    }
+    
+    $config['servers'].each |String $serverKey, Hash $server| {
+        File { "/etc/systemd/system/websocket_${serverKey}.service":
+            ensure  => file,
+            path    => "/etc/systemd/system/websocket_${serverKey}.service",
+            content => template( 'vs_devenv/websocket.service.erb' ),
+            mode    => '0644',
+        } ->
+        Service { "websocket_${serverKey}":
+            ensure  => 'running',
+            enable  => true,
+            require => [User['wsworker']]
+        }
     }
 }
