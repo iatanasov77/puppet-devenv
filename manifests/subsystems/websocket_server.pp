@@ -6,6 +6,9 @@ class vs_devenv::subsystems::websocket_server (
             ensure  => present,
         }
     } ->
+    File { '/var/log/websocket':
+        ensure  => directory,
+    } ->
     user { 'wsworker':
         ensure  => present,
         shell   => '/sbin/nologin',
