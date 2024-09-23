@@ -33,6 +33,8 @@ class vs_devenv (
     Hash $phpMyAdmin					= {},
     Hash $databases						= {},
     
+    Hash $customLampExtensions          = {},
+    
     Hash $frontendtools                 = {},
     Hash $npmCredentials,
     Hash $vstools                       = {},
@@ -113,6 +115,8 @@ class vs_devenv (
         
         phpMyAdmin					=> $phpMyAdmin,
         databases					=> $databases,
+        
+        customExtensions            => $customLampExtensions,
     }
     
     class { 'vs_lamp::fix_php_modules':
