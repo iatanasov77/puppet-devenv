@@ -1,0 +1,12 @@
+[Unit]
+Description=ZMQ Socket Service
+After=network.target
+
+[Service]
+Type=simple
+User=wsworker
+ExecStart=<%= @server['command'] %> <%= @server['tcp_port'] %> <%= @server['websocket_port'] %>
+Restart=on-abort
+
+[Install]
+WantedBy=projects.mount

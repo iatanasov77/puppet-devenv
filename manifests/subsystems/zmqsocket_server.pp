@@ -1,4 +1,4 @@
-class vs_devenv::subsystems::websocket_server (
+class vs_devenv::subsystems::zmqsocket_server (
     Hash $config    = {},
 ) {
     if ! defined( File['/var/log/websocket'] ) {
@@ -21,13 +21,13 @@ class vs_devenv::subsystems::websocket_server (
     }
     
     $config['servers'].each |String $serverKey, Hash $server| {
-        File { "/etc/systemd/system/websocket_${serverKey}.service":
+        File { "/etc/systemd/system/zmq_${serverKey}.service":
             ensure  => file,
-            path    => "/etc/systemd/system/websocket_${serverKey}.service",
-            content => template( 'vs_devenv/websocket.service.erb' ),
+            path    => "/etc/systemd/system/zmq_${serverKey}.service",
+            content => template( 'vs_devenv/zmq.service.erb' ),
             mode    => '0644',
         } ->
-        Service { "websocket_${serverKey}":
+        Service { "zmq_${serverKey}":
             ensure  => 'running',
             enable  => true,
             require => [
