@@ -4,6 +4,7 @@ class vs_devenv::subsystems::zmqsocket_server (
     if ! defined( File['/var/log/websocket'] ) {
         File { '/var/log/websocket':
             ensure  => directory,
+            mode    => '0777',
         }
     }
     
