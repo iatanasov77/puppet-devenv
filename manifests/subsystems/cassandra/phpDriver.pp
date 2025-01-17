@@ -4,7 +4,8 @@ class vs_devenv::subsystems::cassandra::phpDriver (
 	Boolean $installDriverFromGitHub	= false,
 ) {
 	case $::operatingsystem {
-    	centos: {
+    	#centos: {
+    	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
 			if $::operatingsystemmajrelease == '7' {
 				$dependencies			= {
 					'libuv'			=> 'https://downloads.datastax.com/cpp-driver/centos/7/dependencies/libuv/v1.35.0/libuv-1.35.0-1.el7.x86_64.rpm',

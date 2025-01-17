@@ -2,7 +2,8 @@ class vs_devenv::subsystems::cassandra::server (
 	String $cassandraPackage,
 ) {
 	case $::operatingsystem {
-    	centos: {
+    	#centos: {
+    	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
 			yumrepo { 'datastax':
 				descr      	=> 'DataStax Repo for Apache Cassandra',
 		        ensure      => 'present',

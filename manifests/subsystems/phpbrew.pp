@@ -44,7 +44,11 @@ class vs_devenv::subsystems::phpbrew (
         additional_dependencies	=> $deps
     }
     
-    if $::operatingsystem == 'centos' and Integer( $::operatingsystemmajrelease ) >= 8 and ! defined(Package['php-json'])  {
+    if (
+        ( $::operatingsystem == 'centos' or $::operatingsystem == 'AlmaLinux' ) and
+        Integer( $::operatingsystemmajrelease ) >= 8 and
+        ! defined( Package['php-json'] )
+    ) {
     	if ! defined(Package['php-json']) {
 	    	Package { 'php-json':
 			    ensure    => installed,

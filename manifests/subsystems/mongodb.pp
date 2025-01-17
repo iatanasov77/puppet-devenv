@@ -2,7 +2,8 @@ class vs_devenv::subsystems::mongodb (
 	Hash $config    = {},
 ) {
 	case $::operatingsystem {
-    	centos: {
+    	#centos: {
+    	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
 		    yumrepo { 'mongodb-org':
 				descr      	=> 'MongoDB Repository',
 		        ensure      => 'present',

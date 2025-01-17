@@ -2,7 +2,8 @@ class vs_devenv::subsystems::cassandra::dependencies (
 	
 ) {
 	case $::operatingsystem {
-    	centos: {
+    	#centos: {
+    	'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
     		if ! defined(Class['java']) {
 	    		class { 'java' :
 			        package => 'java-1.8.0-openjdk-devel',
