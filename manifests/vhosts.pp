@@ -1,7 +1,5 @@
 class vs_devenv::vhosts (
     String $hostIp                  = '0.0.0.0',
-    String $defaultHost,
-    String $defaultDocumentRoot,
     Hash $installedProjects         = {},
     Hash $vhosts                    = {},
     Boolean $sslModule				= false,
@@ -10,28 +8,6 @@ class vs_devenv::vhosts (
     Boolean $python             	= false,
     Boolean $ruby             		= false,
 ) {
-
-    ##################################################
-    # Create Vhost for GUI
-    ##################################################
-    vs_lamp::apache_vhost{ "${defaultHost}":
-        hostName        => $defaultHost,
-        documentRoot    => $defaultDocumentRoot,
-        aliases         => [
-            {
-                alias => '/phpmyadmin',
-                path  => '/usr/share/phpMyAdmin'
-            }
-        ],
-        directories     => [
-            {
-                'path'              => '/usr/share/phpMyAdmin',
-                'allow_override'    => ['All'],
-                'Require'           => 'all granted',
-            }
-        ],
-    }
-    
     ##################################################
     # Create Vhosts for all installed projects
     ##################################################

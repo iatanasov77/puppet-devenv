@@ -3,10 +3,8 @@ class vs_devenv (
     String $hostIp                      = '0.0.0.0',
 	
     String $defaultHost,
-    String $defaultDocumentRoot			= '/vagrant/gui_symfony/public',
     String $guiUrl                      = '',
     String $guiRoot                     = '',
-    Hash $guiDatabase                   = {},
     
     Hash $installedProjects             = {},
     
@@ -133,8 +131,6 @@ class vs_devenv (
     } ->
     class { '::vs_devenv::vhosts':
         hostIp              => "${hostIp}",
-        defaultHost         => "${defaultHost}",
-        defaultDocumentRoot => "${defaultDocumentRoot}",
         installedProjects   => $installedProjects,
         sslModule			=> ( 'ssl' in $apacheModules ),
         dotnetCore          => ( ( 'dotnet' in $subsystems ) and $subsystems['dotnet']['enabled'] ),
@@ -142,6 +138,12 @@ class vs_devenv (
         python				=> ( ( 'wsgi' in $apacheModules ) and $subsystems['python']['enabled'] ),
         ruby				=> ( ( 'passenger' in $apacheModules ) and $subsystems['ruby']['enabled'] ),
         require     		=> Class['vs_lamp::install_mod_php'],
+    } ->
+    class { '::vs_devenv::vhost_gui':
+        hostIp      => "${hostIp}",
+        defaultHost => "${defaultHost}",
+        guiRoot     => "${guiRoot}",
+        require     => Class['vs_lamp::install_mod_php'],
     }
 
 	if ( $ansibleConfig['enabled'] ) {
@@ -155,13 +157,9 @@ class vs_devenv (
 	class { '::vs_devenv::install_gui':
         guiUrl      => "${guiUrl}",
         guiRoot     => "${guiRoot}",
-        database    => $guiDatabase,
         require     => Class['vs_lamp::mysql'],
 	} ->
-	file { "${defaultDocumentRoot}/../var":
-		ensure  => directory,
-	} ->
-	file { "${defaultDocumentRoot}/../var/subsystems-${defaultHost}.json":
+	file { "${guiRoot}/var/subsystems-${defaultHost}.json":
 		ensure  => file,
 		content => stdlib::to_json_pretty( $subsystems ),
 	}
