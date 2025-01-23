@@ -38,9 +38,4 @@ class vs_devenv::vhost_gui (
         hostName        => "admin.${defaultHost}",
         documentRoot    => "${guiRoot}/public/admin-panel",
     }
-    
-    vs_devenv::system_host{ "${host['hostName']}":
-        hostIp      => $hostIp,
-        hostName    => "admin.${defaultHost}",
-    }
 }
