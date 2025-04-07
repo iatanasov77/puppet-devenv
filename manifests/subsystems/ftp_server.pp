@@ -26,7 +26,7 @@ class vs_devenv::subsystems::ftp_server (
         pasv_enable             => true,
         pasv_min_port           => 1024,
         pasv_max_port           => 1048,
-        pasv_address            => '127.0.0.1',
+        pasv_address            => "${facts['host_ip']}",
         
         userlist_enable         => true,
         userlist_deny           => false,
