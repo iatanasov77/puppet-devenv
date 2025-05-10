@@ -69,6 +69,7 @@ class vs_devenv (
         stage           => 'install-dependencies',
         gitUserName     => $gitUserName,
         gitUserEmail    => $gitUserEmail,
+        jdkVersion      => "${dependencies['jdkVersion']}",
     }
     
     class { 'vs_core::git_setup':
@@ -164,14 +165,18 @@ class vs_devenv (
 		content => stdlib::to_json_pretty( $subsystems ),
 	}
     
+    ######################################################################
+    # Apply Final Fixes if Needed
+    ######################################################################
     if ( $finalFixes['enabled'] ) { 
-        class { '::vs_devenv::final_fixes':
+        class { '::vs_core::dependencies::final_fixes':
             stage       => 'after-main',
             subsystems  => $subsystems,
             finalFixes  => $finalFixes,
         }
     }
     
+    #################################
 	# Set Bash Aliases
 	# 'bashrc' module is too OLD
 	#################################
