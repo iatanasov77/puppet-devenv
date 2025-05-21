@@ -28,7 +28,7 @@ class vs_devenv::vhosts (
             }
         
             if ( mercureProxy in $host and $host['mercureProxy'] ) {
-                $mercureProxy   = vs_devenv::apache_vhost_reverse_proxy( '3000', '/hub/', 'https' )
+                $mercureProxy   = vs_devenv::apache_vhost_reverse_proxy( '3000', '/hub/', 'http', false )
             }
             
             case $host['hostType']

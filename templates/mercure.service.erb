@@ -1,0 +1,17 @@
+[Unit]
+Description=Mercure Hub
+
+[Service]
+Restart=always
+StartLimitInterval=20
+StartLimitBurst=5
+TimeoutStartSec=0
+RestartSec=5
+SyslogIdentifier=mercure
+
+WorkingDirectory=/usr/local/bin/mercure
+ExecStart=/usr/local/bin/mercure/mercure run --config mercure.Caddyfile
+ExecStop=/usr/local/bin/mercure/mercure stop
+
+[Install]
+WantedBy=multi-user.target
