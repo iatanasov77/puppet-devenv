@@ -43,6 +43,12 @@ class vs_devenv (
     
     Hash $finalFixes                    = {},
 ) {
+    exec { 'daemon-reload':
+        command     => 'systemctl daemon-reload',
+        path        => '/bin:/sbin:/usr/bin:/usr/sbin',
+        refreshonly => true,
+    }
+    
 	# Maika mu deeba :)
 	if ( $subsystems['ruby']['enabled'] ) {
 		stage { 'install-dependencies': before => Stage['rvm-install'] }
