@@ -151,6 +151,9 @@ class vs_devenv (
         defaultHost => "${defaultHost}",
         guiRoot     => "${guiRoot}",
         require     => Class['vs_lamp::install_mod_php'],
+    } ->
+    exec { 'Update_CA_Trust':
+        command => 'update-ca-trust extract',
     }
 
 	if ( $ansibleConfig['enabled'] ) {
