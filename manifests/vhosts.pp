@@ -27,7 +27,7 @@ class vs_devenv::vhosts (
                 $needRewriteRules = Boolean( "false" )
             }
         
-            if ( mercureProxy in $host and $host['mercureProxy'] ) {
+            if ( 'mercureProxy' in $host and $host['mercureProxy'] ) {
                 $mercureProxy   = vs_devenv::apache_vhost_reverse_proxy( '3000', '/hub/', 'http', false )
             }
             
@@ -39,6 +39,7 @@ class vs_devenv::vhosts (
                 	$hostCustomFragment	= $host['customFragment']
                 	$aliases            = $host['aliases']
                 	$directories        = $host['directories']
+                	
                 	if ( $fpmProxy or $hostCustomFragment or $mercureProxy ) {
                 		$customFragment	= "
                 			${fpmProxy}
@@ -47,12 +48,19 @@ class vs_devenv::vhosts (
                 		"
                 	}
                 	
+                	if ( 'sslHost' in $host ) {
+                	   $sslHost = $host['sslHost']
+                	} else {
+                	   $sslHost = 'myprojects.lh'
+                	}
+                	
                     vs_lamp::apache_vhost{ "${host['hostName']}":
                         hostName            => $host['hostName'],
                         documentRoot        => $host['documentRoot'],
                         customFragment      => $customFragment,
                         needRewriteRules    => $needRewriteRules,
                         ssl					=> ( $host['withSsl'] and $sslModule ),
+                        sslHost             => $sslHost,
                         aliases             => $aliases,
                         directories         => $directories,
                     }
