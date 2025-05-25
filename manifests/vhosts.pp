@@ -28,7 +28,14 @@ class vs_devenv::vhosts (
             }
         
             if ( 'mercureProxy' in $host and $host['mercureProxy'] ) {
-                $mercureProxy   = vs_devenv::apache_vhost_reverse_proxy( '3000', '/hub/', 'http', false )
+                $mercureProxy   = vs_devenv::apache_vhost_reverse_proxy( '3000', '/hub/', 'http', '127.0.0.1', false )
+            }
+            
+            if ( 'websockets' in $host ) {
+                $websockets = $host['websockets'].keys.map |$port| {
+                    vs_devenv::apache_vhost_reverse_proxy( $port, $host['websockets'][$port], 'ws', $host['hostName'], false, false )
+                }
+                $websocketProxy  = join( $websockets, "\n" )
             }
             
             case $host['hostType']
@@ -40,11 +47,12 @@ class vs_devenv::vhosts (
                 	$aliases            = $host['aliases']
                 	$directories        = $host['directories']
                 	
-                	if ( $fpmProxy or $hostCustomFragment or $mercureProxy ) {
+                	if ( $fpmProxy or $hostCustomFragment or $mercureProxy or $websocketProxy ) {
                 		$customFragment	= "
                 			${fpmProxy}
                 			${hostCustomFragment}
                 			${mercureProxy}
+                			${websocketProxy}
                 		"
                 	}
                 	

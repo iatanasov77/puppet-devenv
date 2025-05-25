@@ -1,11 +1,24 @@
-function vs_devenv::apache_vhost_reverse_proxy( $port, $path = '/', $scheme = 'http', $preserveHost = true )
-{
+function vs_devenv::apache_vhost_reverse_proxy(
+    $port,
+    $path = '/',
+    $scheme = 'http',
+    $uri = '127.0.0.1',
+    $preserveHost = true,
+    $reverseProxy = true
+) {
     if ( $preserveHost ) {
-        "ProxyPreserveHost On
-        ProxyPass ${path} ${scheme}://127.0.0.1:${port}
-        ProxyPassReverse ${path} ${scheme}://127.0.0.1:${port}"
+        $preserveHostOn = 'ProxyPreserveHost On'
     } else {
-        "ProxyPass ${path} ${scheme}://127.0.0.1:${port}/
-        ProxyPassReverse ${path} ${scheme}://127.0.0.1:${port}/"
+        $preserveHostOn = ''
     }
+    
+    if ( $reverseProxy ) {
+        $proxyPassReverse   = "ProxyPassReverse ${path} ${scheme}://${uri}:${port}/"
+    } else {
+        $proxyPassReverse = ''
+    }
+    
+    "${preserveHostOn}
+    ProxyPass ${path} ${scheme}://${uri}:${port}/
+    ${proxyPassReverse}"
 }
