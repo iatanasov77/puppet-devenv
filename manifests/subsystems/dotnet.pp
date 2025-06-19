@@ -5,6 +5,6 @@ class vs_devenv::subsystems::dotnet (
         sdkVersion  => $config['dotnet_core'],
         sdkUser     => $config['sdkUser'],
         sdks        => $config['sdks'],
-        mono        => ( $config['mono'] == Undef ),
+        mono        => $config['mono'],
     }
 }
