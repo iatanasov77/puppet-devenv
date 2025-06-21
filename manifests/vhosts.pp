@@ -79,19 +79,20 @@ class vs_devenv::vhosts (
                 	if ( $dotnetCore ) {
 	                    if ( $host['publish'] ) {
 	                        vs_dotnet::sdk_publish{ "Publish ${host['application']}":
-	                            application         => $host['application'],
-	                            projectName         => $projectId,
-	                            projectPath         => $host['dotnetCoreAppPath'],
-	                            reverseProxyPort    => $host['reverseProxyPort'],
-	                            sdkUser             => 'vagrant',
+	                            application    => $host['application'],
+	                            description    => $host['description'],
+	                            projectName    => $projectId,
+	                            projectPath    => $host['dotnetCoreAppPath'],
+	                            sdkUser        => 'vagrant',
+	                            aspnetCoreUrls => $host['aspnetCoreUrls'],
 	                        }
-	                    }
-	                    
-	                    vs_dotnet::apache_vhost{ "${host['hostName']}":
-	                        hostName            => $host['hostName'],
-	                        documentRoot        => $host['documentRoot'],
-	                        reverseProxyPort    => $host['reverseProxyPort'],
-	                    }
+	                    } else {
+    	                    vs_dotnet::apache_vhost{ "${host['hostName']}":
+    	                        hostName            => $host['hostName'],
+    	                        documentRoot        => $host['documentRoot'],
+    	                        reverseProxyPort    => $host['reverseProxyPort'],
+    	                    }
+    	                }
 	                }
                 }
                 
