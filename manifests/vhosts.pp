@@ -76,24 +76,36 @@ class vs_devenv::vhosts (
                 
                 'DotNet':
                 {
-                	if ( $dotnetCore ) {
-	                    if ( $host['publish'] ) {
-	                        vs_dotnet::sdk_publish{ "Publish ${host['application']}":
-	                            application    => $host['application'],
-	                            description    => $host['description'],
-	                            projectName    => $projectId,
-	                            projectPath    => $host['dotnetCoreAppPath'],
-	                            sdkUser        => 'vagrant',
-	                            aspnetCoreUrls => $host['aspnetCoreUrls'],
-	                        }
-	                    } else {
-    	                    vs_dotnet::apache_vhost{ "${host['hostName']}":
-    	                        hostName            => $host['hostName'],
-    	                        documentRoot        => $host['documentRoot'],
-    	                        reverseProxyPort    => $host['reverseProxyPort'],
-    	                    }
-    	                }
+                    if ( $host['withSsl'] and $sslModule ) {
+                        vs_lamp::create_ssl_certificate{ "CreateSelfSignedCertificate_${host['hostName']}":
+                            hostName    => $host['hostName'],
+                            sslHost     => $host['sslHost'],
+                        } ->
+                        exec { "CopyAspNetSelfSignedCertificateToTrust_${host['hostName']}":
+                            command => "cp /etc/pki/tls/certs/${host['sslHost']}.crt /home/vagrant/.aspnet/dev-certs/trust/"
+                        }
+                    }
+    
+                	if ( $dotnetCore and $host['publish'] ) {
+                        vs_dotnet::sdk_publish{ "Publish ${host['application']}":
+                            application    => $host['application'],
+                            description    => $host['description'],
+                            projectName    => $projectId,
+                            projectPath    => $host['dotnetCoreAppPath'],
+                            sdkUser        => 'vagrant',
+                            aspnetCoreUrls => $host['aspnetCoreUrls'],
+                            ssl            => ( $host['withSsl'] and $sslModule ),
+                            sslHost        => $host['sslHost'],
+                        }
 	                }
+	                
+	                vs_dotnet::apache_vhost{ "${host['hostName']}":
+                        hostName            => $host['hostName'],
+                        documentRoot        => $host['documentRoot'],
+                        reverseProxyPort    => $host['reverseProxyPort'],
+                        ssl                 => ( $host['withSsl'] and $sslModule ),
+                        sslHost             => $host['sslHost'],
+                    }
                 }
                 
                 'Jsp':
