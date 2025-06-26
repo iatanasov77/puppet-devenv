@@ -81,6 +81,12 @@ class vs_devenv::vhosts (
                             hostName    => $host['hostName'],
                             sslHost     => $host['sslHost'],
                         } ->
+                        file { "/etc/pki/tls/certs/${host['sslHost']}.crt":
+                            owner   => 'vagrant',
+                        } ->
+                        file { "/etc/pki/tls/private/${host['sslHost']}.key":
+                            owner   => 'vagrant',
+                        } ->
                         exec { "CopyAspNetSelfSignedCertificateToTrust_${host['hostName']}":
                             command => "cp /etc/pki/tls/certs/${host['sslHost']}.crt /home/vagrant/.aspnet/dev-certs/trust/"
                         }
