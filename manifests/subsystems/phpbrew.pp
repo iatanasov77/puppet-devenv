@@ -3,8 +3,8 @@ class vs_devenv::subsystems::phpbrew (
 ) {
 	if ( 
 		'libzip-devel' in $config['additional_dependencies'] and
-		$::operatingsystem == 'CentOS' and 
-		$::operatingsystemmajrelease == '7' 
+		$facts['os']['name'] == 'CentOS' and 
+		$facts['os']['release']['major'] == '7' 
 	) {
     	$deps	= delete($config['additional_dependencies'], 'libzip-devel')
     	
@@ -45,8 +45,8 @@ class vs_devenv::subsystems::phpbrew (
     }
     
     if (
-        ( $::operatingsystem == 'centos' or $::operatingsystem == 'AlmaLinux' ) and
-        Integer( $::operatingsystemmajrelease ) >= 8 and
+        ( $facts['os']['name'] == 'centos' or $facts['os']['name'] == 'AlmaLinux' ) and
+        Integer( $facts['os']['release']['major'] ) >= 8 and
         ! defined( Package['php-json'] )
     ) {
     	if ! defined(Package['php-json']) {

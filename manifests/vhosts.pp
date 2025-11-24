@@ -29,6 +29,9 @@ class vs_devenv::vhosts (
         
             if ( 'mercureProxy' in $host and $host['mercureProxy'] ) {
                 $mercureProxy   = vs_devenv::apache_vhost_reverse_proxy( '3000', '/hub/', 'http', '127.0.0.1', false )
+            } else {
+                # When interpolated into a string, undef is converted to the empty string.
+                $mercureProxy   = undef
             }
             
             if ( 'websockets' in $host ) {
@@ -36,6 +39,9 @@ class vs_devenv::vhosts (
                     vs_devenv::apache_vhost_reverse_proxy( $port, $host['websockets'][$port], 'ws', $host['hostName'], false, false )
                 }
                 $websocketProxy  = join( $websockets, "\n" )
+            } else {
+                # When interpolated into a string, undef is converted to the empty string.
+                $websocketProxy   = undef
             }
             
             case $host['hostType']
@@ -54,6 +60,8 @@ class vs_devenv::vhosts (
                 			${mercureProxy}
                 			${websocketProxy}
                 		"
+                	} else {
+                	   $customFragment = undef
                 	}
                 	
                 	if ( 'sslHost' in $host ) {
