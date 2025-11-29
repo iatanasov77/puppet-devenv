@@ -113,12 +113,14 @@ class vs_devenv::vhosts (
                         }
 	                }
 	                
-	                vs_dotnet::apache_vhost{ "${host['hostName']}":
-                        hostName            => $host['hostName'],
-                        documentRoot        => $host['documentRoot'],
-                        reverseProxyPort    => $host['reverseProxyPort'],
-                        ssl                 => ( $host['withSsl'] and $sslModule ),
-                        sslHost             => $host['sslHost'],
+	                if ( $host['documentRoot'] ) {
+    	                vs_dotnet::apache_vhost{ "${host['hostName']}":
+                            hostName            => $host['hostName'],
+                            documentRoot        => $host['documentRoot'],
+                            reverseProxyPort    => $host['reverseProxyPort'],
+                            ssl                 => ( $host['withSsl'] and $sslModule ),
+                            sslHost             => $host['sslHost'],
+                        }
                     }
                 }
                 
