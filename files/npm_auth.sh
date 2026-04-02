@@ -1,7 +1,7 @@
 #!/bin/bash
 
 npm adduser<<!
-$NPM_USERNAME
-$NPM_PASSWORD
+$NPM_USER
+$NPM_PASS
 $NPM_EMAIL
 !

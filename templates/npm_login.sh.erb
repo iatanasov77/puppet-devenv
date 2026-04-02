@@ -1,4 +1,7 @@
+#! /bin/bash
+
 export NPM_USER="<%= @npmCredentials['username'] %>"
 export NPM_PASS="<%= @npmCredentials['password'] %>"
 export NPM_EMAIL="<%= @npmCredentials['email'] %>"
-export NPM_TOKEN="<%= @npmCredentials['token'] %>"
+
+/usr/bin/npx npm-login-cmd
