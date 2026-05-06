@@ -10,5 +10,12 @@ class vs_devenv::subsystems::elasticsearch (
         apiPort     => $config['port'],
         apiUsername => "${config['user']}",
         apiPassword => "${config['pass']}",
+        
+        apiConfig   => {
+            'cluster'   => {
+                'name'                  => "${config['elasticsearch_cluster']}",
+                'initial_master_nodes'  => ["${config['apiHost']}"]
+            }
+        }
     }
 }
