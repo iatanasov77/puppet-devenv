@@ -16,6 +16,8 @@ class vs_devenv::subsystems::elasticsearch (
                 'name'                  => "${config['elasticsearch_cluster']}",
                 'initial_master_nodes'  => ["${config['apiHost']}"]
             }
-        }
+        },
+        
+        guis        => $config['guis'],
     }
 }
