@@ -13,7 +13,7 @@ class vs_devenv::subsystems::elasticsearch (
         
         apiConfig   => {
             'cluster'   => {
-                'name'                  => "${config['elasticsearch_cluster']}",
+                'name'                  => 'VsElkCluster',
                 'initial_master_nodes'  => ["${config['apiHost']}"]
             }
         },
