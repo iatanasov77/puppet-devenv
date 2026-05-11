@@ -24,6 +24,7 @@ class vs_devenv::subsystems::elasticsearch (
             'http.cors.allow-credentials'   => true,
         },
         
-        guis        => $config['guis'],
+        indexes                             => $config['indexes'],
+        guis                                => $config['guis'],
     }
 }
