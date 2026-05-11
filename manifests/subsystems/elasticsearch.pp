@@ -12,10 +12,16 @@ class vs_devenv::subsystems::elasticsearch (
         apiPassword => "${config['pass']}",
         
         apiConfig   => {
-            'cluster'   => {
-                'name'                  => 'VsElkCluster',
-                'initial_master_nodes'  => ["${config['apiHost']}"]
-            }
+            'cluster.name'                  => 'VsElkCluster',
+            'node.name'                     => "${config['apiHost']}",
+            'network.host'                  => ["localhost", "${facts['host_ip']}"],
+            'cluster.initial_master_nodes'  => ["${config['host']}"],
+            
+            'http.port'                     => $config['port'],
+            'http.cors.allow-origin'        => "http://localhost:1358",
+            'http.cors.enabled'             => true,
+            'http.cors.allow-headers'       => 'X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization',
+            'http.cors.allow-credentials'   => true,
         },
         
         guis        => $config['guis'],
