@@ -69,7 +69,6 @@ class vs_devenv (
 		dependencies	=> $dependencies,
         forcePhp7Repo   => $forcePhp7Repo,
         phpVersion      => $phpVersion,
-        mySqlProvider   => $mySqlProvider,
         stage           => 'install-dependencies',
     } ->
 	class { 'vs_core::dependencies::packages':
