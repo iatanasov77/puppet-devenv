@@ -1,7 +1,7 @@
 class vs_devenv (
-	Hash $dependencies					= {},
+    Hash $dependencies					= {},
     String $hostIp                      = '0.0.0.0',
-	
+    
     String $defaultHost,
     String $guiUrl                      = '',
     String $guiRoot                     = '',
@@ -13,20 +13,21 @@ class vs_devenv (
     Array $packages                     = [],
     String $gitUserName                 = 'undefined_user_name',
     String $gitUserEmail                = 'undefined@example.com',
-	Array $gitCredentials				= [],
-
+    Array $gitCredentials				= [],
+    
     Array $apacheModules                = [],
     String $apacheVersion               = 'installed',   # Latest Version
-    String $phpVersion                  = '7.2',
     
-    String $mysqllRootPassword          = 'vagrant',
-	$mySqlProvider						= false,
-	
+    String $remiRepo                    = '',
+    String $phpVersion                  = '7.2',
     Hash $phpModules                    = {},
     Hash $removePhpIniFiles             = {},
     Boolean $phpunit                    = false,
-    
     Hash $phpSettings                   = {},
+    
+    String $mysqllRootPassword          = 'vagrant',
+    String $mySqlProvider               = 'mariadb',
+    String $mysqlVersion                = '10.11',
     
     Hash $phpMyAdmin					= {},
     Hash $databases						= {},
@@ -66,9 +67,6 @@ class vs_devenv (
     }
     
 	class { '::vs_core::dependencies::repos':
-		dependencies	=> $dependencies,
-        forcePhp7Repo   => $forcePhp7Repo,
-        phpVersion      => $phpVersion,
         stage           => 'install-dependencies',
     } ->
 	class { 'vs_core::dependencies::packages':
@@ -106,22 +104,24 @@ class vs_devenv (
 	include vs_core::sendmail
 	
     class { '::vs_lamp':
-        apacheVersion               => $apacheVersion,
-        phpVersion                  => $phpVersion,
-        apacheModules               => $apacheModules,
+        apacheVersion       => $apacheVersion,
+        apacheModules       => $apacheModules,
         
-        mysqllRootPassword          => $mysqllRootPassword,
-        mySqlProvider				=> $mySqlProvider,
-
-        phpModules                  => $phpModules,
-        phpSettings                 => $phpSettings,
-        phpunit                     => $phpunit,
-        phpManageRepos              => !$forcePhp7Repo,
+        remiRepo            => $remiRepo,
+        phpVersion          => $phpVersion,
+        phpModules          => $phpModules,
+        phpSettings         => $phpSettings,
+        phpunit             => $phpunit,
+        phpManageRepos      => !$forcePhp7Repo,
         
-        phpMyAdmin					=> $phpMyAdmin,
-        databases					=> $databases,
+        mysqllRootPassword  => $mysqllRootPassword,
+        mySqlProvider       => $mySqlProvider,
+        mysqlVersion        => $mysqlVersion,
         
-        customExtensions            => $customLampExtensions,
+        phpMyAdmin          => $phpMyAdmin,
+        databases           => $databases,
+        
+        customExtensions    => $customLampExtensions,
     }
     
     class { 'vs_lamp::fix_php_modules':
