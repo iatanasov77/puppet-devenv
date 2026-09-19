@@ -2,42 +2,50 @@ class vs_devenv::subsystems::mercure_hub (
     Hash $config                = {},
     String $systemd_unit_path   = '/etc/systemd/system',
 ) {
-    $mercure        = $config['mercure']
-    $mercureSource  = "https://github.com/dunglas/mercure/releases/download/v${config['version']}/mercure_Linux_x86_64.tar.gz"
+    $mercure = $config['mercure']
     
-    File { '/usr/local/bin/mercure':
-        ensure  => directory,
-    } ->
-    File { '/var/log/mercure':
-        ensure  => directory,
-    } ->
-    archive { "/tmp/mercure_Linux_x86_64.tar.gz":
-        ensure          => present,
-        source          => $mercureSource,
-        extract         => true,
-        extract_path    => '/usr/local/bin/mercure',
-        cleanup         => true,
+    class { 'vs_devenv::subsystems::mercure::env_vars':
+        mercure => $mercure,
     }
-    -> file { '/usr/local/bin/mercure/mercure':
-        ensure  => 'present',
-        mode    => '0777',
-    } ->
+
+    case $facts['os']['name'] {
+        'RedHat', 'CentOS', 'OracleLinux', 'Fedora', 'AlmaLinux': {
+            package { 'mercure':
+                provider => 'rpm',
+                source => "https://github.com/dunglas/mercure/releases/download/v${config['version']}/mercure_${config['version']}_linux_amd64.rpm",
+            }
+        }
+        'Debian', 'Ubuntu': {
+            package { 'mercure':
+                provider => dpkg,
+                source   => "https://github.com/dunglas/mercure/releases/download/v${config['version']}/mercure_${config['version']}_linux_amd64.deb",
+            }
+        }
+        
+        default: { fail( "Unsupported OS '${::operatingsystem}'" ) }
+    }
+    
     file { 'mercure.conf':
-        path    => "/usr/local/bin/mercure/mercure.Caddyfile",
+        path    => "/etc/mercure.Caddyfile",
         owner   => root,
         group   => root,
-        mode    => '0444',
+        mode    => '0644',
         content => template( 'vs_devenv/mercure.conf.erb' ),
-    } ->
+        require => Package['mercure'],
+    }
+    
     file { 'mercure.service':
         path    => "${systemd_unit_path}/mercure.service",
         owner   => root,
         group   => root,
-        mode    => '0444',
+        mode    => '0644',
         content => template( 'vs_devenv/mercure.service.erb' ),
+        require     => [
+            File['mercure.conf'],
+            Class['vs_devenv::subsystems::mercure::env_vars']
+        ],
         notify  => [
             Exec['daemon-reload'],
-            Service['mercure'],
         ],
     }
     

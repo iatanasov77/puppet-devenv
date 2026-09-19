@@ -135,8 +135,8 @@ class vs_devenv (
 
 	class { '::vs_devenv::subsystems':
         subsystems      => $subsystems,
-    } ->
-    class { '::vs_devenv::vhosts':
+    }
+    -> class { '::vs_devenv::vhosts':
         hostIp              => "${hostIp}",
         installedProjects   => $installedProjects,
         sslModule			=> ( 'ssl' in $apacheModules ),
@@ -145,17 +145,17 @@ class vs_devenv (
         python				=> ( ( 'wsgi' in $apacheModules ) and $subsystems['python']['enabled'] ),
         ruby				=> ( ( 'passenger' in $apacheModules ) and $subsystems['ruby']['enabled'] ),
         require     		=> Class['vs_lamp::install_mod_php'],
-    } ->
-    class { '::vs_devenv::vhost_gui':
+    }
+    -> class { '::vs_devenv::vhost_gui':
         hostIp      => "${hostIp}",
         defaultHost => "${defaultHost}",
         guiRoot     => "${guiRoot}",
         require     => Class['vs_lamp::install_mod_php'],
-    } ->
-    class { '::vs_devenv::update_ca_trust':
+    }
+    -> class { '::vs_devenv::update_ca_trust':
         caTrustNotify   => $caTrustNotify,
     }
-
+    
 	if ( $ansibleConfig['enabled'] ) {
 	    class { '::vs_devenv::ansible':
 	        pathRoles   => $ansibleConfig['pathRoles'],
