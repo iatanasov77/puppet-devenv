@@ -43,7 +43,6 @@ class vs_devenv (
     Hash $ansibleConfig                 = {},
     
     Hash $finalFixes                    = {},
-    Array $caTrustNotify                = [],
 ) {
     exec { 'daemon-reload':
         command     => 'systemctl daemon-reload',
@@ -151,9 +150,6 @@ class vs_devenv (
         defaultHost => "${defaultHost}",
         guiRoot     => "${guiRoot}",
         require     => Class['vs_lamp::install_mod_php'],
-    }
-    -> class { '::vs_devenv::update_ca_trust':
-        caTrustNotify   => $caTrustNotify,
     }
     
 	if ( $ansibleConfig['enabled'] ) {

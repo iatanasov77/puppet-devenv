@@ -26,13 +26,6 @@ class vs_devenv::vhosts (
             } else {
                 $needRewriteRules = Boolean( "false" )
             }
-        
-            if ( 'mercureProxy' in $host and $host['mercureProxy'] ) {
-                $mercureProxy   = vs_devenv::apache_vhost_reverse_proxy( '3000', '/hub/', 'http', '127.0.0.1', false )
-            } else {
-                # When interpolated into a string, undef is converted to the empty string.
-                $mercureProxy   = undef
-            }
             
             if ( 'websockets' in $host ) {
                 $websockets = $host['websockets'].keys.map |$port| {
@@ -53,11 +46,10 @@ class vs_devenv::vhosts (
                 	$aliases            = $host['aliases']
                 	$directories        = $host['directories']
                 	
-                	if ( $fpmProxy or $hostCustomFragment or $mercureProxy or $websocketProxy ) {
+                	if ( $fpmProxy or $hostCustomFragment or $websocketProxy ) {
                 		$customFragment	= "
                 			${fpmProxy}
                 			${hostCustomFragment}
-                			${mercureProxy}
                 			${websocketProxy}
                 		"
                 	} else {

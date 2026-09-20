@@ -47,6 +47,50 @@ class vs_devenv::subsystems (
                 }
             }
             
+            'mercure_hub':
+            {
+                if ( $subsys['enabled'] ) {
+                    class { "::vs_devenv::subsystems::mercure_hub":
+                        config  => $subsys,
+                        require => [
+                            Class['vs_lamp::php'], 
+                            Class['vs_lamp::apache']
+                        ],
+                    }
+                    
+                    if ( $facts['os']['name'] == 'AlmaLinux' ) {
+                        class { 'vs_devenv::subsystems::mercure::update_ca_trust':
+                            caTrustNotify   => $subsys['caTrustNotify'],
+                            
+                            # Make a Dependency Cycle Error
+                            # require => Class['vs_devenv::subsystems::mercure_hub'],
+                        }
+                    }
+                }
+            }
+            
+            'websocket_server':
+            {
+                if ( $subsys['enabled'] ) {
+                    class { "::vs_devenv::subsystems::websocket_server":
+                        config  => $subsys,
+                        require => [
+                            Class['vs_lamp::php'], 
+                            Class['vs_lamp::apache']
+                        ],
+                    }
+                    
+                    if ( $facts['os']['name'] == 'AlmaLinux' ) {
+                        class { 'vs_devenv::subsystems::websocket::update_ca_trust':
+                            caTrustNotify   => $subsys['caTrustNotify'],
+                            
+                            # Make a Dependency Cycle Error
+                            # require => Class['vs_devenv::subsystems::websocket_server'],
+                        }
+                    }
+                }
+            }
+            
             default:
             {
                 if ( $subsys['enabled'] ) {

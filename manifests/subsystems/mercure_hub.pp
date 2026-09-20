@@ -56,4 +56,9 @@ class vs_devenv::subsystems::mercure_hub (
         timeout     => 3600,
         require     => File['mercure.service'],
     }
+    
+    class { 'vs_devenv::subsystems::mercure::apache_vhost':
+        mercure => $mercure,
+        require => Service['mercure'],
+    }
 }

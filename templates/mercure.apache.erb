@@ -1,0 +1,19 @@
+<VirtualHost *:443>
+    ServerName <%= @mercure['host'] %>
+
+    SSLEngine on
+    SSLCertificateFile <%= @certFile %>
+    SSLCertificateKeyFile <%= @certKey %>
+
+    # Required modules: proxy, proxy_http, proxy_http2, proxy_wstunnel
+    ProxyPreserveHost On
+    
+    # Maintain HTTP/2 for Server-Sent Events (SSE) streaming
+    ProtocolsHonorOrder On
+    Protocols h2 http/1.1
+
+    # Proxy requests for Mercure's endpoint (.well-known/mercure or custom path)
+    # Adjust http://<%= @mercure['host'] %>:<%= @mercure['port'] %> to match your Mercure container/service port
+    ProxyPass /.well-known/mercure https://<%= @mercure['host'] %>:<%= @mercure['port'] %>/.well-known/mercure
+    ProxyPassReverse /.well-known/mercure http://<%= @mercure['host'] %>:<%= @mercure['port'] %>/.well-known/mercure
+</VirtualHost>

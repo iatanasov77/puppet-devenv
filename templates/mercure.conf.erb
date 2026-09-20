@@ -6,7 +6,7 @@
     order mercure after encode
 }
 
-https://127.0.0.1:<%= @mercure['port'] %> {
+https://<%= @mercure['host'] %>:<%= @mercure['port'] %> {
     log {
         output file /var/log/mercure.log {
             roll_size 3MiB
@@ -19,10 +19,10 @@ https://127.0.0.1:<%= @mercure['port'] %> {
     mercure {
         protocol_version_compatibility 8
         
-        publisher_jwt "<%= @config['mercure']['jwtSecret'] %>"
-        subscriber_jwt "<%= @config['mercure']['jwtSecret'] %>"
+        publisher_jwt "<%= @mercure['jwtSecret'] %>"
+        subscriber_jwt "<%= @mercure['jwtSecret'] %>"
         
-        #cors_origins <%= @config['mercure']['cors_origins'] %>
+        #cors_origins <%= @mercure['cors_origins'] %>
         cors_origins *
         publish_origins *
         
