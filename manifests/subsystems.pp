@@ -1,5 +1,6 @@
 class vs_devenv::subsystems (
     Hash $subsystems    = {},
+    String $hostIp      = '0.0.0.0',
 ) {
 	$subsystems.each |String $subsysKey, Hash $subsys| {
      
@@ -52,6 +53,7 @@ class vs_devenv::subsystems (
                 if ( $subsys['enabled'] ) {
                     class { "::vs_devenv::subsystems::mercure_hub":
                         config  => $subsys,
+                        hostIp  => $hostIp,
                         require => [
                             Class['vs_lamp::php'], 
                             Class['vs_lamp::apache']

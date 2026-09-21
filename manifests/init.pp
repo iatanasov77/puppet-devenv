@@ -7,6 +7,8 @@ class vs_devenv (
     String $guiRoot                     = '',
     
     Hash $installedProjects             = {},
+    Hash $mkCert                        = {},
+    Boolean $useMkCert                  = false,
     
     Hash $subsystems                    = {},
     
@@ -121,6 +123,8 @@ class vs_devenv (
         databases           => $databases,
         
         customExtensions    => $customLampExtensions,
+        mkCert              => $mkCert,
+        useMkCert           => $useMkCert,
     }
     
     class { 'vs_lamp::fix_php_modules':
@@ -133,11 +137,14 @@ class vs_devenv (
     }
 
 	class { '::vs_devenv::subsystems':
-        subsystems      => $subsystems,
+        subsystems  => $subsystems,
+        hostIp      => "${hostIp}",
     }
     -> class { '::vs_devenv::vhosts':
         hostIp              => "${hostIp}",
         installedProjects   => $installedProjects,
+        mkCert              => $mkCert,
+        useMkCert           => $useMkCert,
         sslModule			=> ( 'ssl' in $apacheModules ),
         dotnetCore          => ( ( 'dotnet' in $subsystems ) and $subsystems['dotnet']['enabled'] ),
         tomcat				=> ( $subsystems['tomcat']['enabled'] ),

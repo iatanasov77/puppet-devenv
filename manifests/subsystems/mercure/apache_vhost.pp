@@ -1,7 +1,11 @@
 class vs_devenv::subsystems::mercure::apache_vhost (
-    Hash $mercure = {},
+    Hash $mercure   = {},
+    String $hostIp  = '0.0.0.0',
 ) {
-
+    $certKey    = $mercure['certKey']
+    $certFile   = $mercure['certFile']
+    
+    /*  
     $certKey    = "/etc/pki/tls/private/${mercure['host']}.key"
     $certFile   = "/etc/pki/tls/certs/${mercure['host']}.crt"
     
@@ -9,8 +13,9 @@ class vs_devenv::subsystems::mercure::apache_vhost (
         hostName    => $mercure['host'],
         sslHost     => $mercure['host'],
     }
+	*/
 	
-	-> file { "${mercure['host']}.conf":
+	file { "${mercure['host']}.conf":
         path    => "/etc/httpd/conf.d/${mercure['host']}.conf",
         owner   => root,
         group   => root,
@@ -25,5 +30,10 @@ class vs_devenv::subsystems::mercure::apache_vhost (
         owner  => 'apache',
         group  => 'root',
         mode   => '0777',
+    }
+    
+    vs_devenv::system_host{ "${mercure['host']}":
+        hostIp      => $hostIp,
+        hostName    => $mercure['host'],
     }
 }

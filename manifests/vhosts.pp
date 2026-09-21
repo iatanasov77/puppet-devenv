@@ -1,12 +1,14 @@
 class vs_devenv::vhosts (
-    String $hostIp                  = '0.0.0.0',
-    Hash $installedProjects         = {},
-    Hash $vhosts                    = {},
-    Boolean $sslModule				= false,
-    Boolean $dotnetCore             = false,
-    Boolean $tomcat             	= false,
-    Boolean $python             	= false,
-    Boolean $ruby             		= false,
+    String $hostIp          = '0.0.0.0',
+    Hash $installedProjects = {},
+    Hash $vhosts            = {},
+    Boolean $useMkCert      = false,
+    Hash $mkCert            = {},
+    Boolean $sslModule      = false,
+    Boolean $dotnetCore     = false,
+    Boolean $tomcat         = false,
+    Boolean $python         = false,
+    Boolean $ruby           = false,
 ) {
     ##################################################
     # Create Vhosts for all installed projects
@@ -71,6 +73,9 @@ class vs_devenv::vhosts (
                         sslHost             => $sslHost,
                         aliases             => $aliases,
                         directories         => $directories,
+                        useMkCert           => $useMkCert,
+                        mkCert              => $mkCert,
+                        
                     }
                 }
                 

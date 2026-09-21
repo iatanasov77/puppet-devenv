@@ -1,6 +1,7 @@
 class vs_devenv::subsystems::mercure_hub (
     Hash $config                = {},
     String $systemd_unit_path   = '/etc/systemd/system',
+    String $hostIp              = '0.0.0.0',
 ) {
     $mercure = $config['mercure']
     
@@ -59,6 +60,7 @@ class vs_devenv::subsystems::mercure_hub (
     
     class { 'vs_devenv::subsystems::mercure::apache_vhost':
         mercure => $mercure,
+        hostIp  => $hostIp,
         require => Service['mercure'],
     }
 }
