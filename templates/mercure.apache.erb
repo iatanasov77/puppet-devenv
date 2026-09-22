@@ -14,6 +14,10 @@
 
     # Proxy requests for Mercure's endpoint (.well-known/mercure or custom path)
     # Adjust http://<%= @mercure['host'] %>:<%= @mercure['port'] %> to match your Mercure container/service port
+    SSLProxyEngine on
     ProxyPass /.well-known/mercure https://<%= @mercure['host'] %>:<%= @mercure['port'] %>/.well-known/mercure
     ProxyPassReverse /.well-known/mercure http://<%= @mercure['host'] %>:<%= @mercure['port'] %>/.well-known/mercure
+    
+    ErrorLog /var/www/<%= @mercure['host'] %>/apache.error.log
+    CustomLog /var/www/<%= @mercure['host'] %>/apache.access.log common
 </VirtualHost>
