@@ -20,7 +20,7 @@ class vs_devenv::subsystems::mercure::apache_vhost (
         owner   => root,
         group   => root,
         mode    => '0644',
-        content => template( 'vs_devenv/mercure.apache.erb' ),
+        content => template( 'vs_devenv/mercure/apache_vhost.erb' ),
         notify  => Service['httpd'],
     }
     

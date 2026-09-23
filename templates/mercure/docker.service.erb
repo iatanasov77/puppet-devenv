@@ -1,0 +1,20 @@
+[Unit]
+Description=Mercure Hub
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+StartLimitInterval=20
+StartLimitBurst=5
+TimeoutStartSec=0
+RestartSec=5
+SyslogIdentifier=mercure
+
+ExecStartPre=/bin/bash -c "/usr/local/bin/mercure_run.sh"
+
+ExecStart=/usr/bin/docker start -a mercure
+ExecStop=/usr/bin/docker stop -t 10 mercure
+
+[Install]
+WantedBy=multi-user.target

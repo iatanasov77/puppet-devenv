@@ -1,0 +1,13 @@
+#! /bin/bash
+
+/usr/bin/docker container inspect mercure 2> /dev/null || /usr/bin/docker run -d --name mercure --privileged \
+  -p 8080:80 \
+  -p 8443:443 \
+  -e SERVER_NAME=':80' \
+  -e MERCURE_PUBLISHER_JWT_KEY='!ChangeThisMercureHubJWTSecretKey!' \
+  -e MERCURE_SUBSCRIBER_JWT_KEY='!ChangeThisMercureHubJWTSecretKey!' \
+  -e MERCURE_EXTRA_DIRECTIVES='anonymous
+cors_origins *
+playground
+debugger' \
+  dunglas/mercure:v1.0.0
