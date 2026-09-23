@@ -1,0 +1,16 @@
+[Unit]
+Description=MailCatcher  Service
+After=network.target
+
+[Service]
+Type=simple
+
+#ExecStart=/usr/local/bin/mailcatcher --ip <%= @facts['host_ip'] %>
+ExecStart=/usr/local/bin/mailcatcher --foreground --http-ip 0.0.0.0 --http-port 1080
+
+Restart=always
+User=vagrant
+Group=vagrant
+
+[Install]
+WantedBy=multi-user.target

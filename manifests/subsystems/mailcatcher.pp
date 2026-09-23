@@ -20,4 +20,21 @@ class vs_devenv::subsystems::mailcatcher (
         ensure    => installed,
         require   => Package['ruby-devel'],
     }
+    
+    File { "mailcatcher.service":
+        ensure  => file,
+        path    => "/etc/systemd/system/mailcatcher.service",
+        content => template( 'vs_devenv/mailcatcher.service.erb' ),
+        mode    => '0644',
+        require => Package['mailcatcher'],
+    }
+    
+    Service { "mailcatcher":
+        ensure  => 'running',
+        enable  => true,
+        require => File['mailcatcher.service'],
+        notify  => [
+            Exec['daemon-reload'],
+        ],
+    }
 }
