@@ -13,10 +13,10 @@
     Protocols h2 http/1.1
 
     # Proxy requests for Mercure's endpoint (.well-known/mercure or custom path)
-    # Adjust http://<%= @mercure['host'] %>:<%= @mercure['port'] %> to match your Mercure container/service port
+    # Adjust http://<%= @mercure['proxy'] %>:<%= @mercure['httpPort'] %>/ to match your Mercure container/service port
     SSLProxyEngine on
-    ProxyPass / https://<%= @mercure['host'] %>:<%= @mercure['port'] %>/
-    ProxyPassReverse / https://<%= @mercure['host'] %>:<%= @mercure['port'] %>/
+    ProxyPass / http://<%= @mercure['proxy'] %>:<%= @mercure['httpPort'] %>/
+    ProxyPassReverse / http://<%= @mercure['proxy'] %>:<%= @mercure['httpPort'] %>/
     
     ErrorLog /var/www/<%= @mercure['host'] %>/apache.error.log
     CustomLog /var/www/<%= @mercure['host'] %>/apache.access.log common

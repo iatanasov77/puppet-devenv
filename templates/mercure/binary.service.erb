@@ -3,15 +3,15 @@ Description=Mercure Hub
 After=network.target
 
 [Service]
+Restart=always
 StartLimitInterval=20
 StartLimitBurst=5
 TimeoutStartSec=0
-Restart=always
 RestartSec=5
 SyslogIdentifier=mercure
 
 #WorkingDirectory=/var/lib/mercure
-EnvironmentFile=/etc/mercure/mercure.env
+#EnvironmentFile=/etc/mercure/mercure.env
 ExecStart=/usr/bin/mercure run --config /etc/mercure.Caddyfile
 ExecStop=/usr/bin/mercure stop
 

@@ -3,6 +3,8 @@ class vs_devenv::subsystems::mercure::install::docker (
     String $systemd_unit_path,
     String $hostIp,
 ) {
+    $mercure = $config['mercure']
+    
     file { "mercure_run.sh":
         ensure  => present,
         path    => "/usr/local/bin/mercure_run.sh",

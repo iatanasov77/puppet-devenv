@@ -31,9 +31,4 @@ class vs_devenv::subsystems::mercure::apache_vhost (
         group  => 'root',
         mode   => '0777',
     }
-    
-    vs_devenv::system_host{ "${mercure['host']}":
-        hostIp      => $hostIp,
-        hostName    => $mercure['host'],
-    }
 }

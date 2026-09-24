@@ -3,6 +3,8 @@ class vs_devenv::subsystems::mercure_hub (
     String $systemd_unit_path   = '/etc/systemd/system',
     String $hostIp              = '0.0.0.0',
 ) {
+    $mercure = $config['mercure']
+    
     if ( $config['installType'] == 'binary' ) {
         class { 'vs_devenv::subsystems::mercure::install::binary':
             config              => $config,
@@ -17,19 +19,33 @@ class vs_devenv::subsystems::mercure_hub (
         }
     }
     
+    file { 'mercure.conf':
+        path    => "/etc/mercure.Caddyfile",
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template( 'vs_devenv/mercure/conf.erb' ),
+    }
+    
     service { 'mercure':
         ensure      => running,
         enable      => true,
         provider    => systemd,
         timeout     => 3600,
-        require     => File['mercure.service'],
+        require     => [
+            File['mercure.service'],
+            File['mercure.conf'],
+        ],
     }
     
-    if ( $config['installType'] == 'binary' ) {
-        class { 'vs_devenv::subsystems::mercure::apache_vhost':
-            mercure => $mercure,
-            hostIp  => $hostIp,
-            require => Service['mercure'],
-        }
+    class { 'vs_devenv::subsystems::mercure::apache_vhost':
+        mercure => $mercure,
+        hostIp  => $hostIp,
+        require => Service['mercure'],
+    }
+    
+    vs_devenv::system_host{ "${mercure['host']}":
+        hostIp      => $hostIp,
+        hostName    => $mercure['host'],
     }
 }

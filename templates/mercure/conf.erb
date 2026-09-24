@@ -1,12 +1,11 @@
 # Learn how to configure the Mercure.rocks Hub on https://mercure.rocks/docs/hub/config
 {
-    http_port 2019
-    https_port 3000
-    auto_https disable_redirects
-    order mercure after encode
+    http_port <%= @mercure['httpPort'] %>
+    https_port <%= @mercure['httpsPort'] %>
 }
 
-https://<%= @mercure['host'] %>:<%= @mercure['port'] %> {
+#<%= @mercure['host'] %> {
+<%= @hostIp %> {
     log {
         output file /var/log/mercure.log {
             roll_size 3MiB
