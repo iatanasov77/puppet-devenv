@@ -1,5 +1,5 @@
 <VirtualHost *:443>
-    ServerName <%= @mercure['host'] %>
+    ServerName <%= @hostName %>
 
     SSLEngine on
     SSLCertificateFile <%= @certFile %>
@@ -18,8 +18,8 @@
     ProxyPass / http://<%= @mercure['proxy'] %>:<%= @mercure['httpPort'] %>/
     ProxyPassReverse / http://<%= @mercure['proxy'] %>:<%= @mercure['httpPort'] %>/
     
-    ErrorLog /var/www/<%= @mercure['host'] %>/apache.error.log
-    CustomLog /var/www/<%= @mercure['host'] %>/apache.access.log common
+    ErrorLog /var/www/<%= @hostName %>/apache.error.log
+    CustomLog /var/www/<%= @hostName %>/apache.access.log common
     
     SetEnv proxy-initial-not-pooled 1
 </VirtualHost>

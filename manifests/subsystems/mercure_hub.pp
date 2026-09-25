@@ -38,14 +38,29 @@ class vs_devenv::subsystems::mercure_hub (
         ],
     }
     
-    class { 'vs_devenv::subsystems::mercure::apache_vhost':
-        mercure => $mercure,
-        hostIp  => $hostIp,
-        require => Service['mercure'],
+    vs_devenv::subsystems::mercure::apache_vhost{ "mercure_${mercure['host']}":
+        mercure     => $mercure,
+        hostName    => $mercure['host'],
+        hostIp      => $hostIp,
+        require     => Service['mercure'],
     }
     
     vs_devenv::system_host{ "${mercure['host']}":
         hostIp      => $hostIp,
         hostName    => $mercure['host'],
+    }
+    
+    $mercure['siteHosts'].each |String $host| {
+        vs_devenv::subsystems::mercure::apache_vhost{ "mercure_${host}":
+            mercure     => $mercure,
+            hostName    => "mercure-hub.${host}",
+            hostIp      => $hostIp,
+            require     => Service['mercure'],
+        }
+        
+        vs_devenv::system_host{ "mercure-hub.${host}":
+            hostIp      => $hostIp,
+            hostName    => "mercure-hub.${host}",
+        }
     }
 }
