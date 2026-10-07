@@ -5,7 +5,7 @@ After=network.target
 [Service]
 Type=simple
 User=wsworker
-ExecStart=<%= @server['command'] %> <%= @server['host'] %> <%= @server['port'] %>
+ExecStart=/usr/local/bin/websocket/<%= @serverKey %>
 Restart=on-abort
 
 [Install]

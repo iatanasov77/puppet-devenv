@@ -1,6 +1,13 @@
 class vs_devenv::subsystems::websocket_server (
     Hash $config    = {},
 ) {
+    if ! defined( File['/usr/local/bin/websocket'] ) {
+        File { '/usr/local/bin/websocket':
+            ensure  => directory,
+            mode    => '0777',
+        }
+    }
+    
     if ! defined( File['/var/log/websocket'] ) {
         File { '/var/log/websocket':
             ensure  => directory,
@@ -22,6 +29,12 @@ class vs_devenv::subsystems::websocket_server (
     }
     
     $config['servers'].each |String $serverKey, Hash $server| {
+        File { "/usr/local/bin/websocket/${serverKey}":
+            ensure  => file,
+            path    => "/usr/local/bin/websocket/${serverKey}",
+            content => template( 'vs_devenv/websocket.command.erb' ),
+            mode    => '0777',
+        } ->
         File { "/etc/systemd/system/websocket_${serverKey}.service":
             ensure  => file,
             path    => "/etc/systemd/system/websocket_${serverKey}.service",
