@@ -11,8 +11,8 @@ RestartSec=5
 SyslogIdentifier=mercure
 
 #WorkingDirectory=/var/lib/mercure
-#EnvironmentFile=/etc/mercure/mercure.env
-ExecStart=/usr/bin/mercure run --config /etc/mercure.Caddyfile
+EnvironmentFile=/etc/mercure/mercure.env
+ExecStart=/usr/bin/mercure run --config /etc/mercure/mercure.Caddyfile
 ExecStop=/usr/bin/mercure stop
 
 [Install]

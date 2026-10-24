@@ -5,6 +5,12 @@ class vs_devenv::subsystems::mercure_hub (
 ) {
     $mercure = $config['mercure']
     
+    File { 'mercure_config_dir':
+        path    => "/etc/mercure",
+        ensure  => directory,
+        mode    => '0755',
+    }
+    
     if ( $config['installType'] == 'binary' ) {
         class { 'vs_devenv::subsystems::mercure::install::binary':
             config              => $config,
@@ -20,11 +26,12 @@ class vs_devenv::subsystems::mercure_hub (
     }
     
     file { 'mercure.conf':
-        path    => "/etc/mercure.Caddyfile",
+        path    => "/etc/mercure/mercure.Caddyfile",
         owner   => root,
         group   => root,
         mode    => '0644',
         content => template( 'vs_devenv/mercure/conf.erb' ),
+        require => File['mercure_config_dir'],
     }
     
     service { 'mercure':

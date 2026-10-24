@@ -22,6 +22,24 @@ class vs_devenv::subsystems::mercure::install::binary (
         default: { fail( "Unsupported OS '${::operatingsystem}'" ) }
     }
     
+    file { 'mercure_service_environement':
+        path    => "/etc/mercure/mercure.env",
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template( 'vs_devenv/mercure/service_env_vars.erb' ),
+        require => File['mercure_config_dir'],
+    }
+    
+    file { 'mercure_environement':
+        ensure  => present,
+        path    => "/etc/profile.d/mercure.sh",
+        content => template( 'vs_devenv/mercure/env_vars.sh.erb' ),
+        require     => [
+            File['mercure.conf'],
+        ],
+    }
+    
     file { 'mercure.service':
         path    => "${systemd_unit_path}/mercure.service",
         owner   => root,
@@ -29,7 +47,8 @@ class vs_devenv::subsystems::mercure::install::binary (
         mode    => '0644',
         content => template( 'vs_devenv/mercure/binary.service.erb' ),
         require     => [
-            File['mercure.conf'],
+            File['mercure_service_environement'],
+            File['mercure_environement'],
         ],
         notify  => [
             Exec['daemon-reload'],

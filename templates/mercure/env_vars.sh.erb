@@ -1,0 +1,9 @@
+export SERVER_NAME=':<%= @mercure['httpsPort'] %>'
+
+export MERCURE_PUBLISHER_JWT_KEY='<%= @mercure['jwtSecret'] %>'
+export MERCURE_SUBSCRIBER_JWT_KEY='<%= @mercure['jwtSecret'] %>'
+
+export MERCURE_EXTRA_DIRECTIVES='anonymous
+cors_origins *
+playground
+debugger'
