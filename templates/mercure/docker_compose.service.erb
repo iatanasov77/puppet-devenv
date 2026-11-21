@@ -1,0 +1,14 @@
+[Unit]
+Description=Mercure Hub
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=<%= @mercureDirectory %>
+
+ExecStart=/usr/bin/docker compose -f <%= @mercureDirectory %>/docker-compose.yml up
+ExecStop=/usr/bin/docker compose -f <%= @mercureDirectory %>/docker-compose.yml down
+
+[Install]
+WantedBy=multi-user.target

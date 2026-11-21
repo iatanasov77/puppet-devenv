@@ -5,33 +5,38 @@ class vs_devenv::subsystems::mercure_hub (
 ) {
     $mercure = $config['mercure']
     
-    File { 'mercure_config_dir':
-        path    => "/etc/mercure",
-        ensure  => directory,
-        mode    => '0755',
-    }
-    
-    if ( $config['installType'] == 'binary' ) {
-        class { 'vs_devenv::subsystems::mercure::install::binary':
-            config              => $config,
-            systemd_unit_path   => $systemd_unit_path,
-            hostIp              => $hostIp,
+    case $config['installType'] {
+        'binary': {
+            class { 'vs_devenv::subsystems::mercure::install::binary':
+                config              => $config,
+                systemd_unit_path   => $systemd_unit_path,
+                hostIp              => $hostIp,
+            }
+            
+            $requiredResources = [ File['mercure.service'], File['mercure.conf'] ]
         }
-    } else {
-        class { 'vs_devenv::subsystems::mercure::install::docker':
-            config              => $config,
-            systemd_unit_path   => $systemd_unit_path,
-            hostIp              => $hostIp,
+        
+        'docker': {
+            class { 'vs_devenv::subsystems::mercure::install::docker':
+                config              => $config,
+                systemd_unit_path   => $systemd_unit_path,
+                hostIp              => $hostIp,
+                require             => Class['docker'],
+            }
+            
+            $requiredResources = [ File['mercure.service'] ]
         }
-    }
-    
-    file { 'mercure.conf':
-        path    => "/etc/mercure/mercure.Caddyfile",
-        owner   => root,
-        group   => root,
-        mode    => '0644',
-        content => template( 'vs_devenv/mercure/conf.erb' ),
-        require => File['mercure_config_dir'],
+        
+        'docker_compose': {
+            class { 'vs_devenv::subsystems::mercure::install::docker_compose':
+                config              => $config,
+                systemd_unit_path   => $systemd_unit_path,
+                hostIp              => $hostIp,
+                require             => Class['docker'],
+            }
+            
+            $requiredResources = [ File['mercure.service'] ]
+        }
     }
     
     service { 'mercure':
@@ -39,10 +44,7 @@ class vs_devenv::subsystems::mercure_hub (
         enable      => true,
         provider    => systemd,
         timeout     => 3600,
-        require     => [
-            File['mercure.service'],
-            File['mercure.conf'],
-        ],
+        require     => $requiredResources,
     }
     
     vs_devenv::subsystems::mercure::apache_vhost{ "mercure_${mercure['host']}":

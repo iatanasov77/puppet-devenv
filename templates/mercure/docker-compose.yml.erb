@@ -1,0 +1,45 @@
+services:
+    
+    #################################################################################################
+    # Manuals
+    # =======
+    # https://forums.docker.com/t/mercure-hub-with-nginx-and-docker-compose/134451
+    # https://stackoverflow.com/questions/65124697/can-not-configure-the-new-dunglas-mercure-image
+    #################################################################################################
+    mercure:
+        image: dunglas/mercure:v1.1.6
+        container_name: mercure
+        restart: always
+        working_dir: '<%= @mercureDirectory %>'
+        
+        ports:
+            - "8080:80"
+            - "8443:443"
+        
+        environment:
+            SERVER_NAME: ':80'
+            MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+            MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
+            MERCURE_EXTRA_DIRECTIVES: |
+                anonymous
+                subscriptions
+                cors_origins *
+                playground
+                debugger
+        
+        networks:
+            - grafana-net
+        
+        volumes:
+            #- ./mercure.Caddyfile:/etc/caddy/Caddyfile
+            - mercure_data:/data
+            - mercure_config:/config
+
+networks:
+    # Network 'grafana-net' is criated in'vs_core:grafana' class
+    grafana-net:
+        external: true
+
+volumes:
+    mercure_data:
+    mercure_config:

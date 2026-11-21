@@ -54,4 +54,19 @@ class vs_devenv::subsystems::mercure::install::binary (
             Exec['daemon-reload'],
         ],
     }
+    
+    File { 'mercure_config_dir':
+        path    => "/etc/mercure",
+        ensure  => directory,
+        mode    => '0755',
+    }
+    
+    file { 'mercure.conf':
+        path    => "/etc/mercure/mercure.Caddyfile",
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template( 'vs_devenv/mercure/conf.erb' ),
+        require => File['mercure_config_dir'],
+    }
 }
