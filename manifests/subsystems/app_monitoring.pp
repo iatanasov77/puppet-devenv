@@ -1,11 +1,9 @@
 class vs_devenv::subsystems::app_monitoring (
-    Hash $config                = {},
-    String $systemd_unit_path   = '/etc/systemd/system',
-    String $hostIp              = '0.0.0.0',
+    Hash $config = {},
 ) {
     if ( $config['grafana']['enabled'] ) {
-        class { 'vs_core::app_monitoring::grafana':
-            config => $config['grafana'],
+        class { 'vs_core::app_monitoring':
+            grafanaConfig => $config['grafana'],
         }
     }
 }
