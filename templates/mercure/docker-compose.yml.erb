@@ -18,6 +18,11 @@ services:
         
         environment:
             SERVER_NAME: ':80'
+            
+            GLOBAL_OPTIONS: |
+                admin 0.0.0.0:2019
+                metrics
+            
             MERCURE_PUBLISHER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
             MERCURE_SUBSCRIBER_JWT_KEY: '!ChangeThisMercureHubJWTSecretKey!'
             MERCURE_EXTRA_DIRECTIVES: |
@@ -31,7 +36,12 @@ services:
             - grafana-net
         
         volumes:
-            #- ./mercure.Caddyfile:/etc/caddy/Caddyfile
+<% if @config['mercure']['customCaddyfile'] -%>
+            - ./mercure.Caddyfile:/etc/caddy/Caddyfile
+<% end -%>
+<% if @config['mercure']['customMercureConfig'] -%>
+            - ./mercure.json:/opt/mercure/config/mercure.json
+<% end -%>
             - mercure_data:/data
             - mercure_config:/config
 

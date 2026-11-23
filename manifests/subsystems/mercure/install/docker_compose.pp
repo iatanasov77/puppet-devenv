@@ -17,7 +17,16 @@ class vs_devenv::subsystems::mercure::install::docker_compose (
         owner   => root,
         group   => root,
         mode    => '0644',
-        content => template( 'vs_devenv/mercure/conf.erb' ),
+        content => template( 'vs_devenv/mercure/caddyfile.erb' ),
+        require => File['mercure_opt_dir'],
+    }
+    
+    File { 'mercure_docker_compose_mercure_json':
+        path    => "${mercureDirectory}/mercure.json",
+        owner   => root,
+        group   => root,
+        mode    => '0644',
+        content => template( 'vs_devenv/mercure/mercure.json.erb' ),
         require => File['mercure_opt_dir'],
     }
     

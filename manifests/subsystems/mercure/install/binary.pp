@@ -66,7 +66,7 @@ class vs_devenv::subsystems::mercure::install::binary (
         owner   => root,
         group   => root,
         mode    => '0644',
-        content => template( 'vs_devenv/mercure/conf.erb' ),
+        content => template( 'vs_devenv/mercure/caddyfile.erb' ),
         require => File['mercure_config_dir'],
     }
 }

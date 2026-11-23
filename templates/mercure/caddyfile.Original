@@ -1,0 +1,57 @@
+# Learn how to configure the Mercure.rocks Hub on https://mercure.rocks/docs/hub/config
+{
+    {$GLOBAL_OPTIONS}
+}
+
+{$CADDY_EXTRA_CONFIG}
+
+{$SERVER_NAME:localhost} {
+    mercure {
+        # Trusted issuer: binds the iss claim access tokens must carry (RFC 9068)
+        # to its verification keys. The localhost default suits local development
+        # only. In production set MERCURE_TRUSTED_ISSUERS to the stable identifier
+        # of your token issuer (your app's URL for self-issued tokens). Add
+        # `authorization_server` inside the block to advertise it in the protected
+        # resource metadata, or add more `issuer` blocks via MERCURE_EXTRA_DIRECTIVES.
+        issuer {$MERCURE_TRUSTED_ISSUERS:https://localhost} {
+            # Publisher JWT key
+            publisher {
+                jwt {env.MERCURE_PUBLISHER_JWT_KEY} {env.MERCURE_PUBLISHER_JWT_ALG}
+            }
+            # Subscriber JWT key
+            subscriber {
+                jwt {env.MERCURE_SUBSCRIBER_JWT_KEY} {env.MERCURE_SUBSCRIBER_JWT_ALG}
+            }
+        }
+        # The hub derives its public URL, the OAuth 2.0 resource identifier (the
+        # audience access tokens must carry) and the RFC 9728 metadata from each
+        # request, so it works unchanged behind one or several domains. A catch-all
+        # SERVER_NAME (e.g. `:80`) accepts any client-chosen Host: add `public_urls`.
+        # Advanced (via MERCURE_EXTRA_DIRECTIVES): pin one canonical audience
+        # across every domain with `resource_identifier https://…/.well-known/mercure`,
+        # or, on a catch-all site block, restrict the public URLs the hub answers
+        # on with `public_urls https://a.example.com https://b.example.com`.
+        # Extra directives
+        {$MERCURE_EXTRA_DIRECTIVES}
+    }
+
+    {$CADDY_SERVER_EXTRA_DIRECTIVES}
+
+    log_skip /robots.txt
+    log_skip /favicon.ico
+
+    header / Content-Type "text/html; charset=utf-8"
+    
+    respond / `<!DOCTYPE html>
+    <html lang=en>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex">
+    <title>Welcome to Mercure</title>
+    <h1>Welcome to Mercure</h1>
+    <p>The URL of your hub is <code>/.well-known/mercure</code>.
+    Read the documentation on <a href="https://mercure.rocks">Mercure.rocks, real-time apps made easy</a>.`
+    respond /robots.txt `User-agent: *
+    Disallow: /`
+    
+    respond "Not Found" 404
+}
